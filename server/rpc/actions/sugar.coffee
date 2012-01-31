@@ -20,7 +20,7 @@ exports.actions = (req, res, ss) ->
         options = {
             host: 'sugarinternal.sugarondemand.com',
             port: 443,
-            path: '/service/v3/rest.php?'+getQueryString(func, args),
+            path: '/service/v4/rest.php?'+getQueryString(func, args),
             method: 'POST',
             headers: {
                 'Content-Length': Buffer.byteLength(data, 'utf8'),
