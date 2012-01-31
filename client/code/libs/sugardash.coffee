@@ -5,6 +5,7 @@ SugarDash = {
         $(window).resize()
         this.populate()
         $("#container p").fadeOut()
+        setInterval(this.switch, 5*1000)
     maintainAspectRatio: ->
         container = $(this.container)
         width = $(window).width()
@@ -21,21 +22,18 @@ SugarDash = {
             e.attr 'id', 'panel_'+panel
             e.addClass 'panel'
             template_id = "#tmpl-panels-"+panel
-            console.log($(template_id).html())
             template = Handlebars.compile($(template_id).html())
-            console.log(template)
             output = template({
             })
-            console.log(output)
 
             e.html(output)
             e.appendTo("#container")
-        this.container.children('div').first().show("fade", 'easeInSine', 2000)
+        SugarDash.current = $(this.container).children('div').first().show("fade", 'easeInSine', 2000)
     switch: ->
-        current = this.container.find('.visible')
-        next = current.next()
+        next = $(SugarDash.current).next()
         if next.length == 0
-            next = this.container.children('div').first()
-        current.removeClass 'visible'
-        next.addClass 'visible'
+            next = $(SugarDash.container.children('div')).first()
+        $(SugarDash.current).hide("slide", {direction: "right"}, 1000);
+        next.show("slide", {direction: "right"}, 1000);
+        SugarDash.current = next
 }
