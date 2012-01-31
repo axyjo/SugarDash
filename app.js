@@ -3,7 +3,7 @@
 var http = require('http')
   , ss = require('socketstream');
 
-require('underscore');
+_ = require('underscore');
 
 ss.client.define('main', {
   view:   'app.jade',

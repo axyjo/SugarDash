@@ -1,5 +1,4 @@
 exports.actions = (req, res, ss) ->
-    _ = require('underscore')
     getQueryString = (func, args) ->
         console.log("Getting query string");
         data = {
