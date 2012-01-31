@@ -20,9 +20,17 @@ SugarDash = {
             e = $ document.createElement('div')
             e.attr 'id', 'panel_'+panel
             e.addClass 'panel'
-            e.html('test panel text for '+panel)
+            template_id = "#tmpl-panels-"+panel
+            console.log($(template_id).html())
+            template = Handlebars.compile($(template_id).html())
+            console.log(template)
+            output = template({
+            })
+            console.log(output)
+
+            e.html(output)
             e.appendTo("#container")
-        this.container.children('div').first().addClass 'visible'
+        this.container.children('div').first().show("fade", 'easeInSine', 2000)
     switch: ->
         current = this.container.find('.visible')
         next = current.next()
