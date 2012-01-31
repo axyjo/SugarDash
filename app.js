@@ -8,7 +8,7 @@ require('underscore');
 ss.client.define('main', {
   view:   'app.jade',
   css:    ['libs', 'app.styl'],
-  code:   ['libs/jquery.min.js', 'libs/jquery-ui.min.js', 'libs', 'modules', 'main'],
+  code:   ['libs', 'modules', 'main'],
   tmpl:   ['panels'],
 });
 
