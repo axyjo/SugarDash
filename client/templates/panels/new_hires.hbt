@@ -1,0 +1,6 @@
+<p>Welcome, new hires!</p>
+{{#each entry_list}}
+    <p>Name: {{this.name_value_list.full_name.value}}</p>
+    <p>Department: {{this.name_value_list.department.value}}</p>
+    <p>Date: <span class="moment_datetime">{{this.name_value_list.date_entered.value}}</span></p>
+{{/each}}
