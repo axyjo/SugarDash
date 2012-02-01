@@ -1,47 +1,47 @@
 exports.actions = (req, res, ss) ->
+    makeHTTPrequest = (host, path) ->
+        http = require('http')
+        client = http.createClient 80, host
+        request = client.request 'GET', path
 
-    getRSSasJSON =  (url) ->
-        https = require('https')
-        query = {
-            v: 1.0
-            q: url
-        }
-        queryString = require('querystring').stringify query
-        options = {
-            host: 'ajax.googleapis.com',
-            port: 443,
-            path: 'ajax/services/feed/load?' + queryString,
-            method: 'GET',
-        }
-        request = https.request options, (response) ->
+        contents = []
+
+        request.on 'response', (response) ->
             response.on "data", (chunk) ->
                 console.log("got chunk:", chunk.toString())
                 if(!_.isEmpty(chunk))
-                    process.emit "local_success", JSON.parse(chunk.toString())
+                    contents.push chunk
+            response.on "end", ->
+                process.emit "local_success", JSON.parse(contents.join(''))
 
         request.end()
-        console.log "Request sent."
+        console.log 'Request sent.'
 
     return {
         getWeather: (code, units) ->
             if(units != 'f' && units != 'c')
                 console.error "Invalid units for getWeather."
-            http = require('http')
             query = {
                 p: code,
                 u: units
             }
             queryString = require('querystring').stringify query
-            client = http.createClient 80, 'weather.yahooapis.com'
-            request = client.request 'GET', '/forecastjson?'+queryString
-            request.on 'response', (response) ->
-                response.on "data", (chunk) ->
-                    console.log("got chunk:", chunk.toString())
-                    if(!_.isEmpty(chunk))
-                        res JSON.parse(chunk.toString())
-
-        getNews: (rss_url) ->
-            getRSSasJSON(rss_url)
+            makeHTTPrequest('weather.yahooapis.com', '/forecastjson?'+queryString)
             process.on "local_success", (data) ->
                 res data
+
+        getNews: (rss_url) ->
+            query = {
+                v: "1.0"
+                q: rss_url
+            }
+            queryString = require('querystring').stringify query
+            console.log queryString
+            makeHTTPrequest('ajax.googleapis.com', '/ajax/services/feed/load?'+queryString)
+            process.on "local_success", (data) ->
+                if data.responseStatus == 200
+                    res data.responseData.feed
+                else
+                    console.error data.responseDetails
+                    console.log "Error in getting data", data
     }
