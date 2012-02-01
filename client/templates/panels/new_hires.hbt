@@ -1,8 +1,6 @@
 <div class="panel_title">Welcome, new hires!</div>
-{{#each entry_list}}
-    <div class="new_hire widget half">
-        <div class="new_hire_name">{{this.name_value_list.full_name.value}}</div>
-        <div class="new_hire_dept">{{this.name_value_list.department.value}}</div>
-        <div class="new_hire_date"><span class="moment_datetime">{{this.name_value_list.date_entered.value}}</span></div>
-    </div>
+<div class="widget full" id="widget_new_hires" data-func="sugar.getNewEmployees">
+{{#each widget_new_hires.entry_list}}
+    {{> new_hire this}}
 {{/each}}
+</div>

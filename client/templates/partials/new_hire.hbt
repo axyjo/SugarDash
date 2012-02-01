@@ -1,0 +1,5 @@
+<div class="new_hire">
+    <div class="new_hire_name">{{this.name_value_list.full_name.value}}</div>
+    <div class="new_hire_dept">{{this.name_value_list.department.value}}</div>
+    <div class="new_hire_date"><span class="moment_datetime">{{this.name_value_list.date_entered.value}}</span></div>
+</div>

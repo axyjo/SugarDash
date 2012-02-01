@@ -1,22 +1,21 @@
 SugarDash = {
     panelFilter: 'div.panel'
-    panels: ['new_hires', 'birthdays', 'local_news']
+    panels: ['new_hires', 'local_news']
     init: ->
         this.container = $("#container")
         #$(window).resize()
         this.populate()
         setInterval(this.switch, 5*1000)
         $("#container p").fadeOut('fast').remove()
-    maintainAspectRatio: ->
-        container = $(this.container)
-        width = $(window).width()
-        height = $(window).height()
-        if(width/height > 16/9)
-            container.width 16/9*height
-            container.height 9/16*container.width()
-        else
-            container.height 9/16*height
-            container.width 16/9*container.height()
+    generateUUID: ->
+        s = [];
+        hexDigits = "0123456789abcdef";
+        for i in [0..35]
+            s[i] = hexDigits.substr Math.floor(Math.random() * 0x10), 1
+        s[14] = "4"  # bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1)  # bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-"
+        s.join("")
     populate: ->
         for panel in this.panels
             this.refresh(panel)
@@ -39,20 +38,40 @@ SugarDash = {
         e.data('panel_show_count', panel_show_count + 1)
     fetch: (panel_id, e, cb) ->
         func = 'sugar.loggedIn'
-        if(panel_id == 'new_hires')
-            func = 'sugar.getNewEmployees'
-        ss.rpc func, (data) ->
-            cb panel_id, e, data
-
+        template_id = "#tmpl-panels-"+panel_id
+        template = $(template_id).html()
+        panel_data = {}
+        states = []
+        $(template).each ->
+            if $(this).is('div.widget')
+                widget_id = $(this).attr "id"
+                states.push widget_id
+        callback = ->
+            console.debug "sent", panel_data, "to", panel_id
+            cb panel_id, e, panel_data
             #update any moment_datetimes
             e.find("span.moment_datetime").each ->
-                mom = moment($(this).html(), "YYYY-MM-DD HH:mm:ss")
+                mom = moment($(this).html())
                 $(this).html mom.fromNow()
                 $(this).removeClass 'moment_datetime'
                 $(this).addClass 'datetime'
+        statemachine = new State(states, callback, this)
+        $(template).each ->
+            if $(this).is('div.widget')
+                widget_id = $(this).attr "id"
+                # Default values:
+                func = 'sugar.loggedIn'
+                inputs = {}
+
+                func = $(this).data "func"
+                inputs = $(this).data()
+                inputs.uuid = SugarDash.generateUUID()
+                ss.rpc func, inputs
+                ss.event.on 'response_'+inputs.uuid, (data) ->
+                    panel_data[widget_id] = data
+                    statemachine.complete widget_id
 
     update: (panel_id, e, data) ->
-        console.log(panel_id, data)
         template_id = "#tmpl-panels-"+panel_id
         template = Handlebars.compile($(template_id).html())
         output = template(data)

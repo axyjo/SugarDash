@@ -57,12 +57,13 @@ exports.actions = (req, res, ss) ->
                 res data.name_value_list
         loggedIn: ->
             res !_.isEmpty(process.sugar_login_id)
-        getNewEmployees: (count) ->
-            if(_.isEmpty(count) || _.isNaN(count))
-                count = 10
-            request = call('get_entry_list', [process.sugar_login_id, 'Users', null, 'date_entered DESC', null, ['date_entered', 'department', 'full_name'], null, count])
+        getNewEmployees: (input) ->
+            if(_.isEmpty(input.count) || _.isNaN(input.count))
+                input.count = 10
+            request = call('get_entry_list', [process.sugar_login_id, 'Users', null, 'date_entered DESC', null, ['date_entered', 'department', 'full_name'], null, input.count])
             process.on "sugar_success_get_entry_list", (data) ->
-                res data
+                ss.publish.all 'response_'+input.uuid, data
+                res true
 
         _rawCall: (func, args, params) ->
             request = _call(func, args, params)

@@ -1,47 +1,59 @@
 exports.actions = (req, res, ss) ->
-    makeHTTPrequest = (host, path) ->
-        http = require('http')
-        client = http.createClient 80, host
-        request = client.request 'GET', path
-
-        contents = []
-
-        request.on 'response', (response) ->
-            response.on "data", (chunk) ->
-                console.log("got chunk:", chunk.toString())
-                if(!_.isEmpty(chunk))
-                    contents.push chunk
-            response.on "end", ->
-                process.emit "local_success", JSON.parse(contents.join(''))
-
-        request.end()
-        console.log 'Request sent.'
-
     return {
-        getWeather: (code, units) ->
-            if(units != 'f' && units != 'c')
+        getWeather: (input) ->
+            console.log "Got request", input.uuid
+            if(input.units != 'f' && input.units != 'c')
                 console.error "Invalid units for getWeather."
             query = {
-                p: code,
-                u: units
+                p: input.weathercode,
+                u: input.units
             }
             queryString = require('querystring').stringify query
-            makeHTTPrequest('weather.yahooapis.com', '/forecastjson?'+queryString)
-            process.on "local_success", (data) ->
-                res data
+            host = 'weather.yahooapis.com'
+            path = '/forecastjson?'+queryString
+            http = require('http')
+            client = http.createClient 80, host
+            request = client.request 'GET', path
 
-        getNews: (rss_url) ->
+            contents = []
+
+            request.on 'response', (response) ->
+                response.on "data", (chunk) ->
+                    if(!_.isEmpty(chunk))
+                        contents.push chunk
+                response.on "end", ->
+                    ss.publish.all 'response_'+input.uuid, JSON.parse(contents.join(''))
+                    res true
+            request.end()
+            console.log 'Request sent.'
+
+        getNews: (input) ->
+            console.log "Got request", input.uuid
             query = {
                 v: "1.0"
-                q: rss_url
+                q: input.rssurl
             }
             queryString = require('querystring').stringify query
-            console.log queryString
-            makeHTTPrequest('ajax.googleapis.com', '/ajax/services/feed/load?'+queryString)
-            process.on "local_success", (data) ->
-                if data.responseStatus == 200
-                    res data.responseData.feed
-                else
-                    console.error data.responseDetails
-                    console.log "Error in getting data", data
+            host = 'ajax.googleapis.com'
+            path = '/ajax/services/feed/load?'+queryString
+            http = require('http')
+            client = http.createClient 80, host
+            request = client.request 'GET', path
+
+            contents = []
+
+            request.on 'response', (response) ->
+                response.on "data", (chunk) ->
+                    if(!_.isEmpty(chunk))
+                        contents.push chunk
+                response.on "end", ->
+                    data = JSON.parse(contents.join(''))
+                    if data.responseStatus == 200
+                        ss.publish.all 'response_'+input.uuid, data.responseData.feed
+                        res true
+                    else
+                        console.error data.responseDetails
+                        console.log "Error in getting data", data
+            request.end()
+            console.log 'Request sent.'
     }
