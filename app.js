@@ -1,7 +1,7 @@
 // My SocketStream app
 
-var http = require('http')
-  , ss = require('socketstream');
+var http = require('http'),
+    ss = require('socketstream');
 
 _ = require('underscore');
 
@@ -9,7 +9,7 @@ ss.client.define('main', {
   view:   'app.jade',
   css:    ['libs', 'app.styl'],
   code:   ['libs', 'modules', 'main'],
-  tmpl:   ['panels'],
+  tmpl:   ['panels', 'partials'],
 });
 
 ss.http.router.on('/', function(req, res) {

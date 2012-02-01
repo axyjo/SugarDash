@@ -1,6 +1,8 @@
-<p>Welcome, new hires!</p>
+<div class="panel_title">Welcome, new hires!</div>
 {{#each entry_list}}
-    <p>Name: {{this.name_value_list.full_name.value}}</p>
-    <p>Department: {{this.name_value_list.department.value}}</p>
-    <p>Date: <span class="moment_datetime">{{this.name_value_list.date_entered.value}}</span></p>
+    <div class="new_hire widget half">
+        <div class="new_hire_name">{{this.name_value_list.full_name.value}}</div>
+        <div class="new_hire_dept">{{this.name_value_list.department.value}}</div>
+        <div class="new_hire_date"><span class="moment_datetime">{{this.name_value_list.date_entered.value}}</span></div>
+    </div>
 {{/each}}
