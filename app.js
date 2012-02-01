@@ -20,6 +20,8 @@ ss.http.router.on('/', function(req, res) {
 ss.client.formatters.add(require('ss-coffee'));
 ss.client.formatters.add(require('ss-jade'));
 ss.client.formatters.add(require('ss-stylus'));
+// Add a formatter for Handlebar templates
+ss.client.formatters.add(require('./formatters/hbt'));
 
 // Minimise and pack assets if you type SS_ENV=production node app
 if (ss.env == 'production') ss.client.packAssets();

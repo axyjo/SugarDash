@@ -35,13 +35,29 @@ SugarDash = {
             e.appendTo("#container")
         panel_show_count = e.data('panel_show_count')
         if(panel_show_count % 20 == 0)
-            template_id = "#tmpl-panels-"+panel_id
-            template = Handlebars.compile($(template_id).html())
-            output = template({
-            })
-            e.html(output)
-        else
-            e.data('panel_show_count', panel_show_count + 1)
+            SugarDash.fetch(panel_id, e, SugarDash.update)
+        e.data('panel_show_count', panel_show_count + 1)
+    fetch: (panel_id, e, cb) ->
+        func = 'sugar.loggedIn'
+        if(panel_id == 'new_hires')
+            func = 'sugar.getNewEmployees'
+        ss.rpc func, (data) ->
+            cb panel_id, e, data
+
+            #update any moment_datetimes
+            e.find("span.moment_datetime").each ->
+                mom = moment($(this).html(), "YYYY-MM-DD HH:mm:ss")
+                $(this).html mom.fromNow()
+                $(this).removeClass 'moment_datetime'
+                $(this).addClass 'datetime'
+
+    update: (panel_id, e, data) ->
+        console.log(panel_id, data)
+        template_id = "#tmpl-panels-"+panel_id
+        template = Handlebars.compile($(template_id).html())
+        output = template(data)
+        e.html(output)
+
     switch: ->
         $(SugarDash.current).fadeOut()
         SugarDash.next.fadeIn()

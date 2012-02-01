@@ -55,6 +55,8 @@ exports.actions = (req, res, ss) ->
                 console.log "SESSION ID:", data.id
                 process.sugar_login_id = data.id
                 res data.name_value_list
+        loggedIn: ->
+            res !_.isEmpty(process.sugar_login_id)
         getNewEmployees: (count) ->
             if(_.isEmpty(count) || _.isNaN(count))
                 count = 10
