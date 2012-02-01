@@ -1,11 +1,12 @@
 SugarDash = {
+    panelFilter: 'div.panel'
     panels: ['new_hires', 'birthdays', 'local_news']
     init: ->
         this.container = $("#container")
-        $(window).resize()
+        #$(window).resize()
         this.populate()
-        $("#container p").fadeOut()
         setInterval(this.switch, 5*1000)
+        $("#container p").fadeOut('fast').remove()
     maintainAspectRatio: ->
         container = $(this.container)
         width = $(window).width()
@@ -18,22 +19,35 @@ SugarDash = {
             container.width 16/9*container.height()
     populate: ->
         for panel in this.panels
+            this.refresh(panel)
+        SugarDash.current = $(this.container).children(SugarDash.panelFilter).first()
+        SugarDash.next = SugarDash.current.next()
+        SugarDash.current.fadeIn()
+    refresh: (panel_id) ->
+        e = $("#panel_"+panel_id)
+        if(e.length == 0)
+            console.debug "created panel", panel_id, e
             e = $ document.createElement('div')
-            e.attr 'id', 'panel_'+panel
+            e.attr 'id', 'panel_'+panel_id
+            e.data('panel_id', panel_id)
+            e.data('panel_show_count', 0)
             e.addClass 'panel'
-            template_id = "#tmpl-panels-"+panel
+            e.appendTo("#container")
+        panel_show_count = e.data('panel_show_count')
+        if(panel_show_count % 20 == 0)
+            template_id = "#tmpl-panels-"+panel_id
             template = Handlebars.compile($(template_id).html())
             output = template({
             })
-
             e.html(output)
-            e.appendTo("#container")
-        SugarDash.current = $(this.container).children('div').first().show("fade", 'easeInSine', 2000)
+        else
+            e.data('panel_show_count', panel_show_count + 1)
     switch: ->
-        next = $(SugarDash.current).next()
-        if next.length == 0
-            next = $(SugarDash.container.children('div')).first()
-        $(SugarDash.current).hide("slide", {direction: "right"}, 1000);
-        next.show("slide", {direction: "right"}, 1000);
-        SugarDash.current = next
+        $(SugarDash.current).fadeOut()
+        SugarDash.next.fadeIn()
+        SugarDash.current = SugarDash.next
+        SugarDash.next = $(SugarDash.current).next(SugarDash.panelFilter)
+        if SugarDash.next.length == 0
+            SugarDash.next = $(SugarDash.container.children(SugarDash.panelFilter)).first()
+        SugarDash.refresh(SugarDash.next.data('panel_id'))
 }

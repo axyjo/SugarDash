@@ -1,6 +1,6 @@
 exports.actions = (req, res, ss) ->
+    appName = 'SugarDash'
     getQueryString = (func, args) ->
-        console.log("Getting query string");
         data = {
             method: func,
             input_type: "JSON",
@@ -8,11 +8,9 @@ exports.actions = (req, res, ss) ->
         }
         if(!_.isNull(args))
             data.rest_data = JSON.stringify(args)
-        console.log "stringified."
         require('querystring').stringify data
-    call = (func, args, params) ->
+    _call = (func, args, params) ->
         https = require('https')
-        console.log("Making a call to", func, "with args:", args);
 
         params = params || {}
         data = JSON.stringify(params)
@@ -25,16 +23,20 @@ exports.actions = (req, res, ss) ->
                 'Content-Length': Buffer.byteLength(data, 'utf8'),
             },
         }
-
+        resp = []
         request = https.request options, (response) ->
             response.on "data", (chunk) ->
-                console.log("got chunk:", chunk.toString())
-                if(!_.isEmpty(chunk))
-                    process.emit "sugar_success", JSON.parse(chunk.toString())
+                resp.push(chunk)
+            response.on "end", ->
+                process.emit "sugar_success_"+func, JSON.parse(resp.join(''))
 
-        request.write(data)
+        request.write data
         request.end()
         console.log("Request sent.")
+    call = (func, args, params) ->
+        if(!_.isEmpty(process.sugar_login_id))
+            #args = args.splice(0, 0, process.sugar_login_id)
+            _call func, args, params
 
     return {
         getServerInfo: ->
@@ -47,8 +49,23 @@ exports.actions = (req, res, ss) ->
                 password: password,
                 encryption: 'PLAIN',
             }, 'SugaDash', []]
-            request = call("login", loginData)
-            process.on "sugar_success", (data) ->
+            # Only login can bypass the auth check for call.
+            request = _call("login", loginData)
+            process.on "sugar_success_login", (data) ->
+                console.log "SESSION ID:", data.id
+                process.sugar_login_id = data.id
+                res data.name_value_list
+        getNewEmployees: (count) ->
+            if(_.isEmpty(count) || _.isNaN(count))
+                count = 10
+            request = call('get_entry_list', [process.sugar_login_id, 'Users', null, 'date_entered DESC', null, ['date_entered', 'department', 'full_name'], null, count])
+            process.on "sugar_success_get_entry_list", (data) ->
                 res data
+
+        _rawCall: (func, args, params) ->
+            request = _call(func, args, params)
+            process.on "sugar_success_"+func, (data) ->
+                res data
+
     }
 
