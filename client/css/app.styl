@@ -13,11 +13,16 @@
 body, html
   height 100%
 
-#container
-  font normal 3em sans-serif
+body
   height 1080px
   width 1920px
-  vertical-gradient #eee, #fff
+  overflow hidden
+  background-image url('/images/metal-tile.png')
+  color #BBB
+
+#container
+  font normal 3em Helvetica
+  //vertical-gradient #eee, #fff
   //vertical-gradient #000, #111
 
 p
@@ -31,7 +36,6 @@ h1
   font-weight normal
   margin 1.5em
   color #333
-  text-shadow 1px 1px 2px white
 
 .panel
     width 95%
@@ -40,16 +44,41 @@ h1
     margin-right auto
 
 .widget
-    display none
     border 1px #B61324 solid
-    .full
-        width 95%
+    &.half
+        width 47%
+    &.full
+        width 94%
         clear both
 
-    .wide
+    &.wide
         width 60%
         float left
 
-    .narrow
+    &.narrow
         width 30%
         float right
+
+.panel_title
+    margin-top 10px
+    margin-bottom 10px
+    text-align center
+    padding 10px
+    round 5px
+    border 1px #4E5153 solid
+    text-shadow 1px 1px 2px black
+
+.new_hire
+    margin-bottom 10px
+    .new_hire_name
+        font-size 75%
+        text-align center
+    .new_hire_dept
+        font-size 50%
+    .new_hire_date
+        font-size 50%
+        &:before
+            content "Joined "
+
+
+
