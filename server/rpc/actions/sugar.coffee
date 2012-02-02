@@ -1,5 +1,29 @@
 exports.actions = (req, res, ss) ->
     appName = 'SugarDash'
+    groupBy = (data, column) ->
+        entry_list = {}
+        for entry in data.entry_list
+            val = entry.name_value_list[column].value
+            if !_.isArray entry_list[val]
+                entry_list[val] = []
+            entry_list[val].push(entry)
+        data.entry_list = entry_list
+
+        # return data
+        data
+
+    mergeDate = (data, date_field, dateParam, valueTransform) ->
+        moment = require('moment')
+        epoch = moment(0)
+        for entry in data.entry_list
+            value = entry.name_value_list[date_field].value
+            date = moment(value)
+            new_value = date.diff epoch, dateParam+"s"
+            entry.name_value_list[date_field+"_converted"] = {name: date_field+"_converted", value: new_value}
+        # return data
+        data
+
+
     getQueryString = (func, args) ->
         data = {
             method: func,
@@ -41,7 +65,7 @@ exports.actions = (req, res, ss) ->
     return {
         getServerInfo: ->
             request = call("get_server_info", '')
-            process.on "sugar_success", (data) ->
+            process.once "sugar_success", (data) ->
                 res data
         login: (username, password) ->
             loginData = [{
@@ -60,15 +84,37 @@ exports.actions = (req, res, ss) ->
         getNewEmployees: (input) ->
             if(_.isEmpty(input.count) || _.isNaN(input.count))
                 input.count = 10
-            request = call('get_entry_list', [process.sugar_login_id, 'Users', null, 'date_entered DESC', null, ['date_entered', 'department', 'full_name'], null, input.count])
-            process.on "sugar_success_get_entry_list", (data) ->
+            #request = call('get_entry_list', [process.sugar_login_id, 'Users', null, 'date_entered DESC', null, null, null, input.count])
+            request = call('get_entry_list', [process.sugar_login_id, 'Users', null, 'date_entered DESC', null, ['picture', 'date_entered', 'department', 'full_name'], null, input.count])
+            process.once "sugar_success_get_entry_list", (data) ->
                 ss.publish.all 'response_'+input.uuid, data
                 res true
+        getMilestoneDates: (input) ->
+            data = [
+                {date: Date.parse('Feb 29, 2012'), title: '6.4.1 GA'},
+                {date: Date.parse('Mar 28, 2012'), title: '6.4.2 GA'},
+                {date: Date.parse('Apr 25, 2012'), title: '6.4.3 GA'},
+                {date: Date.parse('May 23, 2012'), title: '6.4.4 GA'},
+                {date: Date.parse('Feb 3, 2012'), title: 'Caramel coding complete'},
+                {date: Date.parse('Mar 2, 2012'), title: 'Caramel QA complete'},
+                {date: Date.parse('Mar 14, 2012'), title: '6.5b1'},
+                {date: Date.parse('Mar 21, 2012'), title: '6.5b2'},
+                {date: Date.parse('Mar 28, 2012'), title: '6.5b3'},
+                {date: Date.parse('Apr 4, 2012'), title: '6.5b4'},
+                {date: Date.parse('Apr 11, 2012'), title: '6.5b5'},
+                {date: Date.parse('Apr 18, 2012'), title: '6.5b6'},
+                {date: Date.parse('Apr 25, 2012'), title: '6.5RC1'},
+                {date: Date.parse('May 9, 2012'), title: '6.5RC2'},
+                {date: Date.parse('May 23, 2012'), title: '6.5RC3'},
+                {date: Date.parse('Jun 6, 2012'), title: '6.5 GA'},
+            ]
+            process.once
 
         _rawCall: (func, args, params) ->
             request = _call(func, args, params)
-            process.on "sugar_success_"+func, (data) ->
-                res data
+            process.once "sugar_success_"+func, (data) ->
+                #res data
+                res groupBy(mergeDate(data, 'date_entered', 'day'), 'date_entered_converted')
 
     }
 

@@ -1,4 +1,11 @@
 <div class="panel_title">Local News</div>
+
+{{#if widget_weather}}
+<div class="widget narrow" id="widget_weather" data-func="local.getWeather" data-weatherCode="USCA0273" data-units="f">
+ {{>weather widget_weather}}
+</div>
+{{/if}}
+
 {{#if widget_news_mercury}}
 <div class="widget wide" id="widget_news_mercury" data-func="local.getNews" data-rssurl="http://feeds.mercurynews.com/mngi/rss/CustomRssServlet/568/200734.xml">
   {{>feed widget_news_mercury}}
@@ -11,9 +18,4 @@
 </div>
 {{/if}}
 
-{{#if widget_weather}}
-<div class="widget narrow" id="widget_weather" data-func="local.getWeather" data-weatherCode="USCA0273" data-units="f">
- {{>weather widget_weather}}
-</div>
-{{/if}}
 

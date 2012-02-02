@@ -49,6 +49,9 @@ exports.actions = (req, res, ss) ->
                 response.on "end", ->
                     data = JSON.parse(contents.join(''))
                     if data.responseStatus == 200
+                        for entry in data.responseData.feed.entries
+                            if(entry.content.length > 300)
+                                entry.content = entry.contentSnippet
                         ss.publish.all 'response_'+input.uuid, data.responseData.feed
                         res true
                     else

@@ -2,6 +2,8 @@
 
 @import 'helpers'
 @import 'demo'
+@import url(http://fonts.googleapis.com/css?family=Lusitana)
+@import url(http://fonts.googleapis.com/css?family=Inika:400,700)
 
 // Main
 // SugarCRM colors:
@@ -21,7 +23,8 @@ body
   color #BBB
 
 #container
-  font normal 3em Helvetica
+  line-height 900%
+  font normal 3em 'Lusitana', serif
   //vertical-gradient #eee, #fff
   //vertical-gradient #000, #111
 
@@ -38,15 +41,18 @@ h1
   color #333
 
 .panel
-    width 95%
+    width 98%
     display none
     margin-left auto
     margin-right auto
 
 .widget
-    border 1px #B61324 solid
+    border 2px #133595 solid
+    padding 5px
+    round 10px
+    margin-bottom 10px
     &.half
-        width 50%
+        width 49%
     &.full
         width 100%
         clear both
@@ -56,32 +62,62 @@ h1
         float left
 
     &.narrow
-        width 35%
+        width 33%
         float right
+    .widget_title
+        text-align center
+        font-family 'Inika', serif
+        font-weight 700
 
 .panel_title
     margin-top 10px
     margin-bottom 10px
     text-align center
+    font-family 'Inika', serif
+    font-weight 700
     padding 10px
-    round 5px
-    border 1px #4E5153 solid
+    round 10px
+    border 3px #133595 solid
     text-shadow 1px 1px 2px black
 
+.widgets_new_hires
+    columns: 4
+    max-height: 500px
+
+footer
+    clear both
+    text-align center
+
 .new_hire
+    width 24%
+    text-align center
     margin-bottom 10px
+    .new_hire_photo
+        text-align center
+        img
+            border 1px #88B7E8 solid
     .new_hire_name
-        display inline
-        font-size 75%
+        font-size 80%
         text-align center
     .new_hire_dept
-        display inline
-        font-size 50%
+        font-size 60%
+    .new_hire_date
+        font-size 60%
         &:before
             content "Joined "
-    .new_hire_date
+
+
+.feed_story
+    font-size 75%
+    margin-bottom 30px
+    .feed_story_title
         display inline
-        font-size 50%
-
-
-
+    .feed_story_time
+        display inline
+        font-size 75%
+        &:before
+            content "(published "
+        &:after
+            content ")"
+    .feed_story_snippet
+        font-size 75%

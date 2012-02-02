@@ -36,6 +36,7 @@ SugarDash = {
         if(panel_show_count % 20 == 0)
             SugarDash.fetch(panel_id, e, SugarDash.update)
         e.data('panel_show_count', panel_show_count + 1)
+        $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
     fetch: (panel_id, e, cb) ->
         func = 'sugar.loggedIn'
         template_id = "#tmpl-panels-"+panel_id
@@ -49,6 +50,7 @@ SugarDash = {
         callback = ->
             console.debug "sent", panel_data, "to", panel_id
             cb panel_id, e, panel_data
+            $("footer").data("last_updated", Date.now())
             #update any moment_datetimes
             e.find("span.moment_datetime").each ->
                 mom = moment($(this).html())

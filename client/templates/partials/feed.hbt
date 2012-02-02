@@ -1,12 +1,10 @@
-<div class="widget">
 <div class="widget_title">{{this.title}}</div>
 {{#each this.entries}}
 <div class="feed_story">
     <div class="feed_story_title">{{this.title}}</div>
+    <br />
     <div class="feed_story_time"><span class="moment_datetime">{{this.publishedDate}}</span></div>
-    <div class="feed_story_snippet">{{this.contentSnippet}}</div>
+    <br />
+    <div class="feed_story_snippet">{{this.content}}</div>
 </div>
 {{/each}}
-
-</div>
-
