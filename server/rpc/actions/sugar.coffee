@@ -85,6 +85,8 @@ exports.actions = (req, res, ss) ->
             @offset_val = params.offset || 0
             @limit_val = params.limit || null
             @uuid_val = params.uuid || null
+            @group_by = params.groupBy || null
+            @count_by = params.countBy || null
 
             @si = si
 
@@ -102,9 +104,15 @@ exports.actions = (req, res, ss) ->
             else
                 all_fields = '*'
 
+            if @count_by?
+                all_fields += ', COUNT(' + @count_by + ')'
+
             query = "SELECT " + all_fields + " FROM " + @module.toLowerCase()
             if @where_clause?
                 query += " WHERE " + @where_clause
+
+            if @group_by?
+                query += " GROUP BY " + @group_by
 
             if @order_clause?
                 query += " ORDER BY " + @order_clause
@@ -122,12 +130,20 @@ exports.actions = (req, res, ss) ->
                 obj = @
                 callback = (data) ->
                     obj.data = data
+                    if obj.group_by?
+                        obj._groupBy(obj.group_by)
+                    else if obj.count_by?
+                        obj._countBy(obj.count_by)
                     obj.cb(obj)
                 @si.call(callback, 'get_entry_list', [SugarInternal::token(), @module, @where_clause, @order_clause, @offset_val, @fields, null, @limit_val])
                 @executed = true
             @
 
         groupBy: (column) =>
+            @group_by = column
+            @
+
+        _groupBy: (column) =>
             entry_list = {}
             for entry in @data.entry_list
                 val = entry.name_value_list[column].value
@@ -136,6 +152,23 @@ exports.actions = (req, res, ss) ->
                 entry_list[val].push(entry)
             @data.entry_list = entry_list
             @
+
+        countBy: (column) =>
+            @count_by = column
+            @
+
+        _countBy: (column) =>
+            @._groupBy column
+            entry_list = {}
+            for key, value of @data.entry_list
+                console.log "Counting", key
+                if not entry_list[key]?
+                    console.log "Key", key, " has ", value.length, "elements"
+                    entry_list[key] = value.length
+
+            @data.entry_list = entry_list
+            @
+
 
         select: (fields) =>
             if _.isString fields
@@ -149,7 +182,9 @@ exports.actions = (req, res, ss) ->
                 table = @module.toLowerCase()
             if custom
                 table += '_cstm'
-            clause = table + '.' + field + ' ' + operator + ' "' + value + '"'
+            clause = table + '.' + field + ' ' + operator
+            if value?
+                clause += ' "' + value + '"'
             @.addWhereClause clause
             @
 
@@ -217,6 +252,11 @@ exports.actions = (req, res, ss) ->
         _validate: () =>
             if not SugarInternal::token()?
                 false
+
+            # Group by takes precedence if both are specified.
+            if @count_by and @group_by
+                @count_by = null
+
 
             if @fields? and not _.isArray @fields
                 if _.isString @fields
@@ -371,6 +411,15 @@ exports.actions = (req, res, ss) ->
             input = validateInput(input)
             input.sprint_number = jonesesCurrentSprintWeek() - 1
             getJoneses input
+
+        getJonesesCounts: (input) ->
+            input = validateInput input
+            q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
+                return_data results
+            statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
+            joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'
+            q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', '', '<>', true)
+            q.countBy('sprint_number_c').all().execute()
 
         _rawCall: (func, args, params) ->
             si = process.si.get()
