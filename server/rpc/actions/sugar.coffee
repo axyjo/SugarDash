@@ -281,12 +281,41 @@ exports.actions = (req, res, ss) ->
         else
             res query
 
+    jonesesCurrentSprintWeek = ->
+        # JS Date of Week for Wednesday
+        wednesday = 3
+        now = new Date()
+        endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)
+        startOfYear = new Date(now.getFullYear(), 0, 1)
+
+        # Number of days since first wednesday of year:
+        # milliseconds since Jan 1 =  endOfToday - startOfYear
+        # days from Jan 1 to first Wed: wednesday - startOfYear.getDay()
+        numDays = (endOfToday - startOfYear)/(24*60*60*1000) - (wednesday - startOfYear.getDay())
+
+        # If we have a negative number, that means we're in last year's final sprint, so calculate based on the end of the previous year
+        if numDays < 0
+            startOfLastYear = new Date(now.getFullYear() - 1)
+            endOfLastYear = new Date(now.getFullYear(), now.getMonth(), 0)
+            numDays = (endOfLastYear - startOfYear)/(24*60*60*1000) - (wednesday - startOfYear.getDay())
+
+        # sprint number is the ceiling of number of weeks since first wednesday
+        Math.ceil(numDays/7)
+
     process.si = SugarInternal.get()
 
     validateInput = (input) ->
         input = input || {}
         input.uuid = input.uuid || null
         input
+
+    getJoneses = (input) ->
+        q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
+            return_data results
+        statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
+        joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'
+        sprint_number = input.sprint_number || jonesesCurrentSprintWeek()
+        q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', sprint_number, '=', true).all().execute()
 
     return {
         getServerInfo: ->
@@ -329,14 +358,19 @@ exports.actions = (req, res, ss) ->
                 return_data results
             q.newest().limit(10)
 
-        getJoneses: (input) ->
+        getJonesesSprint: (input) ->
             input = validateInput(input)
-            q = new Bugs {uuid: input.uuid || null}, process.si, (results) ->
-                return_data results
-            statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
-            joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'
-            sprint_number = input.sprint_number
-            q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', sprint_number, '=', true).all().execute()
+            getJoneses input
+
+        getCurrentJoneses: (input) ->
+            input = validateInput(input)
+            input.sprint_number = jonesesCurrentSprintWeek()
+            getJoneses input
+
+        getPreviousJoneses: (input) ->
+            input = validateInput(input)
+            input.sprint_number = jonesesCurrentSprintWeek() - 1
+            getJoneses input
 
         _rawCall: (func, args, params) ->
             si = process.si.get()
