@@ -96,8 +96,28 @@ exports.actions = (req, res, ss) ->
             @executed = false
             @
 
+        logQuery: =>
+            if @fields?
+                all_fields = @fields.join(', ')
+            else
+                all_fields = '*'
+
+            query = "SELECT " + all_fields + " FROM " + @module.toLowerCase()
+            if @where_clause?
+                query += " WHERE " + @where_clause
+
+            if @order_clause?
+                query += " ORDER BY " + @order_clause
+
+            query += " LIMIT " + @limit_val
+            if @offset_val? and @offset_val != 0
+                query += " OFFSET " + @offset_val
+
+            console.log query
+
         execute: =>
             @._validate()
+            @.logQuery()
             if @validated
                 obj = @
                 callback = (data) ->
@@ -124,6 +144,36 @@ exports.actions = (req, res, ss) ->
                 @fields = fields
             @
 
+        where: (field, value, operator = '=', custom = false, table = false) =>
+            if not table
+                table = @module.toLowerCase()
+            if custom
+                table += '_cstm'
+            clause = table + '.' + field + ' ' + operator + ' "' + value + '"'
+            @.addWhereClause clause
+            @
+
+        addWhereClause: (clause) =>
+            if _.isString @where_clause
+                @where_clause = [clause, @where_clause]
+            else if _.isArray @where_clause
+                @where_clause.push clause
+            else
+                @where_clause = [clause]
+            @
+
+        in: (field, values, custom = false) =>
+            table = @module.toLowerCase()
+            if custom
+                table += '_cstm'
+
+            clause = table + '.' + field + ' IN ('
+            for value in values
+                clause += '"' + value + '", '
+            clause = clause.substr(0, clause.length - 2) + ')'
+            @.addWhereClause clause
+            @
+
         order: (o) =>
             @order_clause = o
             @
@@ -138,6 +188,11 @@ exports.actions = (req, res, ss) ->
 
         limit: (n) =>
             @limit_val = n
+            @
+
+        all: =>
+            # TODO: Come up with a better way to do this.
+            @.limit(100000)
             @
 
         from: (mod) =>
@@ -196,16 +251,15 @@ exports.actions = (req, res, ss) ->
             params.from = 'Users'
             super params, si, cb
 
-    class Defects extends SugarRecord
+    class Bugs extends SugarRecord
         constructor: (params, si, cb) ->
             params.from = 'Bugs'
-            if _.isString params.where
-                params.where = ['type = "Defect"', params.where]
-            else if _.isArray params.where
-                params.where.push 'type = "Defect"'
-            else
-                params.where = ['type = "Defect"']
             super params, si, cb
+
+    class Defects extends Bugs
+        constructor: (params, si, cb) ->
+            super params, si, cb
+            @.where('type', 'Defect')
 
     appName = 'SugarDash'
 
@@ -271,9 +325,19 @@ exports.actions = (req, res, ss) ->
             ]
         getNewBugs: (input) ->
             input = validateInput(input)
-            q = new Defects {uuid: input.uuid || null}, process.si, ->
-                return_data input, data
+            q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
+                return_data results
             q.newest().limit(10)
+
+        getJoneses: (input) ->
+            input = validateInput(input)
+            q = new Bugs {uuid: input.uuid || null}, process.si, (results) ->
+                return_data results
+            statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
+            joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'
+            sprint_number = input.sprint_number
+            q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', sprint_number, '=', true).all().execute()
+
         _rawCall: (func, args, params) ->
             si = process.si.get()
             request = si._call(func, args, params)
