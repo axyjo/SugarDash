@@ -9,7 +9,7 @@ _ = require('underscore');
 
 ss.client.define('main', {
   view:   'app.jade',
-  css:    ['libs', 'app.styl'],
+  css:    ['bootstrap', 'app.less'],
   code:   ['libs/jquery-1.7.1.js', 'libs', 'modules', 'main'],
   tmpl:   ['panels', 'partials'],
 });
@@ -21,7 +21,8 @@ ss.http.router.on('/', function(req, res) {
 // Remove to use only plain .js, .html and .css files if you prefer
 ss.client.formatters.add(require('ss-coffee'));
 ss.client.formatters.add(require('ss-jade'));
-ss.client.formatters.add(require('ss-stylus'));
+ss.client.formatters.add(require('ss-less'));
+
 // Add a formatter for Handlebar templates
 ss.client.formatters.add(require('./formatters/hbt'));
 
