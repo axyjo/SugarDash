@@ -5,6 +5,8 @@
     <br />
     <div class="feed_story_time"><span class="moment_datetime">{{this.publishedDate}}</span></div>
     <br />
-    <div class="feed_story_snippet">{{this.content}}</div>
+    <div class="feed_story_snippet">
+    {{{this.content}}}
+    </div>
 </div>
 {{/each}}

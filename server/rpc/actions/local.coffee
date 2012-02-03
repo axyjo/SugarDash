@@ -22,7 +22,11 @@ exports.actions = (req, res, ss) ->
                     if(!_.isEmpty(chunk))
                         contents.push chunk
                 response.on "end", ->
-                    ss.publish.all 'response_'+input.uuid, JSON.parse(contents.join(''))
+                    resp = {
+                        uuid_val: input.uuid
+                        data: JSON.parse(contents.join(''))
+                    }
+                    ss.publish.all 'response_'+input.uuid, resp
                     res true
             request.end()
             console.log 'Request sent.'
@@ -52,11 +56,16 @@ exports.actions = (req, res, ss) ->
                         for entry in data.responseData.feed.entries
                             if(entry.content.length > 300)
                                 entry.content = entry.contentSnippet
-                        ss.publish.all 'response_'+input.uuid, data.responseData.feed
+                        resp = {
+                            uuid_val: input.uuid
+                            data: data.responseData.feed
+                        }
+                        ss.publish.all 'response_'+input.uuid, resp
                         res true
                     else
                         console.error data.responseDetails
                         console.log "Error in getting data", data
+                        res false
             request.end()
             console.log 'Request sent.'
     }

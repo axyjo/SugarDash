@@ -3,6 +3,8 @@
 var http = require('http'),
     ss = require('socketstream');
 
+var sugar_auth_token = null;
+
 _ = require('underscore');
 
 ss.client.define('main', {

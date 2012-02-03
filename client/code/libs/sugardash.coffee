@@ -5,7 +5,7 @@ SugarDash = {
         this.container = $("#container")
         #$(window).resize()
         this.populate()
-        setInterval(this.switch, 5*1000)
+        setInterval(this.switch, 10*1000)
         $("#container p").fadeOut('fast').remove()
     generateUUID: ->
         s = [];
@@ -33,11 +33,12 @@ SugarDash = {
             e.addClass 'panel'
             e.appendTo("#container")
         panel_show_count = e.data('panel_show_count')
-        if(panel_show_count % 20 == 0)
+        if(panel_show_count % 30 == 0)
             SugarDash.fetch(panel_id, e, SugarDash.update)
         e.data('panel_show_count', panel_show_count + 1)
         $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
     fetch: (panel_id, e, cb) ->
+        console.log "fetching", panel_id
         func = 'sugar.loggedIn'
         template_id = "#tmpl-panels-"+panel_id
         template = $(template_id).html()
@@ -61,6 +62,7 @@ SugarDash = {
         $(template).each ->
             if $(this).is('div.widget')
                 widget_id = $(this).attr "id"
+                console.log widget_id
                 # Default values:
                 func = 'sugar.loggedIn'
                 inputs = {}
@@ -69,8 +71,11 @@ SugarDash = {
                 inputs = $(this).data()
                 inputs.uuid = SugarDash.generateUUID()
                 ss.rpc func, inputs
-                ss.event.on 'response_'+inputs.uuid, (data) ->
-                    panel_data[widget_id] = data
+                console.log "Sent request", inputs.uuid, "to", func
+
+                ss.event.on 'response_'+inputs.uuid, (resp) ->
+                    console.log "Got response", resp.uuid_val, 'for', widget_id, resp
+                    panel_data[widget_id] = resp.data
                     statemachine.complete widget_id
 
     update: (panel_id, e, data) ->
