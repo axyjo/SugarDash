@@ -10,7 +10,7 @@ _ = require('underscore');
 ss.client.define('main', {
   view:   'app.jade',
   css:    ['libs', 'app.styl'],
-  code:   ['libs', 'modules', 'main'],
+  code:   ['libs/jquery-1.7.1.js', 'libs', 'modules', 'main'],
   tmpl:   ['panels', 'partials'],
 });
 

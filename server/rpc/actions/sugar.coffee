@@ -161,9 +161,7 @@ exports.actions = (req, res, ss) ->
             @._groupBy column
             entry_list = {}
             for key, value of @data.entry_list
-                console.log "Counting", key
                 if not entry_list[key]?
-                    console.log "Key", key, " has ", value.length, "elements"
                     entry_list[key] = value.length
 
             @data.entry_list = entry_list
@@ -349,6 +347,18 @@ exports.actions = (req, res, ss) ->
         input.uuid = input.uuid || null
         input
 
+    getValues = (obj) ->
+        ret = []
+        for key, value of obj
+            ret.push value
+        ret
+
+    getKeys = (obj) ->
+        ret = []
+        for key, value of obj
+            ret.push key
+        ret
+
     getJoneses = (input) ->
         q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
             return_data results
@@ -415,6 +425,54 @@ exports.actions = (req, res, ss) ->
         getJonesesCounts: (input) ->
             input = validateInput input
             q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
+                return_data results
+            statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
+            joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'
+            q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', '', '<>', true)
+            q.countBy('sprint_number_c').all().execute()
+
+        getJonesesChart: (input) ->
+            input = validateInput input
+            console.log input
+            q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
+                new_data = {
+                    chart: {
+                        defaultSeriesType: input.chart_type || 'line'
+                    }
+
+                    title: {
+                        text: input.chart_title || 'CHART TITLE NOT SET'
+                    }
+
+                    xAxis: {
+                        categories: getKeys results.data.entry_list
+                        title: {
+                            text: input.xaxis_title || null
+                        }
+                    }
+
+                    yAxis: {
+                        title: {
+                            text: input.yaxis_title || null
+                        }
+                    }
+
+                    plotOptions: {
+                        line: {
+                            dataLabels: {
+                                enabled: input.dataLabels || true
+                            }
+                            enableMouseTracking: false
+                        }
+                    }
+
+                    series: [
+                        {data: getValues results.data.entry_list}
+                    ]
+
+                }
+
+                results.data = new_data
                 return_data results
             statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
             joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'

@@ -1,6 +1,6 @@
 SugarDash = {
     panelFilter: 'div.panel'
-    panels: ['new_hires', 'local_news']
+    panels: ['new_hires', 'local_news', 'joneses_sprintwise']
     init: ->
         this.container = $("#container")
         #$(window).resize()
@@ -58,6 +58,11 @@ SugarDash = {
                 $(this).html mom.fromNow()
                 $(this).removeClass 'moment_datetime'
                 $(this).addClass 'datetime'
+            e.find(".graph").each ->
+                data = panel_data[$(this).attr('id')]
+                data.chart.renderTo = $(this).attr('id')
+                chart = new Highcharts.Chart data
+                console.log this
         statemachine = new State(states, callback, this)
         $(template).each ->
             if $(this).is('div.widget')
