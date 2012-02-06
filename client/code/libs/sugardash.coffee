@@ -1,6 +1,6 @@
 SugarDash = {
     panelFilter: 'div.panel'
-    panels: ['joneses_developerwise', 'new_hires', 'twitterscope', 'twitterscope2', 'joneses_sprintwise']
+    panels: ['joneses_developerwise', 'new_hires', 'local_news', 'local_weather', 'twitterscope', 'twitterscope2', 'gh_pulls', 'joneses_sprintwise']
     #panels: ['gh_pulls', 'twitterscope']
     # 10 second flip delay.
     scrollInterval: 10*1000
@@ -66,8 +66,12 @@ SugarDash = {
                 $(this).removeClass 'moment_datetime'
                 $(this).addClass 'datetime'
             e.find(".graph").each ->
-                data = panel_data[$(this).attr('id')]
-                data.chart.renderTo = $(this).attr('id')
+                id = $(this).attr('id')
+                data = panel_data[id]
+                data.chart.renderTo = id
+                if ("#"+id+"_container").length > 0
+                    data.chart.renderTo = id+"_container"
+                console.log data.chart.renderTo, "RENDER"
                 chart = new Highcharts.Chart data
         statemachine = new State(states, callback, this)
         $(template).each ->
