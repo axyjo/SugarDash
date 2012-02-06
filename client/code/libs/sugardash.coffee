@@ -1,12 +1,16 @@
 SugarDash = {
     panelFilter: 'div.panel'
-    #panels: ['new_hires', 'twitterscope', 'twitterscope2', 'joneses_sprintwise']
-    panels: ['local_weather', 'local_news', 'twitterscope']
+    panels: ['joneses_developerwise', 'new_hires', 'twitterscope', 'twitterscope2', 'joneses_sprintwise']
+    #panels: ['gh_pulls', 'twitterscope']
+    # 10 second flip delay.
+    scrollInterval: 10*1000
+    autoScrollDelay: 4*1000
+    autoScrollTimeout: null
     init: ->
         this.container = $("#container")
         #$(window).resize()
         this.populate()
-        setInterval(this.switch, 10*1000)
+        setInterval(this.switch, this.scrollInterval)
         $("#container p").remove()
     generateUUID: ->
         s = [];
@@ -91,12 +95,30 @@ SugarDash = {
         template = Handlebars.templates[template_id](data)
         e.html(template)
 
+    autoScroll: ->
+        oldH = $('#container').height();
+        $("#container").css('height', 'auto');
+        height = $('#container').height();
+        $("#container").css('height', oldH);
+        console.log "scroll", height, oldH, height > oldH
+        if height > oldH
+            animTime = (SugarDash.scrollInterval - SugarDash.autoScrollDelay) * 4/5
+            delta = height - oldH
+            $("#container").animate({scrollTop:delta}, animTime)
     switch: ->
+        if SugarDash.autoScrollTimeout?
+            clearTimeout SugarDash.autoScrollTimeout
+            SugarDash.autoScrollTimeout = null
         $(SugarDash.current).fadeOut()
         SugarDash.next.fadeIn()
+        $("#container").scrollTop(0)
+
+        SugarDash.autoScrollTimeout = setTimeout(SugarDash.autoScroll, SugarDash.autoScrollDelay)
+
         SugarDash.current = SugarDash.next
         SugarDash.next = $(SugarDash.current).next(SugarDash.panelFilter)
         if SugarDash.next.length == 0
             SugarDash.next = $(SugarDash.container.children(SugarDash.panelFilter)).first()
         SugarDash.refresh(SugarDash.next.data('panel_id'))
+
 }

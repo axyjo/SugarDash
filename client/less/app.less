@@ -110,6 +110,27 @@ h2 {
     }
 }
 
+.pull_request {
+    margin-bottom: 10px;
+    .pull_request_author {
+        display: inline;
+        &:before {
+            content: "@";
+        }
+    }
+    .pull_request_content {
+        display: inline;
+    }
+    .pull_request_time {
+        display: inline;
+        white-space:nowrap;
+        &:before {
+            content: " - ";
+            opacity: 0.5;
+        }
+    }
+}
+
 
 footer {
     text-align: center;
