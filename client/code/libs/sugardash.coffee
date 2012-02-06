@@ -1,6 +1,6 @@
 SugarDash = {
     panelFilter: 'div.panel'
-    panels: ['twitterscope']
+    panels: ['new_hires', 'twitterscope', 'twitterscope2']
     init: ->
         this.container = $("#container")
         #$(window).resize()

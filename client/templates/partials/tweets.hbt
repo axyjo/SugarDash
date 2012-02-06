@@ -1,9 +1,9 @@
 {{#each this}}
 <div class="tweet">
-    <h3 class="tweet_author">{{this.from_user}}</h3>
+    <h3 class="small tweet_author">{{this.from_user}}</h3>
     <div class="tweet_content">
         {{{this.text}}}
     </div>
-    <div class="tweet_time_time"><span class="moment_datetime">{{this.created_at}}</span></div>
+    <div class="tweet_time"><span class="moment_datetime">{{this.created_at}}</span></div>
 </div>
 {{/each}}

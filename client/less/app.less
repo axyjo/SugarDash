@@ -1,6 +1,9 @@
+@import "bootstrap/bootstrap.less";
+
 body {
-    padding-top: 30px;
+    padding-top: 15px;
     padding-bottom: 40px;
+    overflow: hidden;
 }
 
 h1 {
@@ -8,9 +11,15 @@ h1 {
     margin-bottom: 20px;
 }
 
+h2 {
+    color: @blueDark;
+    border-bottom: 2px @blue solid;
+}
+
 .container-fluid {
     margin-left: auto;
     margin-right: auto;
+    border-bottom: 4px @red solid;
 }
 
 
@@ -64,10 +73,7 @@ h1 {
 
 .tweet {
     background-color: #fff;
-    border: 1px #000 solid;
     margin-bottom: 10px;
-    padding: 5px;
-    border-radius: 3px;
     .tweet_author {
         display: inline;
         &:before {
@@ -77,10 +83,19 @@ h1 {
     .tweet_content {
         display: inline;
     }
+    .tweet_time {
+        display: inline;
+        white-space:nowrap;
+        &:before {
+            content: " - ";
+            opacity: 0.5;
+        }
+    }
 }
 
 
 footer {
     text-align: center;
-    opacity: 0.5;
+    opacity: 0.4;
+    font-size: 60%;
 }
