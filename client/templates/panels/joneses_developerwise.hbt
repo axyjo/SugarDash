@@ -1,0 +1,11 @@
+<h1 class="panel_title">Keeping Up with the Joneses</h1>
+
+<div class="row-fluid">
+    <div class="widget graph" id="widget_joneses_current_dev" data-func="sugar.getCurrentJoneses" data-chart_type="pie" >
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="widget graph" id="widget_joneses_previous_dev" data-func="sugar.getPreviousJoneses" data-chart_type="pie" >
+    </div>
+</div>

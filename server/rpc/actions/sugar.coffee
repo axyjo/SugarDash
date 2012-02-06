@@ -236,6 +236,10 @@ exports.actions = (req, res, ss) ->
             @uuid_val = id
             @
 
+        callback: (c) =>
+            @cb = c
+            @
+
         mergeDate: (date_field, dateParam) =>
             moment = require('moment')
             epoch = moment(0)
@@ -359,14 +363,20 @@ exports.actions = (req, res, ss) ->
             ret.push key
         ret
 
+    getPie = (obj) ->
+        ret = []
+        for key, value of obj
+            ret.push [key, value.length]
+        ret
+
     getJoneses = (input) ->
-        q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
-            return_data results
+        q = new Defects {uuid: input.uuid || null}, process.si
         statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
         joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'
         sprint_number = input.sprint_number || jonesesCurrentSprintWeek()
         q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', sprint_number, '=', true).all()
-        q.groupBy('assigned_user_name').execute()
+        q.groupBy('assigned_user_name')
+        q
 
     return {
         getServerInfo: ->
@@ -411,17 +421,73 @@ exports.actions = (req, res, ss) ->
 
         getJonesesSprint: (input) ->
             input = validateInput(input)
-            getJoneses input
+            q = getJoneses input
 
         getCurrentJoneses: (input) ->
             input = validateInput(input)
             input.sprint_number = jonesesCurrentSprintWeek()
-            getJoneses input
+            q = getJoneses input
+            q.callback( (results) ->
+                new_data = {
+                    chart: {}
+                    credits: {
+                        text: 'from: Sugar Internal'
+                        href: 'http://sugarinternal.sugarondemand.com'
+                    }
+
+                    title: {
+                        text: "Current Joneses"
+                    }
+                    plotOptions: {
+                        pie: {
+                            dataLabels: {
+                                enabled: true,
+                            }
+                        }
+                    }
+                    series: [{
+                        type: 'pie',
+                        name: 'Current Joneses fixes by developer',
+                        data: getPie results.data.entry_list
+                    }]
+                }
+
+                results.data = new_data
+                return_data results
+            ).execute()
 
         getPreviousJoneses: (input) ->
             input = validateInput(input)
             input.sprint_number = jonesesCurrentSprintWeek() - 1
-            getJoneses input
+            q = getJoneses input
+            q.callback( (results) ->
+                new_data = {
+                    chart: {}
+                    credits: {
+                        text: 'from: Sugar Internal'
+                        href: 'http://sugarinternal.sugarondemand.com'
+                    }
+
+                    title: {
+                        text: "Previous Joneses"
+                    }
+                    plotOptions: {
+                        pie: {
+                            dataLabels: {
+                                enabled: true,
+                            }
+                        }
+                    }
+                    series: [{
+                        type: 'pie',
+                        name: 'Previous Joneses fixes by developer',
+                        data: getPie results.data.entry_list
+                    }]
+                }
+
+                results.data = new_data
+                return_data results
+            ).execute()
 
         getJonesesChart: (input) ->
             input = validateInput input

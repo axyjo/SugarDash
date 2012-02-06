@@ -21,6 +21,7 @@ h2 {
     margin-left: auto;
     margin-right: auto;
     border-bottom: 4px @red solid;
+    overflow: hidden;
 }
 
 .panel {
@@ -69,8 +70,21 @@ h2 {
     }
     .feed_story {
         margin-bottom: 10px;
+        .feed_story_title {
+            display: inline;
+            line-height: 60px;
+        }
+        .feed_story_time {
+            display: inline;
+            white-space: nowrap;
+            &:before {
+                content: " - ";
+                opacity: 0.5;
+            }
+        }
         .feed_story_snippet {
             opacity: 0.8;
+            line-height: none;
         }
     }
 }
@@ -101,4 +115,5 @@ footer {
     text-align: center;
     opacity: 0.4;
     font-size: 60%;
+    margin-top: -10px;
 }

@@ -17,5 +17,15 @@ SocketStream.event.on 'ready', ->
                 buffer += options.fn row
             buffer + '</div>'
 
+
+
+    # Resize handler
+    resizeFunc = ->
+        console.log "Resize"
+        $("#container").height ($(window).height() - $("footer").outerHeight())
+    $(document).ready ->
+        $(window).resize resizeFunc
+        resizeFunc.call()
+
     SugarDash.init()
 

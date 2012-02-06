@@ -1,22 +1,5 @@
 <h1 class="panel_title">Local News</h1>
 <div class="row-fluid">
-    <div class="widget span4" id="widget_weather_cupertino" data-func="local.getWeather" data-weatherCode="USCA0273" data-units="f">
-        {{#if widget_weather_cupertino}}
-            {{>weather widget_weather_cupertino}}
-        {{/if}}
-    </div>
-    <div class="widget span4" id="widget_weather_sf" data-func="local.getWeather" data-weatherCode="USCA0987" data-units="f">
-        {{#if widget_weather_sf}}
-            {{>weather widget_weather_sf}}
-        {{/if}}
-    </div>
-    <div class="widget span4" id="widget_weather_waterloo" data-func="local.getWeather" data-weatherCode="CAXX0531" data-units="c">
-        {{#if widget_weather_waterloo}}
-            {{>weather widget_weather_waterloo}}
-        {{/if}}
-    </div>
-</div>
-<div class="row-fluid">
     <div class="widget span6" id="widget_news_mercury" data-func="local.getNews" data-rssurl="http://feeds.mercurynews.com/mngi/rss/CustomRssServlet/568/200734.xml">
         {{#if widget_news_mercury}}
             {{>feed widget_news_mercury}}

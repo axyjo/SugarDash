@@ -1,6 +1,7 @@
 SugarDash = {
     panelFilter: 'div.panel'
-    panels: ['new_hires', 'twitterscope', 'twitterscope2']
+    #panels: ['new_hires', 'twitterscope', 'twitterscope2', 'joneses_sprintwise']
+    panels: ['local_weather', 'local_news', 'twitterscope']
     init: ->
         this.container = $("#container")
         #$(window).resize()
@@ -64,7 +65,6 @@ SugarDash = {
                 data = panel_data[$(this).attr('id')]
                 data.chart.renderTo = $(this).attr('id')
                 chart = new Highcharts.Chart data
-                console.log this
         statemachine = new State(states, callback, this)
         $(template).each ->
             if $(this).is('div')
