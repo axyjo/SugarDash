@@ -1,12 +1,11 @@
 SugarDash = {
     panelFilter: 'div.panel'
-    panels: ['new_hires', 'local_news', 'joneses_sprintwise']
+    panels: ['twitterscope']
     init: ->
         this.container = $("#container")
         #$(window).resize()
         this.populate()
         setInterval(this.switch, 10*1000)
-        console.debug "Removing loading div"
         $("#container p").remove()
     generateUUID: ->
         s = [];

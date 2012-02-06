@@ -13,6 +13,11 @@ h1 {
     margin-right: auto;
 }
 
+
+.datetime {
+    opacity: 0.5;
+}
+
 .new_hire {
     margin-right: -2px;
     margin-bottom: 15px;
@@ -26,7 +31,6 @@ h1 {
         padding-right: 10px;
     }
     .new_hire_dept {
-        opacity: 0.8;
         float: right;
         padding-right: 10px;
     }
@@ -52,11 +56,29 @@ h1 {
     }
     .feed_story {
         margin-bottom: 10px;
-        .feed_story_tile, .feed_story_snippet {
+        .feed_story_snippet {
             opacity: 0.8;
         }
     }
 }
+
+.tweet {
+    background-color: #fff;
+    border: 1px #000 solid;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 3px;
+    .tweet_author {
+        display: inline;
+        &:before {
+            content: "@";
+        }
+    }
+    .tweet_content {
+        display: inline;
+    }
+}
+
 
 footer {
     text-align: center;
