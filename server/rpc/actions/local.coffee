@@ -1,4 +1,11 @@
 exports.actions = (req, res, ss) ->
+    return_data = (data) ->
+        if _.isObject(data) and _.isString(data.uuid_val)
+            ss.publish.all 'response_'+data.uuid_val, data
+            res true
+        else
+            res data
+
     return {
         getWeather: (input) ->
             console.log "Got request", input.uuid
@@ -26,8 +33,7 @@ exports.actions = (req, res, ss) ->
                         uuid_val: input.uuid
                         data: JSON.parse(contents.join(''))
                     }
-                    ss.publish.all 'response_'+input.uuid, resp
-                    res true
+                    return_data resp
             request.end()
             console.log 'Request sent.'
 
@@ -60,8 +66,7 @@ exports.actions = (req, res, ss) ->
                             uuid_val: input.uuid
                             data: data.responseData.feed
                         }
-                        ss.publish.all 'response_'+input.uuid, resp
-                        res true
+                        return_data resp
                     else
                         console.error data.responseDetails
                         console.log "Error in getting data", data

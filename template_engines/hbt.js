@@ -5,21 +5,20 @@ exports.init = function(root, config) {
     return {
         name: 'Handlebars',
         prefix: function() {
-            return '<script type="text/javascript">\nHandlebars.templates = {};\n';
+            return '<script type="text/javascript">\n(function() {\n  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};\n';
         },
 
         // Closing code once all templates have been written into the <script> tag
         suffix: function() {
-            return '</script>\n';
+            return '})()\n</script>\n';
         },
 
         // Compile template into a function and attach to window.<windowVar>
         process: function(template, path, id) {
             var options = {
-                knownHelpers: {"if": true, "each": true},
+                knownHelpers: {'if': true, 'divide': true, 'each': true},
                 knownHelpersOnly: {}
             }
-
             return 'Handlebars.templates[\'' + id + '\'] = Handlebars.template(' + hb.precompile(template, options) + ');\n'
         }
     }

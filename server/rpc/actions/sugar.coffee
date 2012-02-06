@@ -365,7 +365,8 @@ exports.actions = (req, res, ss) ->
         statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
         joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'
         sprint_number = input.sprint_number || jonesesCurrentSprintWeek()
-        q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', sprint_number, '=', true).all().execute()
+        q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', sprint_number, '=', true).all()
+        q.groupBy('assigned_user_name').execute()
 
     return {
         getServerInfo: ->
@@ -422,15 +423,6 @@ exports.actions = (req, res, ss) ->
             input.sprint_number = jonesesCurrentSprintWeek() - 1
             getJoneses input
 
-        getJonesesCounts: (input) ->
-            input = validateInput input
-            q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
-                return_data results
-            statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
-            joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'
-            q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', '', '<>', true)
-            q.countBy('sprint_number_c').all().execute()
-
         getJonesesChart: (input) ->
             input = validateInput input
             console.log input
@@ -438,6 +430,11 @@ exports.actions = (req, res, ss) ->
                 new_data = {
                     chart: {
                         defaultSeriesType: input.chart_type || 'line'
+                    }
+
+                    credits: {
+                        text: 'from: Sugar Internal'
+                        href: 'http://sugarinternal.sugarondemand.com'
                     }
 
                     title: {

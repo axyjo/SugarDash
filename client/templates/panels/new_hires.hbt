@@ -1,6 +1,9 @@
-<div class="panel_title">Welcome, new hires!</div>
-<div class="widget full" id="widget_new_hires" data-func="sugar.getNewEmployees">
-{{#each widget_new_hires.entry_list}}
-    {{> new_hire this}}
-{{/each}}
+<h1 class="panel_title">Welcome, new hires!</h1>
+
+<div class="row-fluid">
+    <div class="widget" id="widget_new_hires" data-func="sugar.getNewEmployees">
+    {{#divide widget_new_hires.entry_list}}
+        {{> new_hire this}}
+    {{/divide}}
+    </div>
 </div>

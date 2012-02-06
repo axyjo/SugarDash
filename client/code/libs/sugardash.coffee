@@ -6,7 +6,8 @@ SugarDash = {
         #$(window).resize()
         this.populate()
         setInterval(this.switch, 10*1000)
-        $("#container p").fadeOut('fast').remove()
+        console.debug "Removing loading div"
+        $("#container p").remove()
     generateUUID: ->
         s = [];
         hexDigits = "0123456789abcdef";
@@ -17,6 +18,7 @@ SugarDash = {
         s[8] = s[13] = s[18] = s[23] = "-"
         s.join("")
     populate: ->
+        console.log Handlebars.templates
         for panel in this.panels
             this.refresh(panel)
         SugarDash.current = $(this.container).children(SugarDash.panelFilter).first()
@@ -39,15 +41,16 @@ SugarDash = {
         $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
     fetch: (panel_id, e, cb) ->
         console.log "fetching", panel_id
-        func = 'sugar.loggedIn'
-        template_id = "#tmpl-panels-"+panel_id
-        template = $(template_id).html()
+        template_id = "panels-"+panel_id
+        template = Handlebars.templates[template_id] {}
         panel_data = {}
         states = []
         $(template).each ->
-            if $(this).is('div.widget')
-                widget_id = $(this).attr "id"
-                states.push widget_id
+            if $(this).is('div')
+                $(this).find('.widget').each ->
+                    widget_id = $(this).attr "id"
+                    states.push widget_id
+        console.log states
         callback = ->
             console.debug "sent", panel_data, "to", panel_id
             cb panel_id, e, panel_data
@@ -65,29 +68,29 @@ SugarDash = {
                 console.log this
         statemachine = new State(states, callback, this)
         $(template).each ->
-            if $(this).is('div.widget')
-                widget_id = $(this).attr "id"
-                console.log widget_id
-                # Default values:
-                func = 'sugar.loggedIn'
-                inputs = {}
+            if $(this).is('div')
+                $(this).find('.widget').each ->
+                    widget_id = $(this).attr "id"
+                    console.log widget_id
+                    # Default values:
+                    func = 'sugar.loggedIn'
+                    inputs = {}
 
-                func = $(this).data "func"
-                inputs = $(this).data()
-                inputs.uuid = SugarDash.generateUUID()
-                ss.rpc func, inputs
-                console.log "Sent request", inputs.uuid, "to", func
+                    func = $(this).data "func"
+                    inputs = $(this).data()
+                    inputs.uuid = SugarDash.generateUUID()
+                    ss.rpc func, inputs
+                    console.log "Sent request", inputs.uuid, "to", func
 
-                ss.event.on 'response_'+inputs.uuid, (resp) ->
-                    console.log "Got response", resp.uuid_val, 'for', widget_id, resp
-                    panel_data[widget_id] = resp.data
-                    statemachine.complete widget_id
+                    ss.event.on 'response_'+inputs.uuid, (resp) ->
+                        console.log "Got response", resp.uuid_val, 'for', widget_id, resp
+                        panel_data[widget_id] = resp.data
+                        statemachine.complete widget_id
 
     update: (panel_id, e, data) ->
-        template_id = "#tmpl-panels-"+panel_id
-        template = Handlebars.compile($(template_id).html())
-        output = template(data)
-        e.html(output)
+        template_id = "panels-"+panel_id
+        template = Handlebars.templates[template_id](data)
+        e.html(template)
 
     switch: ->
         $(SugarDash.current).fadeOut()
