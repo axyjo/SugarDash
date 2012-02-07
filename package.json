@@ -1,13 +1,16 @@
 {
-  "name": "my_realtime_app",
-  "description": "An awesome real time application",
+  "name": "SugarDash",
+  "description": "An awesome real time dashboard for multiple devices.",
   "version": "0.0.1",
-  "author": "Me <me@mydomain.com>",
+  "author": "Akshay <me@akshayjoshi.com>",
   "private": true,
   "engines": { "node": ">= 0.6.0" },
   "dependencies": {
     "ss-coffee": "0.1.x",
-    "ss-less": "0.1.x",
-    "ss-jade": "0.1.x"
+    "ss-jade": "0.1.x",
+    "underscore": "1.3.x",
+    "handlebars": "1.0.x",
+    "moment": "1.3.x",
+    "socketstream": "0.3.x",
   }
 }
