@@ -1,4 +1,9 @@
 exports.actions = (req, res, ss) ->
+
+    log = (args...)->
+        str = "SugarCRM: ".blue + args.join(' ')
+        console.log str
+
     class SugarInternal
         @get: -> @instance ?= new @
 
@@ -6,7 +11,7 @@ exports.actions = (req, res, ss) ->
             if(!_.isEmpty(SugarInternal::getToken()))
                 @_call cb, func, args, params
             else
-                console.log func, "failed: not authenticated."
+                log "Not authenticated.".red
 
         login: (username, password) ->
             loginData = [{
@@ -16,7 +21,7 @@ exports.actions = (req, res, ss) ->
             }, 'SugaDash', []]
             # Only login can bypass the auth check for call.
             cb = (data) ->
-                console.log "SESSION ID:", data.id
+                log "SESSION ID =".green, data.id.toString().green
                 SugarInternal::setToken data.id
                 res data.name_value_list
             request = @_call(cb, "login", loginData)
@@ -32,7 +37,7 @@ exports.actions = (req, res, ss) ->
             if val?
                 val
             else
-                console.log "No auth token present."
+                log "No auth token present.".yellow
                 null
 
         _call: (cb, func, args, params) ->
@@ -58,12 +63,12 @@ exports.actions = (req, res, ss) ->
                         response_body = JSON.parse resp.join('')
                         cb response_body
                     catch error
-                        console.log "Non JSON response:", resp.join('')
-                        console.log "Error:", error
+                        log "Non JSON response:".yellow, resp.join('')
+                        log "Error:".red, error
 
             request.write data
             request.end()
-            console.log("Request sent.")
+            log "Request sent for", func, "."
 
         _getQueryString: (func, args) ->
             data = {
@@ -91,7 +96,7 @@ exports.actions = (req, res, ss) ->
             @si = si
 
             @cb = cb || ->
-                console.log "No callback passed to QuerySI"
+                log 'No callback passed to QuerySI'.warn
 
             @data = null
             @validated = false
@@ -121,7 +126,7 @@ exports.actions = (req, res, ss) ->
             if @offset_val? and @offset_val != 0
                 query += " OFFSET " + @offset_val
 
-            console.log query
+            log query.cyan
 
         execute: =>
             @._validate()
@@ -491,7 +496,6 @@ exports.actions = (req, res, ss) ->
 
         getJonesesChart: (input) ->
             input = validateInput input
-            console.log input
             q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
                 new_data = {
                     chart: {

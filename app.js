@@ -6,6 +6,7 @@ var http = require('http'),
 var sugar_auth_token = null;
 
 _ = require('underscore');
+require('colors');
 
 ss.client.define('main', {
   view:   'app.jade',
