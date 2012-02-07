@@ -36,8 +36,6 @@ h2 {
     margin-right: -2px;
     margin-bottom: 15px;
     border: 1px #999 solid;
-    box-shadow: 10px 10px 5px #888;
-    min-width: 245px;
     .new_hire_name {
         margin-top: -10px;
         float: right;
@@ -85,6 +83,9 @@ h2 {
         .feed_story_snippet {
             opacity: 0.8;
             line-height: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 }

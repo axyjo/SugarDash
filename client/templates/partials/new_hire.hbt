@@ -1,4 +1,4 @@
-<div class="new_hire span3">
+<div class="new_hire span4">
     <div class="new_hire_photo">
     {{#if this.name_value_list.picture.value}}
         <img src="https://sugarinternal.sugarondemand.com/index.php?entryPoint=download&type=SugarFieldImage&isTempFile=1&id={{this.name_value_list.picture.value}}" />

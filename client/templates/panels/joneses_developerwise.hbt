@@ -2,7 +2,18 @@
 
 <div class="row-fluid">
     <div class="widget graph" id="widget_joneses_current_dev" data-func="sugar.getCurrentJoneses" data-chart_type="pie" >
-        <div class="span6" id="widget_joneses_current_dev_container">test
+        <div class="span6" id="widget_joneses_current_dev_container">
+        </div>
+        <div class="span6" id="widget_joneses_current_dev_table">
+            <table>
+            {{#each widget_joneses_current_dev.series.0.data}}
+                <tr>
+                {{#each this}}
+                <td>{{this}}</td>
+                {{/each}}
+                </tr>
+            {{/each}}
+            </table>
         </div>
     </div>
 </div>
@@ -12,6 +23,15 @@
         <div class="span6" id="widget_joneses_previous_dev_container">
         </div>
         <div class="span6" id="widget_joneses_previous_dev_table">
+            <table>
+            {{#each widget_joneses_previous_dev.series.0.data}}
+                <tr>
+                {{#each this}}
+                <td>{{this}}</td>
+                {{/each}}
+                </tr>
+            {{/each}}
+            </table>
         </div>
     </div>
 </div>

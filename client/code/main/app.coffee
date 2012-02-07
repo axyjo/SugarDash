@@ -12,7 +12,7 @@ SocketStream.event.on 'ready', ->
         if array? and array.length > 0
             buffer = '<div class="row-fluid">'
             for row, i in array
-                if i % 4 == 0 and i != 0
+                if i % 3 == 0 and i != 0
                     buffer += '</div><div class="row-fluid">'
                 buffer += options.fn row
             buffer + '</div>'

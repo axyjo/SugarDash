@@ -1,6 +1,8 @@
 Highcharts.theme = {
-	colors: ["#DDDF0D", "#7798BF", "#55BF3B", "#DF5353", "#aaeeee", "#ff0066", "#eeaaee",
-		"#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+    //colors: ["#DDDF0D", "#7798BF", "#55BF3B", "#DF5353", "#aaeeee", "#ff0066", "#eeaaee",
+//		"#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+    colors: ['#049CDB', '#46A546', '#FFC40D', '#C3325F', '#0064CD', '#9D261D', '#F89406', '#7A43B6',
+            '#4572A7', '#AA4643', '#89A54E', '#80699B', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92'],
 	chart: {
         backgroundColor: null,
 		borderWidth: 0,
@@ -58,6 +60,7 @@ Highcharts.theme = {
 		}
 	},
 	legend: {
+        enabled: false,
 		itemStyle: {
 			color: '#CCC'
 		},
@@ -92,8 +95,10 @@ Highcharts.theme = {
 	plotOptions: {
 		line: {
 			dataLabels: {
-				color: '#CCC',
-                font: 'bold 30px "Helvetica Neue", Helvetica, Arial, sans-serif',
+				color: '#AAA',
+                style: {
+                    font: 'bold 20px "Helvetica Neue", Helvetica, Arial, sans-serif',
+                },
 			},
 			marker: {
 				lineColor: '#333'
@@ -109,6 +114,14 @@ Highcharts.theme = {
 				lineColor: '#333'
 			}
 		},
+        pie: {
+            dataLabels: {
+                color: '#AAA',
+                style: {
+                    font: 'bold 20px "Helvetica Neue", Helvetica, Arial, sans-serif',
+                },
+            },
+        },
 		candlestick: {
 			lineColor: 'white'
 		}

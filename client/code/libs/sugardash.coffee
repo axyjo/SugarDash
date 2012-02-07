@@ -1,7 +1,7 @@
 SugarDash = {
     panelFilter: 'div.panel'
-    panels: ['joneses_developerwise', 'new_hires', 'local_news', 'local_weather', 'twitterscope', 'twitterscope2', 'gh_pulls', 'joneses_sprintwise']
-    #panels: ['gh_pulls', 'twitterscope']
+    #panels: ['joneses_developerwise', 'new_hires', 'local_news', 'local_weather', 'twitterscope', 'twitterscope2', 'gh_pulls', 'joneses_sprintwise']
+    panels: ['joneses_developerwise', 'joneses_sprintwise']
     # 10 second flip delay.
     scrollInterval: 10*1000
     autoScrollDelay: 4*1000

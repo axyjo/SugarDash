@@ -1,6 +1,6 @@
 <h1 class="panel_title">New Pull Requests</h1>
 <div class="row-fluid">
-    <div class="widget" id="widget_github_sugarcrm_Mango" data-func="github.pulls" data-repo="sugarcrm/Mango" data-limit="7">
+    <div class="widget" id="widget_github_sugarcrm_Mango" data-func="github.pulls" data-repo="sugarcrm/Mango" data-limit="5">
         <h2 class="widget_title">sugarcrm/Mango</h3>
         {{#if widget_github_sugarcrm_Mango}}
             {{>pull_requests widget_github_sugarcrm_Mango}}
