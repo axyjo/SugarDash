@@ -1,7 +1,7 @@
 SugarDash = {
     panelFilter: 'div.panel'
     #panels: ['joneses_developerwise', 'new_hires', 'local_news', 'local_weather', 'twitterscope', 'twitterscope2', 'gh_pulls', 'joneses_sprintwise']
-    panels: ['joneses_developerwise', 'joneses_sprintwise']
+    panels: ['joneses_developerwise2', 'joneses_sprintwise', 'joneses_developerwise']
     # 10 second flip delay.
     scrollInterval: 10*1000
     autoScrollDelay: 4*1000
@@ -22,7 +22,6 @@ SugarDash = {
         s[8] = s[13] = s[18] = s[23] = "-"
         s.join("")
     populate: ->
-        console.log Handlebars.templates
         for panel in this.panels
             this.refresh(panel)
         SugarDash.current = $(this.container).children(SugarDash.panelFilter).first()
@@ -44,7 +43,7 @@ SugarDash = {
         e.data('panel_show_count', panel_show_count + 1)
         $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
     fetch: (panel_id, e, cb) ->
-        console.log "fetching", panel_id
+        console.log "Fetching", panel_id
         template_id = "panels-"+panel_id
         template = Handlebars.templates[template_id] {}
         panel_data = {}
@@ -54,7 +53,6 @@ SugarDash = {
                 $(this).find('.widget').each ->
                     widget_id = $(this).attr "id"
                     states.push widget_id
-        console.log states
         callback = ->
             console.debug "sent", panel_data, "to", panel_id
             cb panel_id, e, panel_data
@@ -71,14 +69,12 @@ SugarDash = {
                 data.chart.renderTo = id
                 if ("#"+id+"_container").length > 0
                     data.chart.renderTo = id+"_container"
-                console.log data.chart.renderTo, "RENDER"
                 chart = new Highcharts.Chart data
         statemachine = new State(states, callback, this)
         $(template).each ->
             if $(this).is('div')
                 $(this).find('.widget').each ->
                     widget_id = $(this).attr "id"
-                    console.log widget_id
                     # Default values:
                     func = 'sugar.loggedIn'
                     inputs = {}
@@ -104,7 +100,6 @@ SugarDash = {
         $("#container").css('height', 'auto');
         height = $('#container').height();
         $("#container").css('height', oldH);
-        console.log "scroll", height, oldH, height > oldH
         if height > oldH
             animTime = (SugarDash.scrollInterval - SugarDash.autoScrollDelay) * 4/5
             delta = height - oldH
@@ -113,11 +108,11 @@ SugarDash = {
         if SugarDash.autoScrollTimeout?
             clearTimeout SugarDash.autoScrollTimeout
             SugarDash.autoScrollTimeout = null
-        $(SugarDash.current).fadeOut()
-        SugarDash.next.fadeIn()
-        $("#container").scrollTop(0)
+        $(SugarDash.current).fadeOut ->
+            $("#container").scrollTop(0)
+            SugarDash.next.fadeIn()
 
-        SugarDash.autoScrollTimeout = setTimeout(SugarDash.autoScroll, SugarDash.autoScrollDelay)
+        #SugarDash.autoScrollTimeout = setTimeout(SugarDash.autoScroll, SugarDash.autoScrollDelay)
 
         SugarDash.current = SugarDash.next
         SugarDash.next = $(SugarDash.current).next(SugarDash.panelFilter)
