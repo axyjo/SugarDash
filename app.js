@@ -30,7 +30,15 @@ ss.client.formatters.add(require('./formatters/hbt'));
 ss.client.templateEngine.use(require('./template_engines/hbt'));
 
 // Minimise and pack assets if you type SS_ENV=production node app
-if (ss.env == 'production') ss.client.packAssets();
+// Otherwise, log memory usage.
+if (ss.env == 'production') {
+    ss.client.packAssets();
+} else {
+    setInterval(function() {
+        mem = Math.round(process.memoryUsage().rss / 1024 / 1024 * 10)/10
+        console.log("RAM Usage: %s MB", mem);
+    }, 30*1000);
+}
 
 var server = http.Server(ss.http.middleware);
 server.listen(3000);
