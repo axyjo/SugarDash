@@ -2,7 +2,5 @@
 
 <div class="row-fluid">
     <div class="widget graph" id="widget_joneses_closed_by_sprint" data-func="sugar.getJonesesChart" data-chart_title="Bugs Completed in Joneses" data-chart_type="line" data-xaxis_title="Sprint Number" data-yaxis_title="Bugs Closed">
-        <div id="widget_joneses_closed_by_sprint_container">
-        </div>
     </div>
 </div>

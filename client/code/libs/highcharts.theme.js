@@ -61,7 +61,6 @@ Highcharts.theme = {
 		}
 	},
 	legend: {
-        enabled: false,
 		itemStyle: {
 			color: '#CCC'
 		},

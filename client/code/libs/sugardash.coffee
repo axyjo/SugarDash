@@ -67,8 +67,8 @@ SugarDash = {
                 id = $(this).attr('id')
                 data = panel_data[id]
                 data.chart.renderTo = id
-                if ("#"+id+"_container").length > 0
-                    data.chart.renderTo = id+"_container"
+                if data.legend? and data.legend.labelFormatter?
+                    data.legend.labelFormatter = new Function data.legend.labelFormatter
                 chart = new Highcharts.Chart data
         statemachine = new State(states, callback, this)
         $(template).each ->

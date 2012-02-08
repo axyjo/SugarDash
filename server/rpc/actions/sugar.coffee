@@ -356,24 +356,6 @@ exports.actions = (req, res, ss) ->
         input.uuid = input.uuid || null
         input
 
-    getValues = (obj) ->
-        ret = []
-        for key, value of obj
-            ret.push value
-        ret
-
-    getKeys = (obj) ->
-        ret = []
-        for key, value of obj
-            ret.push key
-        ret
-
-    getPie = (obj) ->
-        ret = []
-        for key, value of obj
-            ret.push [key, value.length]
-        ret
-
     getJoneses = (input) ->
         q = new Defects {uuid: input.uuid || null}, process.si
         statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
@@ -382,6 +364,69 @@ exports.actions = (req, res, ss) ->
         q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', sprint_number, '=', true).all()
         q.groupBy('assigned_user_name')
         q
+
+    getChart = (type, title, xaxis, yaxis) ->
+        {
+            chart: {
+                defaultSeriesType: type || 'line'
+            }
+
+            credits: {
+                text: 'from: Sugar Internal'
+                href: 'http://sugarinternal.sugarondemand.com'
+            }
+
+            title: {
+                text: title || 'CHART TITLE NOT SET'
+            }
+
+            xAxis: {
+                title: {
+                    text: xaxis || null
+                }
+            }
+
+            yAxis: {
+                title: {
+                    text: yaxis || null
+                }
+            }
+
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                    enableMouseTracking: false
+                }
+                pie: {
+                    dataLabels: {
+                        enabled: false,
+                    },
+                    showInLegend: true,
+                }
+            }
+            series: []
+        }
+
+    getPie = (results) ->
+        data = _.zip _.keys(results.data.entry_list), _.values(results.data.entry_list)
+        data = _.sortBy data, (point) ->
+            point[1]
+        chart = getChart('pie', 'Joneses')
+        chart.legend = {
+            enabled: true,
+            layout: 'vertical',
+            floating: false,
+            align: 'right',
+            labelFormatter: "return this.name + ': ' + this.y;"
+        }
+        chart.series.push {
+            type: 'pie',
+            name: 'Joneses fixes by developer',
+            data: data.reverse(),
+        }
+        chart
 
     return {
         getServerInfo: ->
@@ -433,113 +478,30 @@ exports.actions = (req, res, ss) ->
             input.sprint_number = jonesesCurrentSprintWeek()
             q = getJoneses input
             q.callback( (results) ->
-                new_data = {
-                    chart: {}
-                    credits: {
-                        text: 'from: Sugar Internal'
-                        href: 'http://sugarinternal.sugarondemand.com'
-                    }
-
-                    title: {
-                        text: "Current Joneses"
-                    }
-                    plotOptions: {
-                        pie: {
-                            dataLabels: {
-                                enabled: true,
-                            }
-                        }
-                    }
-                    series: [{
-                        type: 'pie',
-                        name: 'Current Joneses fixes by developer',
-                        data: getPie results.data.entry_list
-                    }]
-                }
-
-                results.data = new_data
+                results.data = getPie results
                 return_data results
-            ).execute()
+            ).groupBy(null).countBy('assigned_user_name').execute()
 
         getPreviousJoneses: (input) ->
             input = validateInput(input)
             input.sprint_number = jonesesCurrentSprintWeek() - 1
             q = getJoneses input
             q.callback( (results) ->
-                new_data = {
-                    chart: {}
-                    credits: {
-                        text: 'from: Sugar Internal'
-                        href: 'http://sugarinternal.sugarondemand.com'
-                    }
-
-                    title: {
-                        text: "Previous Joneses"
-                    }
-                    plotOptions: {
-                        pie: {
-                            dataLabels: {
-                                enabled: true,
-                            }
-                        }
-                    }
-                    series: [{
-                        type: 'pie',
-                        name: 'Previous Joneses fixes by developer',
-                        data: getPie results.data.entry_list
-                    }]
-                }
-
-                results.data = new_data
+                results.data = getPie results
                 return_data results
-            ).execute()
+            ).groupBy(null).countBy('assigned_user_name').execute()
 
         getJonesesChart: (input) ->
             input = validateInput input
             q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
-                new_data = {
-                    chart: {
-                        defaultSeriesType: input.chart_type || 'line'
-                    }
-
-                    credits: {
-                        text: 'from: Sugar Internal'
-                        href: 'http://sugarinternal.sugarondemand.com'
-                    }
-
-                    title: {
-                        text: input.chart_title || 'CHART TITLE NOT SET'
-                    }
-
-                    xAxis: {
-                        categories: getKeys results.data.entry_list
-                        title: {
-                            text: input.xaxis_title || null
-                        }
-                    }
-
-                    yAxis: {
-                        title: {
-                            text: input.yaxis_title || null
-                        }
-                    }
-
-                    plotOptions: {
-                        line: {
-                            dataLabels: {
-                                enabled: input.dataLabels || true
-                            }
-                            enableMouseTracking: false
-                        }
-                    }
-
-                    series: [
-                        {data: getValues results.data.entry_list}
-                    ]
-
+                chart = getChart input.chart_type, input.chart_title, input.xaxis_title, input.yaxis_title
+                chart.xAxis.categories = _.keys results.data.entry_list
+                chart.series.push {
+                    type: 'line'
+                    name: 'Joneses Chart'
+                    data: _.values results.data.entry_list
                 }
-
-                results.data = new_data
+                results.data = chart
                 return_data results
             statuses = ['Pending', 'Pending Review', 'PendingPM', 'Closed']
             joneses_release = '9385ad44-3ead-6617-b217-4d02b12a8cd3'
