@@ -308,6 +308,11 @@ exports.actions = (req, res, ss) ->
             super params, si, cb
             @.where('type', 'Defect')
 
+    class Features extends Bugs
+        constructor: (params, si, cb) ->
+            super params, si, cb
+            @.where('type', 'Feature')
+
     appName = 'SugarDash'
 
     countBy = (data, column) ->
@@ -444,6 +449,12 @@ exports.actions = (req, res, ss) ->
             q = new Users {uuid: input.uuid}, process.si, (results) ->
                 return_data results
             q.select(['picture', 'date_entered', 'department', 'full_name']).newest().limit(9).execute()
+        getNewFeatures: (input) ->
+            input = validateInput(input)
+            q = new Features {uuid: input.uuid}, process.si, (results) ->
+                return_data results
+            q.limit(500).groupBy('release_name').execute()
+
         getMilestoneDates: (input) ->
             data = [
                 {date: Date.parse('Feb 29, 2012'), title: '6.4.1 GA'},
