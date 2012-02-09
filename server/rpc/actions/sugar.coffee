@@ -433,6 +433,59 @@ exports.actions = (req, res, ss) ->
         }
         chart
 
+    getStackedBar = (chart_data, segments) ->
+        chart = getChart('bar', 'Bugs by Developer/Status')
+        chart.xAxis.categories = _.keys chart_data
+        chart.legend = {
+            enabled: true,
+            layout: 'horizontal',
+            floating: true,
+            align: 'right',
+            verticalAlign: 'top'
+        }
+        chart.plotOptions = {
+            series: {
+                stacking: 'normal'
+            }
+        }
+
+        for segment in segments
+            data = []
+            for key, value of chart_data
+                if value[segment]?
+                    data.push value[segment]
+                else
+                    data.push 0
+
+            chart.series.push {
+                name: segment,
+                data: data
+            }
+        chart
+
+    getDeveloperBugs = (input) ->
+        input = validateInput(input)
+        q = new Defects {uuid: input.uuid}, process.si, (results) ->
+            chart_data = {}
+            segments = []
+            for developer, bugArray of results.data.entry_list
+                if !chart_data[developer]?
+                    chart_data[developer] = {}
+                for bug in bugArray
+                    if !_.include(segments, bug.name_value_list.status.value)
+                        segments.push bug.name_value_list.status.value
+                    if !chart_data[developer][bug.name_value_list.status.value]?
+                        chart_data[developer][bug.name_value_list.status.value] = 0
+                    chart_data[developer][bug.name_value_list.status.value]++
+
+            results.data = getStackedBar chart_data, segments
+            return_data results
+        if input.release?
+            q.where('fixed_in_release', input.release).all()
+        else
+            q.limit(500)
+        q.groupBy('assigned_user_name').execute()
+
     return {
         getServerInfo: ->
             request = call("get_server_info", '')
@@ -449,11 +502,19 @@ exports.actions = (req, res, ss) ->
             q = new Users {uuid: input.uuid}, process.si, (results) ->
                 return_data results
             q.select(['picture', 'date_entered', 'department', 'full_name']).newest().limit(9).execute()
-        getNewFeatures: (input) ->
+
+        getNewFeaturesChart: (input) ->
             input = validateInput(input)
+            releases = ["_6.5.0", "_6.6.0"]
+            release_ids = ["b77dc99e-fd80-384d-51eb-4c1123bfa912", "cac9b8c9-be48-552b-6089-4f063d8cc0d3"]
             q = new Features {uuid: input.uuid}, process.si, (results) ->
                 return_data results
-            q.limit(500).groupBy('release_name').execute()
+            q.limit(500).in('fixed_in_release', release_ids).execute()
+
+        getDeveloperBugsCaramel: (input) ->
+            input = validateInput(input)
+            input.release = "b77dc99e-fd80-384d-51eb-4c1123bfa912"
+            getDeveloperBugs input
 
         getMilestoneDates: (input) ->
             data = [

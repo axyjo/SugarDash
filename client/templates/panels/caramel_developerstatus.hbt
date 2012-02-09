@@ -1,0 +1,7 @@
+<h1 class="panel_title">Caramel</h1>
+<h2 class="widget_title">Developer/Status Bug Overview</h2>
+<div class="row-fluid">
+    <div class="widget graph" id="widget_developer_status_caramel" data-func="sugar.getDeveloperBugsCaramel" data-chart_type="bar" >
+    </div>
+</div>
+
