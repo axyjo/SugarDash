@@ -1,0 +1,16 @@
+<h1 class="panel_title">Largest Opportunities</h1>
+<div class="row-fluid">
+    <div class="widget" id="widget_two_week_large_opportunities" data-func="sugar.getNewLargeOpportunities">
+        <h2 class="widget_title">Last Two Weeks</h3>
+        {{#if widget_two_week_large_opportunities}}
+            {{#each widget_two_week_large_opportunities.entry_list}}
+                <div class="row-fluid opportunity_entry">
+                    <div class="span3 opportunity_amount">${{this.amount}}</div>
+                    <div class="span3 opportinity_title">{{this.name}} ({{this.opportunity_type}})</div>
+                    <div calss="span3 opportunity_account">{{this.account_name}}</div>
+                    <div class="span3 opportunity_datetime"><span class="moment_datetime">{{this.date_entered}}</span></div>
+                </div>
+            {{/each}}
+        {{/if}}
+    </div>
+</div>

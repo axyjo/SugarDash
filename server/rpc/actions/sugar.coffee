@@ -420,6 +420,11 @@ exports.actions = (req, res, ss) ->
             params.from = 'csurv_SurveyResponse'
             super params, si, cb
 
+    class Opportunities extends SugarRecord
+        constructor: (params, si, cb) ->
+            params.from = 'Opportunities'
+            super params, si, cb
+
     appName = 'SugarDash'
 
     countBy = (data, column) ->
@@ -616,6 +621,13 @@ exports.actions = (req, res, ss) ->
             q = new SatisfactionSurvey {uuid: input.uuid}, process.si, (results) ->
                  return_data results
             q.newest().limit(10).execute()
+
+        getNewLargeOpportunities: (input) ->
+            input = validateInput input
+            q = new Opportunities {uuid: input.uuid}, process.si, (results) ->
+                return_data results
+            q.order('amount DESC').addWhereClause('opportunities.date_entered > NOW() - INTERVAL 2 WEEK').limit(10)
+            q.execute()
 
         getNewFeaturesChart: (input) ->
             input = validateInput(input)
