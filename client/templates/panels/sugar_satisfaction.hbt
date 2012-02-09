@@ -1,0 +1,47 @@
+<h1 class="panel_title">Customer Satisfaction</h1>
+<div class="row-fluid">
+    <div class="widget" id="widget_sugar_satisfaction" data-func="sugar.getSatisfaction">
+        <h2 class="widget_title">Most recent</h3>
+        {{#if widget_sugar_satisfaction}}
+            {{#each widget_sugar_satisfaction.entry_list}}
+                <div class="row-fluid">
+                    {{#if this.name_value_list.question_1.value}}
+                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_1.value}}.png" />
+                    {{else}}
+                        <img class="span1" src="/images/emotions/unknown.png" />
+                    {{/if}}
+
+                    {{#if this.name_value_list.question_2.value}}
+                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_2.value}}.png" />
+                    {{else}}
+                        <img class="span1" src="/images/emotions/unknown.png" />
+                    {{/if}}
+
+                    {{#if this.name_value_list.question_3.value}}
+                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_3.value}}.png" />
+                    {{else}}
+                        <img class="span1" src="/images/emotions/unknown.png" />
+                    {{/if}}
+
+                    {{#if this.name_value_list.question_4.value}}
+                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_4.value}}.png" />
+                    {{else}}
+                        <img class="span1" src="/images/emotions/unknown.png" />
+                    {{/if}}
+
+                    {{#if this.name_value_list.question_5.value}}
+                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_5.value}}.png" />
+                    {{else}}
+                        <img class="span1" src="/images/emotions/unknown.png" />
+                    {{/if}}
+
+                    {{#if this.name_value_list.question_6.value}}
+                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_6.value}}.png" />
+                    {{else}}
+                        <img class="span1" src="/images/emotions/unknown.png" />
+                    {{/if}}
+                </div>
+            {{/each}}
+        {{/if}}
+    </div>
+</div>

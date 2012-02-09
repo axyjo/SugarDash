@@ -348,6 +348,11 @@ exports.actions = (req, res, ss) ->
             super params, si, cb
             @.where('type', 'Feature')
 
+    class SatisfactionSurvey extends SugarRecord
+        constructor: (params, si, cb) ->
+            params.from = 'csurv_SurveyResponse'
+            super params, si, cb
+
     appName = 'SugarDash'
 
     countBy = (data, column) ->
@@ -538,6 +543,12 @@ exports.actions = (req, res, ss) ->
             q = new Users {uuid: input.uuid}, process.si, (results) ->
                 return_data results
             q.select(['picture', 'date_entered', 'department', 'full_name']).newest().limit(9).execute()
+
+        getSatisfaction: (input) ->
+            input = validateInput input
+            q = new SatisfactionSurvey {uuid: input.uuid}, process.si, (results) ->
+                 return_data results
+            q.newest().limit(10).execute()
 
         getNewFeaturesChart: (input) ->
             input = validateInput(input)
