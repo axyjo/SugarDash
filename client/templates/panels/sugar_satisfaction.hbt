@@ -4,7 +4,9 @@
         <h2 class="widget_title">Most recent</h3>
         {{#if widget_sugar_satisfaction}}
             {{#each widget_sugar_satisfaction.entry_list}}
-                <div class="row-fluid">
+                <div class="row-fluid sugar_satisfaction_entry">
+                    <div class="span3 sugar_satisfaction_title">{{this.name_value_list.assigned_user_name.value}} - {{this.name_value_list.case_relate.value}}</div>
+                    <div class="span2"><span class="moment_datetime">{{this.name_value_list.date_entered.value}}</span></div>
                     {{#if this.name_value_list.question_1.value}}
                         <img class="span1" src="/images/emotions/{{this.name_value_list.question_1.value}}.png" />
                     {{else}}
