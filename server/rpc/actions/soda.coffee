@@ -64,7 +64,8 @@ exports.actions = (req, res, ss) ->
 
     getStackedArea = (chart_data, segments) ->
         chart = getChart('area', 'Build Status')
-        chart.xAxis.categories = _.keys chart_data
+        # Manually override colours so that they make sense.
+        chart.colors = ['#46A546', '#9D261D', '#F89406']
         chart.legend = {
             enabled: true,
             layout: 'horizontal',
@@ -78,6 +79,7 @@ exports.actions = (req, res, ss) ->
             }
         }
         for build, obj of chart_data
+            chart.xAxis.categories = _.keys chart_data[build]
             for segment in segments
                 data = []
                 for key, value of obj
@@ -154,7 +156,7 @@ exports.actions = (req, res, ss) ->
                         directoryName = $(this).html()
                         buildNums.push directoryName.substr 0, directoryName.length-1
 
-                    buildNums = buildNums.slice(-3)
+                    buildNums = buildNums.slice(-14)
 
                     for build in buildNums
                         state.add branch+"-"+build
