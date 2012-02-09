@@ -93,6 +93,8 @@ exports.actions = (req, res, ss) ->
             @uuid_val = params.uuid || null
             @group_by = params.groupBy || null
             @count_by = params.countBy || null
+            @filters = params.filters || []
+            @filter_lim = params.filter_limit || 0
 
             @si = si
             @orig_data = []
@@ -167,19 +169,50 @@ exports.actions = (req, res, ss) ->
                         for entry, i in data.entry_list
                             if entry.date_entered?
                                 record = _parseUTCDate entry.date_entered
-                                data.entry_list[i].date_entered_age = now.diff record
+                                data.entry_list[i].date_entered_age = record.diff now
                             if entry.date_modified?
                                 record = _parseUTCDate entry.date_modified
-                                data.entry_list[i].date_modified_age = now.diff record
+                                data.entry_list[i].date_modified_age = record.diff now
                             if entry.date_closed?
                                 record = _parseUTCDate entry.date_closed
-                                data.entry_list[i].date_closed_age = now.diff record
+                                data.entry_list[i].date_closed_age = record.diff now
 
+                    # Run any filters on the data.
+                    if obj.filters? and _.isArray obj.filters
+                        for filter in obj.filters
+                            # Generate a filter iterator
+                            switch filter[1]
+                                when "=="
+                                    iterator = (entry) ->
+                                        entry[filter[0]] == filter[2]
+                                when "!="
+                                    iterator = (entry) ->
+                                        entry[filter[0]] != filter[2]
+                                when ">"
+                                    iterator = (entry) ->
+                                        entry[filter[0]] > filter[2]
+                                when "<"
+                                    iterator = (entry) ->
+                                        entry[filter[0]] < filter[2]
+                                when ">="
+                                    iterator = (entry) ->
+                                        entry[filter[0]] >= filter[2]
+                                when "<="
+                                    iterator = (entry) ->
+                                        entry[filter[0]] <= filter[2]
+
+                            data.entry_list = _.filter data.entry_list, iterator
+
+                    if obj.filter_lim? and _.isNumber obj.filter_lim and obj.filter_lim != 0
+                        data.entry_list = data.entry_list.slice(0, obj.filter_lim - 1)
+
+                    # Group the data as requested.
                     if obj.group_by?
                         obj._groupBy(obj.group_by)
                     else if obj.count_by?
                         obj._countBy(obj.count_by)
 
+                    # Log the query.
                     obj.endDate = new Date()
                     obj.time = (obj.endDate - obj.startDate)/1000
                     obj.logQuery()
@@ -227,6 +260,15 @@ exports.actions = (req, res, ss) ->
             @data.entry_list = entry_list
             @
 
+        filter: (field, condition, value) =>
+            if field? and condition? and value?
+                @filters.push [field, condition, value]
+            @
+
+        filter_limit: (filter_limit) =>
+            if filter_limit?
+                @filter_limit = filter_limit
+            @
 
         select: (fields) =>
             if _.isString fields
@@ -588,25 +630,6 @@ exports.actions = (req, res, ss) ->
             input.release = "b77dc99e-fd80-384d-51eb-4c1123bfa912"
             getDeveloperBugs input
 
-        getMilestoneDates: (input) ->
-            data = [
-                {date: Date.parse('Feb 29, 2012'), title: '6.4.1 GA'},
-                {date: Date.parse('Mar 28, 2012'), title: '6.4.2 GA'},
-                {date: Date.parse('Apr 25, 2012'), title: '6.4.3 GA'},
-                {date: Date.parse('May 23, 2012'), title: '6.4.4 GA'},
-                {date: Date.parse('Feb 3, 2012'), title: 'Caramel coding complete'},
-                {date: Date.parse('Mar 2, 2012'), title: 'Caramel QA complete'},
-                {date: Date.parse('Mar 14, 2012'), title: '6.5b1'},
-                {date: Date.parse('Mar 21, 2012'), title: '6.5b2'},
-                {date: Date.parse('Mar 28, 2012'), title: '6.5b3'},
-                {date: Date.parse('Apr 4, 2012'), title: '6.5b4'},
-                {date: Date.parse('Apr 11, 2012'), title: '6.5b5'},
-                {date: Date.parse('Apr 18, 2012'), title: '6.5b6'},
-                {date: Date.parse('Apr 25, 2012'), title: '6.5RC1'},
-                {date: Date.parse('May 9, 2012'), title: '6.5RC2'},
-                {date: Date.parse('May 23, 2012'), title: '6.5RC3'},
-                {date: Date.parse('Jun 6, 2012'), title: '6.5 GA'},
-            ]
         getNewBugs: (input) ->
             input = validateInput(input)
             q = new Defects {uuid: input.uuid || null}, process.si, (results) ->
