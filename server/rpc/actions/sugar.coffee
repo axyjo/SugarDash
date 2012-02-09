@@ -94,16 +94,24 @@ exports.actions = (req, res, ss) ->
             @count_by = params.countBy || null
 
             @si = si
+            @orig_data = []
 
             @cb = cb || ->
                 log 'No callback passed to QuerySI'.warn
+
+            @startDate = null
+            @endDate = null
+            @time = null
 
             @data = null
             @validated = false
             @executed = false
             @
 
-        logQuery: =>
+        logQuery: (failed = false) =>
+            if !@validated
+                @._validate()
+
             if @fields?
                 all_fields = @fields.join(', ')
             else
@@ -126,11 +134,20 @@ exports.actions = (req, res, ss) ->
             if @offset_val? and @offset_val != 0
                 query += " OFFSET " + @offset_val
 
-            log query.cyan
+            if failed
+                query = "FAILED QUERY: ".red + query.red
+            else
+                query = query.cyan
+
+            if @endDate?
+                query += (" (" + @time + " s)").blue
+            else
+                query = "INCOMPLETE QUERY: ".blue + query
+
+            log query
 
         execute: =>
             @._validate()
-            @.logQuery()
             if @validated
                 obj = @
                 callback = (data) ->
@@ -139,9 +156,23 @@ exports.actions = (req, res, ss) ->
                         obj._groupBy(obj.group_by)
                     else if obj.count_by?
                         obj._countBy(obj.count_by)
-                    obj.cb(obj)
-                @si.call(callback, 'get_entry_list', [SugarInternal::token(), @module, @where_clause, @order_clause, @offset_val, @fields, null, @limit_val])
-                @executed = true
+
+                    obj.endDate = new Date()
+                    obj.time = (obj.endDate - obj.startDate)/1000
+                    obj.logQuery()
+                    obj.executed = true
+
+                    try
+                        obj.cb(obj)
+                    catch e
+                        log e
+                @startDate = new Date()
+                try
+                    @si.call(callback, 'get_entry_list', [SugarInternal::token(), @module, @where_clause, @order_clause, @offset_val, @fields, null, @limit_val])
+                catch e
+                    @.endDate = new Date()
+                    @.time = (obj.endDate - obj.startDate)/1000
+                    @.logQuery(true)
             @
 
         groupBy: (column) =>
@@ -155,6 +186,7 @@ exports.actions = (req, res, ss) ->
                 if !_.isArray entry_list[val]
                     entry_list[val] = []
                 entry_list[val].push(entry)
+            @orig_data.push @data
             @data.entry_list = entry_list
             @
 
@@ -168,7 +200,7 @@ exports.actions = (req, res, ss) ->
             for key, value of @data.entry_list
                 if not entry_list[key]?
                     entry_list[key] = value.length
-
+            @orig_data.push @data
             @data.entry_list = entry_list
             @
 
@@ -189,7 +221,6 @@ exports.actions = (req, res, ss) ->
             if value?
                 clause += ' "' + value + '"'
             @.addWhereClause clause
-            @
 
         addWhereClause: (clause) =>
             if _.isString @where_clause
@@ -212,17 +243,22 @@ exports.actions = (req, res, ss) ->
             @.addWhereClause clause
             @
 
+        notEmpty: (field, custom = false) =>
+            table = @module.toLowerCase()
+            if custom
+                table += '_cstm'
+
+            @.where(field, '', '<>', custom)
+
         order: (o) =>
             @order_clause = o
             @
 
         newest: =>
             @.order("date_entered DESC")
-            @
 
         oldest: =>
             @.order("date_entered ASC")
-            @
 
         limit: (n) =>
             @limit_val = n
@@ -231,7 +267,6 @@ exports.actions = (req, res, ss) ->
         all: =>
             # TODO: Come up with a better way to do this.
             @.limit(100000)
-            @
 
         from: (mod) =>
             @module = mod
@@ -424,6 +459,7 @@ exports.actions = (req, res, ss) ->
             layout: 'vertical',
             floating: false,
             align: 'right',
+            verticalAlign: 'middle',
             labelFormatter: "return this.name + ': ' + this.y;"
         }
         chart.series.push {
