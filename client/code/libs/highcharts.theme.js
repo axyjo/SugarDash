@@ -7,6 +7,7 @@ Highcharts.theme = {
         backgroundColor: null,
 		borderWidth: 0,
 		width: 940,
+		height: 700,
 		borderRadius: 2,
 		plotBackgroundColor: null,
 		plotShadow: false,
@@ -61,8 +62,10 @@ Highcharts.theme = {
 		}
 	},
 	legend: {
+        enabled: false,
 		itemStyle: {
-			color: '#CCC'
+			color: '#CCC',
+            font: 'bold 21px "Helvetica Neue", Helvetica, Arial, sans-serif',
 		},
 		itemHoverStyle: {
 			color: '#FFF'
