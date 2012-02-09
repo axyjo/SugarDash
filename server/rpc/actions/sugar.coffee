@@ -628,10 +628,9 @@ exports.actions = (req, res, ss) ->
             q.countBy('sprint_number_c').all().execute()
 
         _rawCall: (func, args, params) ->
-            si = process.si.get()
-            request = si._call(func, args, params)
-            process.once "sugar_success_"+func, (data) ->
+            request = process.si._call (data)->
                 res data
+            , func, args, params
     }
 
 
