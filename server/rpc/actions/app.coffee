@@ -14,6 +14,9 @@ exports.actions = (req, res, ss) ->
         else
             res data
     return {
+        refresh: () ->
+            ss.publish.all 'refresh', 'refresh'
+            res true
         square: (number) ->
             res number*number
         loopback: (input) ->

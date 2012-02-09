@@ -17,7 +17,8 @@ SocketStream.event.on 'ready', ->
                 buffer += options.fn row
             buffer + '</div>'
 
-
+    ss.event.on 'refresh', ->
+        window.location.reload()
 
     # Resize handler
     resizeFunc = ->
