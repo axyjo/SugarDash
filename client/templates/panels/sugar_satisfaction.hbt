@@ -5,40 +5,40 @@
         {{#if widget_sugar_satisfaction}}
             {{#each widget_sugar_satisfaction.entry_list}}
                 <div class="row-fluid sugar_satisfaction_entry">
-                    <div class="span3 sugar_satisfaction_title">{{this.name_value_list.assigned_user_name.value}} - {{this.name_value_list.case_relate.value}}</div>
-                    <div class="span2"><span class="moment_datetime">{{this.name_value_list.date_entered.value}}</span></div>
-                    {{#if this.name_value_list.question_1.value}}
-                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_1.value}}.png" />
+                    <div class="span3 sugar_satisfaction_title">{{this.assigned_user_name}} - {{this.case_relate}}</div>
+                    <div class="span2"><span class="moment_datetime">{{this.date_entered}}</span></div>
+                    {{#if this.question_1}}
+                        <img class="span1" src="/images/emotions/{{this.question_1}}.png" />
                     {{else}}
                         <img class="span1" src="/images/emotions/unknown.png" />
                     {{/if}}
 
-                    {{#if this.name_value_list.question_2.value}}
-                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_2.value}}.png" />
+                    {{#if this.question_2}}
+                        <img class="span1" src="/images/emotions/{{this.question_2}}.png" />
                     {{else}}
                         <img class="span1" src="/images/emotions/unknown.png" />
                     {{/if}}
 
-                    {{#if this.name_value_list.question_3.value}}
-                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_3.value}}.png" />
+                    {{#if this.question_3}}
+                        <img class="span1" src="/images/emotions/{{this.question_3}}.png" />
                     {{else}}
                         <img class="span1" src="/images/emotions/unknown.png" />
                     {{/if}}
 
-                    {{#if this.name_value_list.question_4.value}}
-                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_4.value}}.png" />
+                    {{#if this.question_4}}
+                        <img class="span1" src="/images/emotions/{{this.question_4}}.png" />
                     {{else}}
                         <img class="span1" src="/images/emotions/unknown.png" />
                     {{/if}}
 
-                    {{#if this.name_value_list.question_5.value}}
-                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_5.value}}.png" />
+                    {{#if this.question_5}}
+                        <img class="span1" src="/images/emotions/{{this.question_5}}.png" />
                     {{else}}
                         <img class="span1" src="/images/emotions/unknown.png" />
                     {{/if}}
 
-                    {{#if this.name_value_list.question_6.value}}
-                        <img class="span1" src="/images/emotions/{{this.name_value_list.question_6.value}}.png" />
+                    {{#if this.question_6}}
+                        <img class="span1" src="/images/emotions/{{this.question_6}}.png" />
                     {{else}}
                         <img class="span1" src="/images/emotions/unknown.png" />
                     {{/if}}

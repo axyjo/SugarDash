@@ -1,5 +1,6 @@
 exports.actions = (req, res, ss) ->
 
+    moment = require('moment')
     log = (args...)->
         str = "SugarCRM: ".blue + args.join(' ')
         console.log str
@@ -152,6 +153,28 @@ exports.actions = (req, res, ss) ->
                 obj = @
                 callback = (data) ->
                     obj.data = data
+
+                    if data.entry_list? and _.isArray data.entry_list
+                        # Flatten the object.
+                        for entry, i in data.entry_list
+                            new_data = {}
+                            for key, value of entry.name_value_list
+                                new_data[key] = value.value
+                            data.entry_list[i] = new_data
+
+                        # Calculate ages.
+                        now = moment()
+                        for entry, i in data.entry_list
+                            if entry.date_entered?
+                                record = _parseUTCDate entry.date_entered
+                                data.entry_list[i].date_entered_age = now.diff record
+                            if entry.date_modified?
+                                record = _parseUTCDate entry.date_modified
+                                data.entry_list[i].date_modified_age = now.diff record
+                            if entry.date_closed?
+                                record = _parseUTCDate entry.date_closed
+                                data.entry_list[i].date_closed_age = now.diff record
+
                     if obj.group_by?
                         obj._groupBy(obj.group_by)
                     else if obj.count_by?
@@ -182,7 +205,7 @@ exports.actions = (req, res, ss) ->
         _groupBy: (column) =>
             entry_list = {}
             for entry in @data.entry_list
-                val = entry.name_value_list[column].value
+                val = entry[column]
                 if !_.isArray entry_list[val]
                     entry_list[val] = []
                 entry_list[val].push(entry)
@@ -281,15 +304,17 @@ exports.actions = (req, res, ss) ->
             @
 
         mergeDate: (date_field, dateParam) =>
-            moment = require('moment')
             epoch = moment(0)
             for entry in @data.entry_list
-                value = entry.name_value_list[date_field].value
+                value = entry[date_field]
                 date = moment(value)
                 new_value = date.diff epoch, dateParam+"s"
-                entry.name_value_list[date_field+"_converted"] = {name: date_field+"_converted", value: new_value}
+                entry[date_field+"_converted"] = new_value
             # return this
             @
+
+        _parseUTCDate = (str) ->
+            moment str, "YYYY-MM-DD HH:mm:ss"
 
         _validate: () =>
             if not SugarInternal::token()?
@@ -513,11 +538,11 @@ exports.actions = (req, res, ss) ->
                 if !chart_data[developer]?
                     chart_data[developer] = {}
                 for bug in bugArray
-                    if !_.include(segments, bug.name_value_list.status.value)
-                        segments.push bug.name_value_list.status.value
-                    if !chart_data[developer][bug.name_value_list.status.value]?
-                        chart_data[developer][bug.name_value_list.status.value] = 0
-                    chart_data[developer][bug.name_value_list.status.value]++
+                    if !_.include(segments, bug.status)
+                        segments.push bug.status
+                    if !chart_data[developer][bug.status]?
+                        chart_data[developer][bug.status] = 0
+                    chart_data[developer][bug.status]++
 
             results.data = getStackedBar chart_data, segments
             return_data results
