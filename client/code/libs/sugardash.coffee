@@ -10,8 +10,7 @@ SugarDash = {
         this.container = $("#container")
         #$(window).resize()
         this.populate()
-        setInterval(this.switch, this.scrollInterval)
-        $("#container p").remove()
+        this.switch()
     generateUUID: ->
         s = [];
         hexDigits = "0123456789abcdef";
@@ -24,9 +23,9 @@ SugarDash = {
     populate: ->
         for panel in this.panels
             this.refresh(panel)
-        SugarDash.current = $(this.container).children(SugarDash.panelFilter).first()
-        SugarDash.next = SugarDash.current.next()
-        SugarDash.current.fadeIn()
+        SugarDash.current = $("#container p")
+        SugarDash.next = $(this.container).children(SugarDash.panelFilter).first()
+
     refresh: (panel_id) ->
         e = $("#panel_"+panel_id)
         if(e.length == 0)
@@ -104,6 +103,7 @@ SugarDash = {
             animTime = (SugarDash.scrollInterval - SugarDash.autoScrollDelay) * 4/5
             delta = height - oldH
             $("#container").animate({scrollTop:delta}, animTime)
+
     switch: ->
         if SugarDash.autoScrollTimeout?
             clearTimeout SugarDash.autoScrollTimeout
@@ -112,12 +112,13 @@ SugarDash = {
             $("#container").scrollTop(0)
             SugarDash.next.fadeIn()
 
-        #SugarDash.autoScrollTimeout = setTimeout(SugarDash.autoScroll, SugarDash.autoScrollDelay)
+            #SugarDash.autoScrollTimeout = setTimeout(SugarDash.autoScroll, SugarDash.autoScrollDelay)
 
-        SugarDash.current = SugarDash.next
-        SugarDash.next = $(SugarDash.current).next(SugarDash.panelFilter)
-        if SugarDash.next.length == 0
-            SugarDash.next = $(SugarDash.container.children(SugarDash.panelFilter)).first()
-        SugarDash.refresh(SugarDash.next.data('panel_id'))
+            SugarDash.current = SugarDash.next
+            SugarDash.next = $(SugarDash.current).next(SugarDash.panelFilter)
+            if SugarDash.next.length == 0
+                SugarDash.next = $(SugarDash.container.children(SugarDash.panelFilter)).first()
+            SugarDash.refresh(SugarDash.next.data('panel_id'))
+            setTimeout(SugarDash.switch, SugarDash.scrollInterval)
 
 }
