@@ -5,9 +5,3 @@
     {{/if}}
 </div>
 
-<div class="widget" id="widget_news_patch" data-func="local.getNews" data-rssurl="http://cupertino.patch.com/articles.rss">
-    {{#if widget_news_patch}}
-        {{>feed widget_news_patch}}
-    {{/if}}
-</div>
-
