@@ -1,6 +1,8 @@
-<h2 class="widget_title">{{location.city}}, {{location.state_abbreviation}}</h2>
-<div><img src="{{condition.image}}" />{{condition.temperature}} &deg;{{units.temperature}} - {{condition.text}}</div>
+<div class="item">
+    <h2 class="widget_title">{{location.city}}, {{location.state_abbreviation}}</h2>
+    <div><img src="{{condition.image}}" />{{condition.temperature}} &deg;{{units.temperature}} - {{condition.text}}</div>
 
-{{#each forecast}}
-<div>{{this.day}}: {{this.high_temperature}} &deg;{{../units.temperature}}/{{this.low_temperature}} &deg;{{../units.temperature}} -  {{this.condition}}</div>
-{{/each}}
+    {{#each forecast}}
+    <div>{{this.day}}: {{this.high_temperature}} &deg;{{../units.temperature}}/{{this.low_temperature}} &deg;{{../units.temperature}} -  {{this.condition}}</div>
+    {{/each}}
+</div>
