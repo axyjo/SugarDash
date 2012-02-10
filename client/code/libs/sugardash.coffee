@@ -23,7 +23,7 @@ SugarDash = {
             console.debug "POPULATING", module
             this.refresh(module)
         SugarDash.current = $("#container p")
-        SugarDash.next = $(this.container).children(SugarDash.itemFilter).first()
+        SugarDash.next = $(this.container).find(SugarDash.itemFilter).first()
 
     refresh: (module_id) ->
         console.debug "REFRESHING", module_id
@@ -101,7 +101,7 @@ SugarDash = {
             SugarDash.current = SugarDash.next
             SugarDash.next = $(SugarDash.current).next(SugarDash.itemFilter)
             if SugarDash.next.length == 0
-                SugarDash.next = $(SugarDash.container.children(SugarDash.itemFilter)).first()
+                SugarDash.next = $(SugarDash.container.find(SugarDash.itemFilter)).first()
             SugarDash.refresh(SugarDash.next.data('module_id'))
             setTimeout(SugarDash.switch, SugarDash.scrollInterval)
 
