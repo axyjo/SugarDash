@@ -5,7 +5,7 @@
         {{#if widget_sugar_satisfaction}}
             {{#each widget_sugar_satisfaction.entry_list}}
                 <div class="row-fluid sugar_satisfaction_entry">
-                    <div class="span5 sugar_satisfaction_title">{{this.assigned_user_name}}</div>
+                    <h3 class="span5 sugar_satisfaction_title">{{this.assigned_user_name}}</h3>
                     {{#each this.responses}}
                         {{#if this}}
                             <img class="span1" src="/images/emotions/{{this}}.png" />
