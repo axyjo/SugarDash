@@ -1,4 +1,3 @@
-<h1 class="panel_title">Customer Satisfaction</h1>
 <div class="row-fluid">
     <div class="widget" id="widget_sugar_satisfaction" data-func="sugar.getSatisfaction">
         <h2 class="widget_title">Most recent</h3>

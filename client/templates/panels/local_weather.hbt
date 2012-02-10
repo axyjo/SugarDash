@@ -1,18 +1,15 @@
-<h1 class="panel_title">Current Weather Conditions</h1>
-<div class="row-fluid">
-    <div class="widget span4" id="widget_weather_cupertino" data-func="local.getWeather" data-weatherCode="USCA0273" data-units="f">
-        {{#if widget_weather_cupertino}}
-            {{>weather widget_weather_cupertino}}
-        {{/if}}
-    </div>
-    <div class="widget span4" id="widget_weather_sf" data-func="local.getWeather" data-weatherCode="USCA0987" data-units="f">
-        {{#if widget_weather_sf}}
-            {{>weather widget_weather_sf}}
-        {{/if}}
-    </div>
-    <div class="widget span4" id="widget_weather_waterloo" data-func="local.getWeather" data-weatherCode="CAXX0531" data-units="c">
-        {{#if widget_weather_waterloo}}
-            {{>weather widget_weather_waterloo}}
-        {{/if}}
-    </div>
+<div class="item widget span12" id="widget_weather_cupertino" data-func="local.getWeather" data-weatherCode="USCA0273" data-units="f">
+    {{#if widget_weather_cupertino}}
+        {{>weather widget_weather_cupertino}}
+    {{/if}}
+</div>
+<div class="item widget span12" id="widget_weather_sf" data-func="local.getWeather" data-weatherCode="USCA0987" data-units="f">
+    {{#if widget_weather_sf}}
+        {{>weather widget_weather_sf}}
+    {{/if}}
+</div>
+<div class="item widget span12" id="widget_weather_waterloo" data-func="local.getWeather" data-weatherCode="CAXX0531" data-units="c">
+    {{#if widget_weather_waterloo}}
+        {{>weather widget_weather_waterloo}}
+    {{/if}}
 </div>

@@ -2,13 +2,13 @@ SugarDash = {
     itemFilter: 'div.item'
     #modules: ['joneses_developerwise', 'two_week_large_opportunities', 'countdowns', 'sugar_satisfaction', 'soda_stats', 'new_hires', 'local_news', 'local_weather', 'twitterscope', 'twitterscope2', 'gh_pulls', 'joneses_sprintwise']
     # 10 second flip delay.
-    modules: ['countdowns']
+    modules: ['countdowns', 'twitter']
     scrollInterval: 10*1000
+    initialized: false
     init: ->
         this.container = $("#container")
         #$(window).resize()
         this.populate()
-        this.switch()
     generateUUID: ->
         s = [];
         hexDigits = "0123456789abcdef";
@@ -18,12 +18,18 @@ SugarDash = {
         s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1)  # bits 6-7 of the clock_seq_hi_and_reserved to 01
         s[8] = s[13] = s[18] = s[23] = "-"
         s.join("")
+    initialize: ->
+        if !SugarDash.initialized
+            SugarDash.current = $("#container p")
+            SugarDash.next = $(this.container).find(SugarDash.itemFilter).first()
+            SugarDash.newModule = SugarDash.next.parent()
+            SugarDash.switch()
+            SugarDash.initialized = true
+
     populate: ->
         for module in this.modules
             console.debug "POPULATING", module
             this.refresh(module)
-        SugarDash.current = $("#container p")
-        SugarDash.next = $(this.container).find(SugarDash.itemFilter).first()
 
     refresh: (module_id) ->
         console.debug "REFRESHING", module_id
@@ -41,6 +47,7 @@ SugarDash = {
             SugarDash.fetch(module_id, e, SugarDash.update)
         e.data('module_show_count', module_show_count + 1)
         $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
+
     fetch: (module_id, e, cb) ->
         console.debug "FETCHING", module_id
         template_id = "modules-"+module_id
@@ -49,6 +56,7 @@ SugarDash = {
         states = []
         $(template).each ->
             if $(this).is('.widget')
+                $(this).data('module_id', module_id)
                 widget_id = $(this).attr "id"
                 console.log "FOUND WIDGET:", widget_id
                 states.push widget_id
@@ -69,6 +77,7 @@ SugarDash = {
                 if data.legend? and data.legend.labelFormatter?
                     data.legend.labelFormatter = new Function data.legend.labelFormatter
                 chart = new Highcharts.Chart data
+            SugarDash.initialize()
         statemachine = new State(states, callback, this)
         $(template).each ->
             if $(this).is('.widget')
@@ -96,14 +105,39 @@ SugarDash = {
 
     switch: ->
         console.debug "SWITCHING FROM", SugarDash.current, "TO", SugarDash.next
-        $(SugarDash.current).fadeOut ->
-            SugarDash.next.fadeIn()
 
+        setVars = ->
             SugarDash.current = SugarDash.next
             SugarDash.next = $(SugarDash.current).next(SugarDash.itemFilter)
             if SugarDash.next.length == 0
-                SugarDash.next = $(SugarDash.container.find(SugarDash.itemFilter)).first()
-            SugarDash.refresh(SugarDash.next.data('module_id'))
+                console.log "LAST CHILD:", SugarDash.current.parent().find('div.item:last')
+                if SugarDash.current.is SugarDash.current.parent().find('div.item:last')
+                    console.debug "LAST CHILD IN THIS MODULE"
+                    SugarDash.oldModule = SugarDash.current.parents('.module')
+                    SugarDash.newModule = SugarDash.oldModule.next('.module')
+                    if SugarDash.newModule.length == 0
+                        SugarDash.newModule = SugarDash.oldModule.first()
+                    console.debug "Next Module:", SugarDash.newModule
+                    SugarDash.next = SugarDash.newModule.find(SugarDash.itemFilter).first()
+            console.debug "NEXT", SugarDash.next
+            SugarDash.refresh(SugarDash.next.parents('.module').data('module_id'))
             setTimeout(SugarDash.switch, SugarDash.scrollInterval)
+
+        $(SugarDash.current).fadeOut ->
+            if SugarDash.oldModule? and SugarDash.newModule?
+                SugarDash.oldModule.fadeOut ->
+                    SugarDash.newModule.fadeIn ->
+                        SugarDash.next.fadeIn ->
+                            setVars()
+            else if SugarDash.newModule?
+                SugarDash.newModule.fadeIn ->
+                    SugarDash.next.fadeIn ->
+                        setVars()
+            else
+                SugarDash.next.fadeIn ->
+                    setVars()
+
+
+
 
 }

@@ -1,21 +1,19 @@
-<h1 class="panel_title">Twitterscope</h1>
-<div class="row-fluid">
-    <div class="widget span4" id="widget_twitter_crm" data-func="twitter.search" data-q="#crm" data-limit="2">
-        <h2 class="widget_title">CRM</h3>
-        {{#if widget_twitter_crm}}
-            {{>tweets widget_twitter_crm}}
-        {{/if}}
-    </div>
-    <div class="widget span4" id="widget_twitter_scrm" data-func="twitter.search" data-q="#scrm" data-limit="2">
-        <h2 class="widget_title">Social CRM</h3>
-        {{#if widget_twitter_scrm}}
-            {{>tweets widget_twitter_scrm}}
-        {{/if}}
-    </div>
-    <div class="widget span4" id="widget_twitter_wesay" data-func="twitter.search" data-q="from:sugarcrm OR from:sugarsupport" data-limit="2">
-        <h2 class="widget_title">We say</h3>
-        {{#if widget_twitter_wesay}}
-            {{>tweets widget_twitter_wesay}}
-        {{/if}}
-    </div>
+<h1 class="module_title">Twitter</h1>
+<div class="widget row-fluid" id="widget_twitter_crm" data-func="twitter.search" data-q="#crm" data-limit="2">
+    <h2 class="item widget_title">CRM - Twitter</h2>
+    {{#if widget_twitter_crm}}
+        {{>tweets widget_twitter_crm}}
+    {{/if}}
+</div>
+<div class="widget row-fluid" id="widget_twitter_scrm" data-func="twitter.search" data-q="#scrm" data-limit="2">
+    <h2 class="widget_title">Social CRM</h2>
+    {{#if widget_twitter_scrm}}
+        {{>tweets widget_twitter_scrm}}
+    {{/if}}
+</div>
+<div class="widget row-fluid" id="widget_twitter_wesay" data-func="twitter.search" data-q="from:sugarcrm OR from:sugarsupport" data-limit="2">
+    <h2 class="widget_title">We say</h2>
+    {{#if widget_twitter_wesay}}
+        {{>tweets widget_twitter_wesay}}
+    {{/if}}
 </div>

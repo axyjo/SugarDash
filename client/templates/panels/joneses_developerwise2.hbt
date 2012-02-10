@@ -1,6 +1,2 @@
-<h1 class="panel_title">Keeping Up with the Joneses</h1>
-<h2 class="widget_title">Previous Sprint</h2>
-<div class="row-fluid">
-    <div class="widget graph" id="widget_joneses_previous_dev" data-func="sugar.getPreviousJoneses" data-chart_type="pie" >
-    </div>
+<div class="item graph" id="widget_joneses_previous_dev" data-func="sugar.getPreviousJoneses" data-chart_type="pie" >
 </div>

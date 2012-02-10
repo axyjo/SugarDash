@@ -1,5 +1,5 @@
 {{#each this}}
-<div class="tweet">
+<div class="item tweet">
     <h3 class="small tweet_author">{{this.from_user}}</h3>
     <div class="tweet_content">
         {{{this.text}}}
