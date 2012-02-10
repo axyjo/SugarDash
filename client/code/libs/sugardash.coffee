@@ -2,7 +2,7 @@ SugarDash = {
     itemFilter: 'div.item'
     #modules: ['joneses_developerwise', 'two_week_large_opportunities', 'countdowns', 'sugar_satisfaction', 'soda_stats', 'new_hires', 'local_news', 'local_weather', 'twitterscope', 'twitterscope2', 'gh_pulls', 'joneses_sprintwise']
     # 10 second flip delay.
-    modules: ['countdowns', 'sugar_satisfaction']
+    modules: ['countdowns']
     scrollInterval: 10*1000
     init: ->
         this.container = $("#container")
@@ -95,6 +95,7 @@ SugarDash = {
         e.html(template)
 
     switch: ->
+        console.debug "SWITCHING FROM", SugarDash.current, "TO", SugarDash.next
         $(SugarDash.current).fadeOut ->
             SugarDash.next.fadeIn()
 
