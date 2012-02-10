@@ -4,8 +4,6 @@ SugarDash = {
     # 10 second flip delay.
     modules: ['countdowns', 'sugar_satisfaction']
     scrollInterval: 10*1000
-    autoScrollDelay: 4*1000
-    autoScrollTimeout: null
     init: ->
         this.container = $("#container")
         #$(window).resize()
@@ -96,25 +94,9 @@ SugarDash = {
         template = Handlebars.templates[template_id](data)
         e.html(template)
 
-    autoScroll: ->
-        oldH = $('#container').height();
-        $("#container").css('height', 'auto');
-        height = $('#container').height();
-        $("#container").css('height', oldH);
-        if height > oldH
-            animTime = (SugarDash.scrollInterval - SugarDash.autoScrollDelay) * 4/5
-            delta = height - oldH
-            $("#container").animate({scrollTop:delta}, animTime)
-
     switch: ->
-        if SugarDash.autoScrollTimeout?
-            clearTimeout SugarDash.autoScrollTimeout
-            SugarDash.autoScrollTimeout = null
         $(SugarDash.current).fadeOut ->
-            $("#container").scrollTop(0)
             SugarDash.next.fadeIn()
-
-            #SugarDash.autoScrollTimeout = setTimeout(SugarDash.autoScroll, SugarDash.autoScrollDelay)
 
             SugarDash.current = SugarDash.next
             SugarDash.next = $(SugarDash.current).next(SugarDash.itemFilter)
