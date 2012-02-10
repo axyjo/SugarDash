@@ -1,0 +1,13 @@
+<h1 class="module_title">Local News</h1>
+<div class="widget" id="widget_news_mercury" data-func="local.getNews" data-rssurl="http://feeds.mercurynews.com/mngi/rss/CustomRssServlet/568/200734.xml">
+    {{#if widget_news_mercury}}
+        {{>feed widget_news_mercury}}
+    {{/if}}
+</div>
+
+<div class="widget" id="widget_news_patch" data-func="local.getNews" data-rssurl="http://cupertino.patch.com/articles.rss">
+    {{#if widget_news_patch}}
+        {{>feed widget_news_patch}}
+    {{/if}}
+</div>
+
