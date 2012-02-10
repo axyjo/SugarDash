@@ -126,7 +126,7 @@ SugarDash = {
         $(SugarDash.current).fadeOut ->
             if SugarDash.oldModule? and SugarDash.newModule?
                 SugarDash.oldModule.fadeOut ->
-                    SugarDash.newModule.fadeIn ->
+                    SugarDash.newModule.delay(Math.random()*1500).fadeIn ->
                         SugarDash.next.fadeIn ->
                             setVars()
             else if SugarDash.newModule?
