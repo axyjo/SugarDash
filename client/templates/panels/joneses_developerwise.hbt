@@ -1,6 +1,0 @@
-<h2 class="widget_title">Current Week</h2>
-<div class="row-fluid">
-    <div class="widget graph" id="widget_joneses_current_dev" data-func="sugar.getCurrentJoneses" data-chart_type="pie" >
-    </div>
-</div>
-
