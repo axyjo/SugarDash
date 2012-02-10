@@ -15,34 +15,34 @@
 @black:                 #000;
 @grayDarker:            #222;
 @grayDark:              #333;
-@gray:                  #555;
-@grayLight:             #999;
+@gray:                  #444;
+@grayLight:             #b4b4b4;
 @grayLighter:           #eee;
 @white:                 #fff;
 
-// Accent colors
-@blue:                  #049cdb;
-@blueDark:              #0064cd;
-@green:                 #46a546;
-@red:                   #9d261d;
-@yellow:                #ffc40d;
-@orange:                #f89406;
-@pink:                  #c3325f;
-@purple:                #7a43b6;
+// Accent colors (hue is roughly 20%)
+@bluelight:             lighten(@blue, 30%);
+@blue:                  #0c7ec7;
+@blueDark:              darken(@blue, 10%);
+@green:                 #0cc763;
+@red:                   #C60C30;
+@yellow:                #e0d20d;
+@orange:                #c67e0c;
+@pink:                  #c70ca2;
+@purple:                #830cc7;
+
+// Links
+@linkColor:             @blue;
+@linkColorHover:        darken(@linkColor, 10%);
 
 // Typography
-//@baseFontSize:          13px;
-//@baseLineHeight:        18px;
-//@textColor:             @grayDark;
-@baseFontSize:          50px;
-@baseFontFamily:        "Helvetica Neue", Helvetica, Arial, sans-serif;
-@baseLineHeight:        56px;
-@textColor:             @white;
+@baseFontSize:          13px;
+@baseFontFamily:        Arial, sans-serif;
+@baseLineHeight:        18px;
+@textColor:             @gray;
 
 // Buttons
 @primaryButtonBackground:    @linkColor;
-
-
 
 // COMPONENT VARIABLES
 // --------------------------------------------------
