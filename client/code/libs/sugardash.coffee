@@ -1,7 +1,8 @@
 SugarDash = {
-    panelFilter: 'div.widget'
-    panels: ['joneses_developerwise', 'joneses_developerwise2', 'two_week_large_opportunities', 'countdown_caramel', 'sugar_satisfaction', 'soda_stats', 'new_hires', 'local_news', 'local_weather', 'twitterscope', 'twitterscope2', 'gh_pulls', 'joneses_sprintwise']
+    itemFilter: 'div.item'
+    #modules: ['joneses_developerwise', 'two_week_large_opportunities', 'countdowns', 'sugar_satisfaction', 'soda_stats', 'new_hires', 'local_news', 'local_weather', 'twitterscope', 'twitterscope2', 'gh_pulls', 'joneses_sprintwise']
     # 10 second flip delay.
+    modules: ['countdowns', 'sugar_satisfaction']
     scrollInterval: 10*1000
     autoScrollDelay: 4*1000
     autoScrollTimeout: null
@@ -20,40 +21,42 @@ SugarDash = {
         s[8] = s[13] = s[18] = s[23] = "-"
         s.join("")
     populate: ->
-        for panel in this.panels
-            this.refresh(panel)
+        for module in this.modules
+            console.debug "POPULATING", module
+            this.refresh(module)
         SugarDash.current = $("#container p")
-        SugarDash.next = $(this.container).children(SugarDash.panelFilter).first()
+        SugarDash.next = $(this.container).children(SugarDash.itemFilter).first()
 
-    refresh: (panel_id) ->
-        e = $("#panel_"+panel_id)
+    refresh: (module_id) ->
+        console.debug "REFRESHING", module_id
+        e = $("#module_"+module_id)
         if(e.length == 0)
-            console.debug "created panel", panel_id, e
+            console.debug "CREATED", module_id
             e = $ document.createElement('div')
-            e.attr 'id', 'panel_'+panel_id
-            e.data('panel_id', panel_id)
-            e.data('panel_show_count', 0)
-            e.addClass 'panel'
+            e.attr 'id', 'module_'+module_id
+            e.data('module_id', module_id)
+            e.data('module_show_count', 0)
+            e.addClass 'module'
             e.appendTo("#container")
-        panel_show_count = e.data('panel_show_count')
-        if(panel_show_count % 30 == 0)
-            SugarDash.fetch(panel_id, e, SugarDash.update)
-        e.data('panel_show_count', panel_show_count + 1)
+        module_show_count = e.data('module_show_count')
+        if(module_show_count % 30 == 0)
+            SugarDash.fetch(module_id, e, SugarDash.update)
+        e.data('module_show_count', module_show_count + 1)
         $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
-    fetch: (panel_id, e, cb) ->
-        console.log "Fetching", panel_id
-        template_id = "panels-"+panel_id
+    fetch: (module_id, e, cb) ->
+        console.debug "FETCHING", module_id
+        template_id = "modules-"+module_id
         template = Handlebars.templates[template_id] {}
-        panel_data = {}
+        module_data = {}
         states = []
         $(template).each ->
-            if $(this).is('div')
-                $(this).find('.widget').each ->
-                    widget_id = $(this).attr "id"
-                    states.push widget_id
+            if $(this).is('.widget')
+                widget_id = $(this).attr "id"
+                console.log "FOUND WIDGET:", widget_id
+                states.push widget_id
         callback = ->
-            console.debug "sent", panel_data, "to", panel_id
-            cb panel_id, e, panel_data
+            console.debug "sent", module_data, "to", module_id
+            cb module_id, e, module_data
             $("footer").data("last_updated", Date.now())
             #update any moment_datetimes
             e.find("span.moment_datetime").each ->
@@ -70,26 +73,26 @@ SugarDash = {
                 chart = new Highcharts.Chart data
         statemachine = new State(states, callback, this)
         $(template).each ->
-            if $(this).is('div')
-                $(this).find('.widget').each ->
-                    widget_id = $(this).attr "id"
-                    # Default values:
-                    func = 'sugar.loggedIn'
-                    inputs = {}
+            if $(this).is('.widget')
+                widget_id = $(this).attr "id"
+                # Default values:
+                func = 'sugar.loggedIn'
+                inputs = {}
 
-                    func = $(this).data "func"
-                    inputs = $(this).data()
-                    inputs.uuid = SugarDash.generateUUID()
-                    ss.rpc func, inputs
-                    console.log "Sent request", inputs.uuid, "to", func
+                func = $(this).data "func"
+                inputs = $(this).data()
+                inputs.uuid = SugarDash.generateUUID()
+                ss.rpc func, inputs
+                console.log "Sent request", inputs.uuid, "to", func
 
-                    ss.event.on 'response_'+inputs.uuid, (resp) ->
-                        console.log "Got response", resp.uuid_val, 'for', widget_id, resp
-                        panel_data[widget_id] = resp.data
-                        statemachine.complete widget_id
+                ss.event.on 'response_'+inputs.uuid, (resp) ->
+                    console.log "Got response", resp.uuid_val, 'for', widget_id, resp
+                    module_data[widget_id] = resp.data
+                    statemachine.complete widget_id
 
-    update: (panel_id, e, data) ->
-        template_id = "panels-"+panel_id
+    update: (module_id, e, data) ->
+        console.debug "UPDATING", module_id
+        template_id = "modules-"+module_id
         template = Handlebars.templates[template_id](data)
         e.html(template)
 
@@ -114,10 +117,10 @@ SugarDash = {
             #SugarDash.autoScrollTimeout = setTimeout(SugarDash.autoScroll, SugarDash.autoScrollDelay)
 
             SugarDash.current = SugarDash.next
-            SugarDash.next = $(SugarDash.current).next(SugarDash.panelFilter)
+            SugarDash.next = $(SugarDash.current).next(SugarDash.itemFilter)
             if SugarDash.next.length == 0
-                SugarDash.next = $(SugarDash.container.children(SugarDash.panelFilter)).first()
-            SugarDash.refresh(SugarDash.next.data('panel_id'))
+                SugarDash.next = $(SugarDash.container.children(SugarDash.itemFilter)).first()
+            SugarDash.refresh(SugarDash.next.data('module_id'))
             setTimeout(SugarDash.switch, SugarDash.scrollInterval)
 
 }

@@ -12,7 +12,7 @@ ss.client.define('main', {
   view:   'app.jade',
   css:    ['app.css'],
   code:   ['libs/jquery-1.7.1.js', 'libs', 'modules', 'main'],
-  tmpl:   ['panels', 'partials'],
+  tmpl:   ['modules', 'partials'],
 });
 
 ss.http.router.on('/', function(req, res) {

@@ -1,0 +1,7 @@
+<h2 class="widget_title">GA in:</h2>
+<div class="item widget" id="widget_countdown_caramel" data-func="app.loopback" data-date="2012-06-06">
+    {{#if widget_countdown_caramel}}
+        <h1><span class="moment_datetime">{{widget_countdown_caramel.date}}</span></h1>
+    {{/if}}
+</div>
+
