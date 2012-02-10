@@ -7,41 +7,13 @@
                 <div class="row-fluid sugar_satisfaction_entry">
                     <div class="span3 sugar_satisfaction_title">{{this.assigned_user_name}} - {{this.case_relate}}</div>
                     <div class="span2"><span class="moment_datetime">{{this.date_entered}}</span></div>
-                    {{#if this.question_1}}
-                        <img class="span1" src="/images/emotions/{{this.question_1}}.png" />
-                    {{else}}
-                        <img class="span1" src="/images/emotions/unknown.png" />
-                    {{/if}}
-
-                    {{#if this.question_2}}
-                        <img class="span1" src="/images/emotions/{{this.question_2}}.png" />
-                    {{else}}
-                        <img class="span1" src="/images/emotions/unknown.png" />
-                    {{/if}}
-
-                    {{#if this.question_3}}
-                        <img class="span1" src="/images/emotions/{{this.question_3}}.png" />
-                    {{else}}
-                        <img class="span1" src="/images/emotions/unknown.png" />
-                    {{/if}}
-
-                    {{#if this.question_4}}
-                        <img class="span1" src="/images/emotions/{{this.question_4}}.png" />
-                    {{else}}
-                        <img class="span1" src="/images/emotions/unknown.png" />
-                    {{/if}}
-
-                    {{#if this.question_5}}
-                        <img class="span1" src="/images/emotions/{{this.question_5}}.png" />
-                    {{else}}
-                        <img class="span1" src="/images/emotions/unknown.png" />
-                    {{/if}}
-
-                    {{#if this.question_6}}
-                        <img class="span1" src="/images/emotions/{{this.question_6}}.png" />
-                    {{else}}
-                        <img class="span1" src="/images/emotions/unknown.png" />
-                    {{/if}}
+                    {{#each this.responses}}
+                        {{#if this}}
+                            <img class="span1" src="/images/emotions/{{this}}.png" />
+                        {{else}}
+                            <div class="span1"></div>
+                        {{/if}}
+                    {{/each}}
                 </div>
             {{/each}}
         {{/if}}

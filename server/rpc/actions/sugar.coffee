@@ -625,7 +625,21 @@ exports.actions = (req, res, ss) ->
         getSatisfaction: (input) ->
             input = validateInput input
             q = new SatisfactionSurvey {uuid: input.uuid}, process.si, (results) ->
-                 return_data results
+                for result in results.entry_list
+                    result.responses = []
+                    for i in [1..6]
+                        if result["question_"+i]? and !_.isEmpty result["question_"+i]
+                            switch result["question_"+i]
+                                when 10, 9, 8
+                                    val = "happy"
+                                when 7, 6, 5
+                                    val = "neutral"
+                                else
+                                    val = "sad"
+                            result.responses.push val
+                        else
+                            result.responses.push false
+                return_data results
             q.newest().limit(10).execute()
 
         getNewLargeOpportunities: (input) ->
