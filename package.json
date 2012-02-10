@@ -12,6 +12,7 @@
     "handlebars": "1.0.x",
     "moment": "1.3.x",
     "socketstream": "0.3.x",
-    "jsdom": "0.2.x"
+    "jsdom": "0.2.x",
+    "base64": "2.0.x"
   }
 }

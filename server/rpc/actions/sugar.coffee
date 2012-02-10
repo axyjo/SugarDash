@@ -12,9 +12,13 @@ exports.actions = (req, res, ss) ->
             if(!_.isEmpty(SugarInternal::getToken()))
                 @_call cb, func, args, params
             else
-                log "Not authenticated.".red
+                if !_.isEmpty(process.env.SUGAR_USER) and !_.isEmpty(process.env.SUGAR_PASS)
+                    @login process.env.SUGAR_USER, process.env.SUGAR_PASS, ->
+                        @_call cb, func, args, params
+                else
+                    log "Not authenticated.".red
 
-        login: (username, password) ->
+        login: (username, password, callback = null) ->
             loginData = [{
                 user_name: username,
                 password: password,
@@ -25,6 +29,8 @@ exports.actions = (req, res, ss) ->
                 log "SESSION ID =".green, data.id.toString().green
                 SugarInternal::setToken data.id
                 res data.name_value_list
+                ss.publish.all "refresh", "refresh"
+                callback.call()
             request = @_call(cb, "login", loginData)
 
         setToken: (t) ->

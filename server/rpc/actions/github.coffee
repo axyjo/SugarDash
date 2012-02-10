@@ -22,10 +22,11 @@ exports.actions = (req, res, ss) ->
         options = {
             host: 'api.github.com'
             port: 443
-            path: input.path + '?' + process.github_token
+            path: input.path + '?'
             method: 'GET'
             headers: {
                 'Content-Length': Buffer.byteLength(data, 'utf8')
+                'Authorization': 'Basic ' + require('base64').encode(new Buffer(process.env.GH_USER + ':' + process.env.GH_PASS))
             }
         }
         resp = []
@@ -51,8 +52,6 @@ exports.actions = (req, res, ss) ->
 
     return {
         pulls: (input) ->
-            # OAuth path:
-            # https://github.com/login/oauth/authorize?client_id=ef7345be94c480cff2c2
             input = input || {}
             input.path = "/repos/" + input.repo + "/pulls"
             cb = (result) ->
@@ -62,44 +61,4 @@ exports.actions = (req, res, ss) ->
                 }
                 return_data ret
             call input, cb
-        getOAuthPath: ->
-            opts = {
-                client_id: client_id
-                scope: 'repo'
-            }
-            res "https://github.com/login/oauth/authorize?" +  require('querystring').stringify opts
-
-        getOAuthAccessToken: (code) ->
-            https = require('https')
-
-            data = require('querystring').stringify {
-                code: code
-                client_id: client_id
-                client_secret: client_secret
-            }
-
-            options = {
-                host: 'github.com'
-                port: 443
-                path: '/login/oauth/access_token'
-                method: 'POST'
-                headers: {
-                    'Content-Length': Buffer.byteLength(data, 'utf8')
-                }
-            }
-            resp = []
-            request = https.request options, (response) ->
-                response.on "data", (chunk) ->
-                    resp.push(chunk)
-                response.on "end", ->
-                    try
-                        process.github_token = resp.join('')
-                        console.log "GitHub auth: ", process.github_token
-                        res true
-                    catch error
-                        console.log "Invalid response:", resp.join('')
-                        console.log "Error:", error
-
-            request.write data
-            request.end()
     }

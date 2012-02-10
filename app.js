@@ -40,6 +40,11 @@ if (ss.env == 'production') {
     }, 30*1000);
 }
 
+process.env.GH_USER = process.env.GH_USER || ""
+process.env.GH_PASS = process.env.GH_PASS || ""
+process.env.SUGAR_USER = process.env.SUGAR_USER || ""
+process.env.SUGAR_PASS = process.env.SUGAR_PASS || ""
+
 var server = http.Server(ss.http.middleware);
 server.listen(3000);
 
