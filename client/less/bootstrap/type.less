@@ -29,22 +29,22 @@ p {
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-weight: bold;
-  color: @white;
+  color: @grayDark;
   text-rendering: optimizelegibility; // Fix the character spacing for headings
   small {
     font-weight: normal;
-    color: @grayDark;
+    color: @grayLight;
   }
 }
 h1 {
-  font-size: @baseFontSize * 2.1;
+  font-size: 30px;
   line-height: @baseLineHeight * 2;
   small {
     font-size: 18px;
   }
 }
 h2 {
-  font-size: @baseFontSize * 1.85;
+  font-size: 24px;
   line-height: @baseLineHeight * 2;
   small {
     font-size: 18px;
@@ -52,25 +52,25 @@ h2 {
 }
 h3 {
   line-height: @baseLineHeight * 1.5;
-  font-size: @baseFontSize * 1.4;
+  font-size: 18px;
   small {
-    font-size: @baseFontSize * 1.08;
+    font-size: 14px;
   }
 }
 h4, h5, h6 {
   line-height: @baseLineHeight;
 }
 h4 {
-  font-size: @baseFontSize * 1.08;
+  font-size: 14px;
   small {
-    font-size: @baseFontSize * 0.92;
+    font-size: 12px;
   }
 }
 h5 {
-  font-size: @baseFontSize * 0.92;
+  font-size: 12px;
 }
 h6 {
-  font-size: @baseFontSize * 0.85;
+  font-size: 11px;
   color: @grayLight;
   text-transform: uppercase;
 }
@@ -195,7 +195,7 @@ blockquote {
 // Quotes
 q:before,
 q:after,
-blockquote:before,
+blockquote:before, 
 blockquote:after {
   content: "";
 }
