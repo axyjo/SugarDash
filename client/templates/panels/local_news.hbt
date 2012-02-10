@@ -1,5 +1,3 @@
-<h1 class="panel_title">Local News</h1>
-<div class="row-fluid">
     <div class="widget span6" id="widget_news_mercury" data-func="local.getNews" data-rssurl="http://feeds.mercurynews.com/mngi/rss/CustomRssServlet/568/200734.xml">
         {{#if widget_news_mercury}}
             {{>feed widget_news_mercury}}
@@ -11,4 +9,3 @@
             {{>feed widget_news_patch}}
         {{/if}}
     </div>
-</div>
