@@ -625,11 +625,11 @@ exports.actions = (req, res, ss) ->
         getSatisfaction: (input) ->
             input = validateInput input
             q = new SatisfactionSurvey {uuid: input.uuid}, process.si, (results) ->
-                for result in results.entry_list
+                for result in results.data.entry_list
                     result.responses = []
                     for i in [1..6]
                         if result["question_"+i]? and !_.isEmpty result["question_"+i]
-                            switch result["question_"+i]
+                            switch parseInt(result["question_"+i])
                                 when 10, 9, 8
                                     val = "happy"
                                 when 7, 6, 5
