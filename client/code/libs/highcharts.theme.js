@@ -65,7 +65,7 @@ Highcharts.theme = {
         enabled: false,
 		itemStyle: {
 			color: '#CCC',
-            font: 'bold 21px "Helvetica Neue", Helvetica, Arial, sans-serif',
+            font: 'bold 25px "Helvetica Neue", Helvetica, Arial, sans-serif',
 		},
 		itemHoverStyle: {
 			color: '#FFF'
