@@ -116,7 +116,7 @@ SugarDash = {
                     SugarDash.oldModule = SugarDash.current.parents('.module')
                     SugarDash.newModule = SugarDash.oldModule.next('.module')
                     if SugarDash.newModule.length == 0
-                        SugarDash.newModule = SugarDash.oldModule.first()
+                        SugarDash.newModule = SugarDash.oldModule.siblings('.module').first()
                     console.debug "Next Module:", SugarDash.newModule
                     SugarDash.next = SugarDash.newModule.find(SugarDash.itemFilter).first()
             console.debug "NEXT", SugarDash.next
