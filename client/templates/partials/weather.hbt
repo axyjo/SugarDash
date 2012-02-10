@@ -1,4 +1,4 @@
-<div class="item">
+<div class="weather_report item">
     <h2 class="widget_title">{{location.city}}, {{location.state_abbreviation}}</h2>
     <div><img src="/images/weather/{{condition.code}}.png" />
     <br />
