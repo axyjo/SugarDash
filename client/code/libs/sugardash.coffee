@@ -1,8 +1,7 @@
 SugarDash = {
     itemFilter: 'div.item'
-    #modules: ['joneses_developerwise', 'two_week_large_opportunities', 'countdowns', 'sugar_satisfaction', 'soda_stats', 'new_hires', 'local_news', 'local_weather', 'twitterscope', 'twitterscope2', 'gh_pulls', 'joneses_sprintwise']
+    modules: ['countdowns', 'joneses', 'soda', 'twitter']
     # 10 second flip delay.
-    modules: ['countdowns', 'twitter']
     scrollInterval: 10*1000
     initialized: false
     init: ->
@@ -72,8 +71,10 @@ SugarDash = {
                 $(this).addClass 'datetime'
             e.find(".graph").each ->
                 id = $(this).attr('id')
-                data = panel_data[id]
-                data.chart.renderTo = id
+                data = module_data[id]
+                data.chart.renderTo = id+"_container"
+                data.chart.width = 0.9*SugarDash.container.width()
+                data.chart.height = 0.8*(SugarDash.container.height() - SugarDash.container.find("h1:visible").first().outerHeight())
                 if data.legend? and data.legend.labelFormatter?
                     data.legend.labelFormatter = new Function data.legend.labelFormatter
                 chart = new Highcharts.Chart data
@@ -112,13 +113,17 @@ SugarDash = {
             if SugarDash.next.length == 0
                 console.log "LAST CHILD:", SugarDash.current.parent().find('div.item:last')
                 if SugarDash.current.is SugarDash.current.parent().find('div.item:last')
-                    console.debug "LAST CHILD IN THIS MODULE"
-                    SugarDash.oldModule = SugarDash.current.parents('.module')
-                    SugarDash.newModule = SugarDash.oldModule.next('.module')
-                    if SugarDash.newModule.length == 0
-                        SugarDash.newModule = SugarDash.oldModule.siblings('.module').first()
-                    console.debug "Next Module:", SugarDash.newModule
-                    SugarDash.next = SugarDash.newModule.find(SugarDash.itemFilter).first()
+                    console.debug "LAST CHILD IN THIS WIDGET"
+                    if SugarDash.current.parents('.widget').is SugarDash.current.parents('.module').find('div.widget:last')
+                        console.debug "LAST CHILD IN THIS MODULE"
+                        SugarDash.oldModule = SugarDash.current.parents('.module')
+                        SugarDash.newModule = SugarDash.oldModule.next('.module')
+                        if SugarDash.newModule.length == 0
+                            SugarDash.newModule = SugarDash.oldModule.siblings('.module').first()
+                        console.debug "Next Module:", SugarDash.newModule
+                        SugarDash.next = SugarDash.newModule.find(SugarDash.itemFilter).first()
+                    else
+                        SugarDash.next = SugarDash.current.parents('.widget').next().find(SugarDash.itemFilter).first()
             console.debug "NEXT", SugarDash.next
             SugarDash.refresh(SugarDash.next.parents('.module').data('module_id'))
             setTimeout(SugarDash.switch, SugarDash.scrollInterval)

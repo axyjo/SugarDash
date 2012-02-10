@@ -1,7 +1,0 @@
-<h1 class="panel_title">SODA</h1>
-<h2 class="widget_title">Integration Test Results</h2>
-<div class="row-fluid">
-    <div class="widget graph" id="widget_soda_graph" data-func="soda.getSodaResults">
-    </div>
-</div>
-

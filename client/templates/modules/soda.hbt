@@ -1,0 +1,5 @@
+<h1 class="module_title">SODA Integration Tests</h1>
+<div class="widget graph row-fluid" id="widget_soda_graph" data-func="soda.getSodaResults">
+    <div class="item" id="widget_soda_graph_container"></div>
+</div>
+

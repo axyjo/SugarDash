@@ -1,12 +1,12 @@
 <h1 class="module_title">Countdowns</h2>
-<div class="item widget" id="widget_countdown_caramel" data-func="app.loopback" data-date="2012-06-06">
+<div class="widget" id="widget_countdown_caramel" data-func="app.loopback" data-date="2012-06-06">
     {{#if widget_countdown_caramel}}
-        <h3>Caramel GA <span class="moment_datetime">{{widget_countdown_caramel.date}}</span></h3>
+        <div class="item"><h3>Caramel GA <span class="moment_datetime">{{widget_countdown_caramel.date}}</span></h3></div>
     {{/if}}
 </div>
-<div class="item widget" id="widget_countdown_new_year" data-func="app.loopback" data-date="2013-01-01">
+<div class="widget" id="widget_countdown_new_year" data-func="app.loopback" data-date="2013-01-01">
     {{#if widget_countdown_new_year}}
-        <h3>2013 <span class="moment_datetime">{{widget_countdown_new_year.date}}</span></h3>
+        <div class="item"><h3>2013 <span class="moment_datetime">{{widget_countdown_new_year.date}}</span></h3></div>
     {{/if}}
 </div>
 
