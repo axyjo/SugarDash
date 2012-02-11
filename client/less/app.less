@@ -1,8 +1,17 @@
 @import "bootstrap/bootstrap.less";
+@import "bootstrap/responsive.less";
+
 body {
-    padding-top: 15px;
-    padding-bottom: 40px;
     overflow: hidden;
+}
+
+#ticker {
+    margin-bottom: 20px;
+    overflow: hidden;
+    img {
+        opacity: 0.6;
+        float: right;
+    }
 }
 
 h1 {
@@ -34,6 +43,7 @@ h1 {
 }
 
 .weather_report {
+    min-height: 300px;
     img {
         width: 300px;
         float: right;

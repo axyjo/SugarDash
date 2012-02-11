@@ -10,72 +10,24 @@ Highcharts.theme = {
 		plotBackgroundColor: null,
 		plotShadow: false,
 		plotBorderWidth: 0,
-        style: {
-            color: '#AAA',
-            font: 'bold 35px "Helvetica Neue", Helvetica, Arial, sans-serif',
-        }
 	},
 
-    title: {
-        style: {
-            display: 'none',
-        },
-    },
-
-	xAxis: {
-		gridLineWidth: 0,
-		lineColor: '#999',
-		tickColor: '#999',
-		labels: {
-			style: {
-				color: '#999',
-				marginTop: "100px",
-				font: 'bold 25px "Helvetica Neue", Helvetica, Arial, sans-serif',
-			}
-		},
-		title: {
-			style: {
-				color: '#AAA',
-				font: 'bold 35px "Helvetica Neue", Helvetica, Arial, sans-serif',
-			}
-		}
-	},
 	yAxis: {
 		alternateGridColor: null,
 		minorTickInterval: null,
 		gridLineColor: 'rgba(255, 255, 255, .1)',
 		lineWidth: 0,
 		tickWidth: 0,
-		labels: {
-			style: {
-				color: '#999',
-				font: 'bold 25px "Helvetica Neue", Helvetica, Arial, sans-serif',
-			}
-		},
-		title: {
-			style: {
-				color: '#AAA',
-				font: 'bold 35px "Helvetica Neue", Helvetica, Arial, sans-serif',
-			}
-		}
 	},
 	legend: {
-        enabled: false,
+        enabled: true,
 		itemStyle: {
-			color: '#CCC',
-            font: 'bold 25px "Helvetica Neue", Helvetica, Arial, sans-serif',
 		},
 		itemHoverStyle: {
 			color: '#FFF'
 		},
 		itemHiddenStyle: {
 			color: '#333'
-		}
-	},
-	labels: {
-		style: {
-			color: '#CCC',
-            font: 'bold 30px "Helvetica Neue", Helvetica, Arial, sans-serif',
 		}
 	},
 	tooltip: {
@@ -85,9 +37,6 @@ Highcharts.theme = {
 		line: {
 			dataLabels: {
 				color: '#AAA',
-                style: {
-                    font: 'bold 20px "Helvetica Neue", Helvetica, Arial, sans-serif',
-                },
 			},
 			marker: {
 				lineColor: '#333'
@@ -106,9 +55,6 @@ Highcharts.theme = {
         pie: {
             dataLabels: {
                 color: '#AAA',
-                style: {
-                    font: 'bold 20px "Helvetica Neue", Helvetica, Arial, sans-serif',
-                },
             },
         },
 	},
