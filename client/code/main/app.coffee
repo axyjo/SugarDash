@@ -23,7 +23,7 @@ SocketStream.event.on 'ready', ->
     # Resize handler
     resizeFunc = ->
         console.log "Resize"
-        $("#container").height ($(window).height() - $("footer").outerHeight())
+        $("#container").height ($(window).height() - $("#ticker").outerHeight())
     $(document).ready ->
         $(window).resize resizeFunc
         resizeFunc.call()

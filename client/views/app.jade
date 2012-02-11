@@ -5,6 +5,12 @@ html(lang="en")
     meta(charset="utf-8")
     title Welcome to SugaDash
   body
-    #container.container-fluid
-        p Loading...
-    footer test
+    #container.container
+        p Loading.
+    #ticker.container-fluid
+        .row-fluid
+            .span8
+                p Test Ticker
+            .span3.offset1
+                img(id='sugarLogo', src='/images/sugar-light.png')
+

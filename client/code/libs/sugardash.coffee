@@ -1,6 +1,6 @@
 SugarDash = {
     itemFilter: 'div.item'
-    modules: ['countdowns', 'weather', 'local_news', 'joneses', 'soda', 'twitter']
+    modules: ['countdowns', 'weather', 'joneses', 'soda', 'twitter']
     # 10 second flip delay.
     scrollInterval: 10*1000
     initialized: false
@@ -21,7 +21,7 @@ SugarDash = {
         if !SugarDash.initialized
             SugarDash.current = $("#container p")
             SugarDash.next = $(this.container).find(SugarDash.itemFilter).first()
-            SugarDash.newModule = SugarDash.next.parent()
+            SugarDash.newModule = SugarDash.next.parents('.module')
             SugarDash.switch()
             SugarDash.initialized = true
 
@@ -74,7 +74,6 @@ SugarDash = {
                 data = module_data[id]
                 data.chart.renderTo = id+"_container"
                 data.chart.width = 0.9*SugarDash.container.width()
-                data.chart.height = 0.8*(SugarDash.container.height() - SugarDash.container.find("h1:visible").first().outerHeight())
                 if data.legend? and data.legend.labelFormatter?
                     data.legend.labelFormatter = new Function data.legend.labelFormatter
                 chart = new Highcharts.Chart data
@@ -130,12 +129,12 @@ SugarDash = {
 
         $(SugarDash.current).fadeOut ->
             if SugarDash.oldModule? and SugarDash.newModule?
-                SugarDash.oldModule.fadeOut ->
-                    SugarDash.newModule.delay(Math.random()*1500).fadeIn ->
+                SugarDash.oldModule.slideUp 'slow', ->
+                    SugarDash.newModule.delay(Math.random()*1500).slideDown 'slow', ->
                         SugarDash.next.fadeIn ->
                             setVars()
             else if SugarDash.newModule?
-                SugarDash.newModule.fadeIn ->
+                SugarDash.newModule.slideDown 'slow', ->
                     SugarDash.next.fadeIn ->
                         setVars()
             else
