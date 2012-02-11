@@ -109,7 +109,7 @@ SugarDash = {
         setVars = ->
             SugarDash.current = SugarDash.next
             SugarDash.next = $(SugarDash.current).next(SugarDash.itemFilter)
-            if SugarDash.next.length == 0
+            while SugarDash.next.length == 0
                 console.log "LAST CHILD:", SugarDash.current.parent().find('div.item:last')
                 if SugarDash.current.is SugarDash.current.parent().find('div.item:last')
                     console.debug "LAST CHILD IN THIS WIDGET"
