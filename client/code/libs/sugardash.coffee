@@ -143,9 +143,6 @@ SugarDash = {
             if SugarDash.current.find('.graph_container').length > 0
                 if SugarDash.loaded_charts[SugarDash.current.parent().attr('id')]?
                     SugarDash.loaded_charts[SugarDash.current.parent().attr('id')].destroy()
-                    SugarDash.loaded_charts[SugarDash.current.parent().attr('id')] = null
-                    SugarDash.current.find('.graph_container').html ''
-
             if SugarDash.oldModule? and SugarDash.newModule?
                 SugarDash.oldModule.slideUp 'slow', ->
                     SugarDash.newModule.delay(Math.random()*1500).slideDown 'slow', ->
