@@ -534,6 +534,14 @@ exports.actions = (req, res, ss) ->
 
     getPie = (results) ->
         data = _.zip _.keys(results.data.entry_list), _.values(results.data.entry_list)
+        if data.length > 6
+            data = _.first(data, 6)
+            other_vals = _.rest(_.values(results.data.entry_list), 6)
+            sum = _.reduce other_vals, (memo, num) ->
+                memo+num
+            , 0
+            data.push ["Others", sum]
+
         data = _.sortBy data, (point) ->
             point[1]
         chart = getChart('pie', 'Joneses')
