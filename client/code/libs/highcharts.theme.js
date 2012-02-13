@@ -26,6 +26,7 @@ Highcharts.theme = {
 	legend: {
         enabled: true,
 		itemStyle: {
+            color: '#EEE'
 		},
 		itemHoverStyle: {
 			color: '#FFF'
