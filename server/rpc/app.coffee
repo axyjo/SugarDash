@@ -19,6 +19,31 @@ exports.actions = (req, res, ss) ->
             res true
         square: (number) ->
             res number*number
+        time: (input) ->
+            input = validateInput input
+            if input.tz?
+                host = 'json-time.appspot.com'
+                path = '/time.json?tz='+input.tz
+                http = require('http')
+                client = http.createClient 80, host
+                request = client.request 'GET', path
+
+                contents = []
+
+                request.on 'response', (response) ->
+                    response.on "data", (chunk) ->
+                        if(!_.isEmpty(chunk))
+                            contents.push chunk
+                    response.on "end", ->
+                        resp = JSON.parse(contents.join(''))
+                        data = {
+                            data: resp
+                            uuid_val: input.uuid
+                        }
+                        return data
+                request.end()
+                console.log 'Request sent.'
+
         loopback: (input) ->
             input = validateInput input
             ret = {
