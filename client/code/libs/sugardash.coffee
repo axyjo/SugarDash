@@ -2,7 +2,7 @@ SugarDash = {
     charts: {}
     loaded_charts: {}
     itemFilter: 'div.item'
-    modules: ['countdowns', 'joneses', 'soda']
+    modules: ['countdowns', 'weather', 'github', 'joneses', 'soda', 'twitter']
     # 10 second flip delay.
     scrollInterval: 10*1000
     initialized: false
