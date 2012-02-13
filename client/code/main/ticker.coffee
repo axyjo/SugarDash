@@ -6,7 +6,7 @@ Ticker = {
             for news in data
                 if news?
                     Ticker.ticker_items.push news.title
-            console.log "Ticker is good to go.", Ticker.ticker_items
+            console.log "Ticker is good to go."
             setTimeout Ticker.switch, 3500
 
         ss.event.on "ticker", (data) ->
