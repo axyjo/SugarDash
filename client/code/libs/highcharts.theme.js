@@ -10,6 +10,9 @@ Highcharts.theme = {
 		plotBackgroundColor: null,
 		plotShadow: false,
 		plotBorderWidth: 0,
+		style: {
+            fontSize: '45px'
+        }
 	},
 
 	yAxis: {
@@ -17,7 +20,7 @@ Highcharts.theme = {
 		minorTickInterval: null,
 		gridLineColor: 'rgba(255, 255, 255, .1)',
 		lineWidth: 0,
-		tickWidth: 0,
+		tickWidth: 0
 	},
 	legend: {
         enabled: true,
@@ -31,12 +34,12 @@ Highcharts.theme = {
 		}
 	},
 	tooltip: {
-        enabled: false,
+        enabled: false
 	},
 	plotOptions: {
 		line: {
 			dataLabels: {
-				color: '#AAA',
+				color: '#AAA'
 			},
 			marker: {
 				lineColor: '#333'
@@ -54,9 +57,9 @@ Highcharts.theme = {
 		},
         pie: {
             dataLabels: {
-                color: '#AAA',
-            },
-        },
+                color: '#AAA'
+            }
+        }
 	},
 
 	toolbar: {
@@ -78,34 +81,6 @@ Highcharts.theme = {
 		}
 	},
 
-	scrollbar: {
-		barBackgroundColor: {
-				linearGradient: [0, 0, 0, 20],
-				stops: [
-					[0.4, '#888'],
-					[0.6, '#555']
-				]
-			},
-		barBorderColor: '#CCC',
-		buttonArrowColor: '#CCC',
-		buttonBackgroundColor: {
-				linearGradient: [0, 0, 0, 20],
-				stops: [
-					[0.4, '#888'],
-					[0.6, '#555']
-				]
-			},
-		buttonBorderColor: '#CCC',
-		rifleColor: '#FFF',
-		trackBackgroundColor: {
-			linearGradient: [0, 0, 0, 10],
-			stops: [
-				[0, '#000'],
-				[1, '#333']
-			]
-		},
-		trackBorderColor: '#666'
-	},
 
 	// special colors for some of the demo examples
 	legendBackgroundColor: 'rgba(48, 48, 48, 0.8)',
