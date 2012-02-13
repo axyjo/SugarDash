@@ -21,7 +21,6 @@ exports.actions = (req, res, ss) ->
 
         auth =  new Buffer(process.env.GH_USER + ':' + process.env.GH_PASS)
         auth = auth.toString 'base64'
-        console.log "Github Auth Token:", auth
 
         options = {
             host: 'api.github.com'
