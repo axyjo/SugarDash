@@ -19,6 +19,10 @@ exports.actions = (req, res, ss) ->
         data = JSON.stringify data
         console.log "Sending", data
 
+        auth =  new Buffer(process.env.GH_USER + ':' + process.env.GH_PASS)
+        auth = auth.toString 'base64'
+        console.log "Github Auth Token:", auth
+
         options = {
             host: 'api.github.com'
             port: 443
@@ -26,7 +30,7 @@ exports.actions = (req, res, ss) ->
             method: 'GET'
             headers: {
                 'Content-Length': Buffer.byteLength(data, 'utf8')
-                'Authorization': 'Basic ' + new Buffer(process.env.GH_USER + ':' + process.env.GH_PASS, 'base64')
+                'Authorization': 'Basic ' + auth
             }
         }
         resp = []
