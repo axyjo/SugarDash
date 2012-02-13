@@ -27,14 +27,14 @@ SugarDash = {
 
     populate: ->
         for module in this.modules
-            console.debug "POPULATING", module
+            #console.debug "POPULATING", module
             this.refresh(module)
 
     refresh: (module_id) ->
-        console.debug "REFRESHING", module_id
+        #console.debug "REFRESHING", module_id
         e = $("#module_"+module_id)
         if(e.length == 0)
-            console.debug "CREATED", module_id
+            #console.debug "CREATED", module_id
             e = $ document.createElement('div')
             e.attr 'id', 'module_'+module_id
             e.data('module_id', module_id)
@@ -48,7 +48,7 @@ SugarDash = {
         $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
 
     fetch: (module_id, e, cb) ->
-        console.debug "FETCHING", module_id
+        #console.debug "FETCHING", module_id
         template_id = "modules-"+module_id
         template = Handlebars.templates[template_id] {}
         module_data = {}
@@ -60,7 +60,7 @@ SugarDash = {
                 console.log "FOUND WIDGET:", widget_id
                 states.push widget_id
         callback = ->
-            console.debug "sent", module_data, "to", module_id
+            #console.debug "sent", module_data, "to", module_id
             cb module_id, e, module_data
             $("footer").data("last_updated", Date.now())
             #update any moment_datetimes
@@ -98,13 +98,13 @@ SugarDash = {
                     statemachine.complete widget_id
 
     update: (module_id, e, data) ->
-        console.debug "UPDATING", module_id
+        #console.debug "UPDATING", module_id
         template_id = "modules-"+module_id
         template = Handlebars.templates[template_id](data)
         e.html(template)
 
     switch: ->
-        console.debug "SWITCHING FROM", SugarDash.current, "TO", SugarDash.next
+        #console.debug "SWITCHING FROM", SugarDash.current, "TO", SugarDash.next
 
         setVars = ->
             SugarDash.current = SugarDash.next
@@ -112,18 +112,18 @@ SugarDash = {
             while SugarDash.next.length == 0
                 console.log "LAST CHILD:", SugarDash.current.parent().find('div.item:last')
                 if SugarDash.current.is SugarDash.current.parent().find('div.item:last')
-                    console.debug "LAST CHILD IN THIS WIDGET"
+                    #console.debug "LAST CHILD IN THIS WIDGET"
                     if SugarDash.current.parents('.widget').is SugarDash.current.parents('.module').find('div.widget:last')
-                        console.debug "LAST CHILD IN THIS MODULE"
+                        #console.debug "LAST CHILD IN THIS MODULE"
                         SugarDash.oldModule = SugarDash.current.parents('.module')
                         SugarDash.newModule = SugarDash.oldModule.next('.module')
                         if SugarDash.newModule.length == 0
                             SugarDash.newModule = SugarDash.oldModule.siblings('.module').first()
-                        console.debug "Next Module:", SugarDash.newModule
+                        #console.debug "Next Module:", SugarDash.newModule
                         SugarDash.next = SugarDash.newModule.find(SugarDash.itemFilter).first()
                     else
                         SugarDash.next = SugarDash.current.parents('.widget').next().find(SugarDash.itemFilter).first()
-            console.debug "NEXT", SugarDash.next
+            #console.debug "NEXT", SugarDash.next
             SugarDash.refresh(SugarDash.next.parents('.module').data('module_id'))
             setTimeout(SugarDash.switch, SugarDash.scrollInterval)
 
