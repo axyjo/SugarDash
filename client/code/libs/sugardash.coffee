@@ -1,6 +1,8 @@
 SugarDash = {
+    charts: {}
+    loaded_charts: {}
     itemFilter: 'div.item'
-    modules: ['countdowns', 'weather', 'github', 'joneses', 'soda', 'twitter']
+    modules: ['countdowns', 'joneses', 'soda']
     # 10 second flip delay.
     scrollInterval: 10*1000
     initialized: false
@@ -76,7 +78,7 @@ SugarDash = {
                 data.chart.width = 0.9*SugarDash.container.width()
                 if data.legend? and data.legend.labelFormatter?
                     data.legend.labelFormatter = new Function data.legend.labelFormatter
-                chart = new Highcharts.Chart data
+                SugarDash.charts[$(this).attr('id')] = data
             SugarDash.initialize()
         statemachine = new State(states, callback, this)
         $(template).each ->
@@ -109,7 +111,10 @@ SugarDash = {
         setVars = ->
             SugarDash.current = SugarDash.next
             SugarDash.next = $(SugarDash.current).next(SugarDash.itemFilter)
-            while SugarDash.next.length == 0
+            # Debug infinite loop.
+            recurse = 0
+            while SugarDash.next.length == 0 && recurse < 5
+                recurse++
                 console.log "LAST CHILD:", SugarDash.current.parent().find('div.item:last')
                 if SugarDash.current.is SugarDash.current.parent().find('div.item:last')
                     #console.debug "LAST CHILD IN THIS WIDGET"
@@ -125,9 +130,19 @@ SugarDash = {
                         SugarDash.next = SugarDash.current.parents('.widget').next().find(SugarDash.itemFilter).first()
             #console.debug "NEXT", SugarDash.next
             SugarDash.refresh(SugarDash.next.parents('.module').data('module_id'))
+
+            # Load any charts if there are some.
+            hc_data = SugarDash.charts[SugarDash.current.parent().attr('id')]
+            if hc_data?
+                SugarDash.loaded_charts[SugarDash.current.parent().attr('id')] = new Highcharts.Chart hc_data
+
             setTimeout(SugarDash.switch, SugarDash.scrollInterval)
 
         $(SugarDash.current).fadeOut ->
+            # Destroy the old chart, if there is one.
+            if SugarDash.current.find('.graph_container').length > 0
+                if SugarDash.loaded_charts[SugarDash.current.parent().attr('id')]?
+                    SugarDash.loaded_charts[SugarDash.current.parent().attr('id')].destroy()
             if SugarDash.oldModule? and SugarDash.newModule?
                 SugarDash.oldModule.slideUp 'slow', ->
                     SugarDash.newModule.delay(Math.random()*1500).slideDown 'slow', ->
