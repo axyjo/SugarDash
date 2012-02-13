@@ -1,0 +1,8 @@
+<h1 class="module_title">New Pull Requests</h1>
+
+<div class="widget" id="widget_github_sugarcrm_Mango" data-func="github.pulls" data-repo="sugarcrm/Mango" data-limit="5">
+    <div class="widget_title item">New Pull Requests for sugarcrm/Mango</div>
+    {{#if widget_github_sugarcrm_Mango}}
+        {{>pull_requests widget_github_sugarcrm_Mango}}
+    {{/if}}
+</div>

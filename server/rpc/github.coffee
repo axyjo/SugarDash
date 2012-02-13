@@ -26,7 +26,7 @@ exports.actions = (req, res, ss) ->
             method: 'GET'
             headers: {
                 'Content-Length': Buffer.byteLength(data, 'utf8')
-                'Authorization': 'Basic ' + require('base64').encode(new Buffer(process.env.GH_USER + ':' + process.env.GH_PASS))
+                'Authorization': 'Basic ' + new Buffer(process.env.GH_USER + ':' + process.env.GH_PASS, 'base64')
             }
         }
         resp = []

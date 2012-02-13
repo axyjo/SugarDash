@@ -1,6 +1,6 @@
 SugarDash = {
     itemFilter: 'div.item'
-    modules: ['countdowns', 'weather', 'joneses', 'soda', 'twitter']
+    modules: ['countdowns', 'weather', 'github', 'joneses', 'soda', 'twitter']
     # 10 second flip delay.
     scrollInterval: 10*1000
     initialized: false

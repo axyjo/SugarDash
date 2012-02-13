@@ -1,5 +1,5 @@
 {{#each this}}
-<div class="pull_request">
+<div class="item pull_request">
     <h3 class="small pull_request_author">{{this.user.login}}</h3>
     <div class="pull_request_content">
         <strong>{{{this.title}}}</strong> {{{this.body}}}
