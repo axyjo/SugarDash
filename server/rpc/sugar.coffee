@@ -431,6 +431,11 @@ exports.actions = (req, res, ss) ->
             params.from = 'Opportunities'
             super params, si, cb
 
+    class Heartbeats extends SugarRecord
+        constructor: (params, si, cb) ->
+            params.from = 'SugarInstallations'
+            super params, si, cb
+
     appName = 'SugarDash'
 
     countBy = (data, column) ->
@@ -629,6 +634,12 @@ exports.actions = (req, res, ss) ->
             q = new Users {uuid: input.uuid}, process.si, (results) ->
                 return_data results
             q.select(['picture', 'date_entered', 'department', 'full_name']).newest().limit(9).execute()
+
+        getNewHeartbeats: (input) ->
+            input = validateInput(input)
+            q = new Heartbeats {uuid: input.uuid}, process.si, (results) ->
+                return_data results
+            q.newest().limit(10).execute()
 
         getSatisfaction: (input) ->
             input = validateInput input
