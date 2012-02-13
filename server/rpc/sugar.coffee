@@ -640,7 +640,7 @@ exports.actions = (req, res, ss) ->
                         else
                             result.responses.push false
                 return_data results
-            q.newest().limit(10).execute()
+            q.newest().addWhereClause('csurv_SurveyResponse.date_entered > NOW() - INTERVAL 2 WEEK').execute()
 
         getNewLargeOpportunities: (input) ->
             input = validateInput input
