@@ -186,16 +186,21 @@ exports.actions = (req, res, ss) ->
             results = {
                 uuid_val: input.uuid
             }
-            cb = ->
-                if input.branch?
-                    chart_data = parsed
-                    results.data = getStackedArea chart_data, segments
-                    return_data results
-                    res true
-                else
-                    res false
-            state = new State ["fetch"], cb, this
-            fetchSodaResults state
+            if process.soda?
+                return_data process.soda
+                res true
+            else
+                cb = ->
+                    if input.branch?
+                        chart_data = parsed
+                        results.data = getStackedArea chart_data, segments
+                        process.soda = results
+                        return_data results
+                        res true
+                    else
+                        res false
+                state = new State ["fetch"], cb, this
+                fetchSodaResults state
 
     }
 
