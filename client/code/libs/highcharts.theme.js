@@ -7,6 +7,7 @@ Highcharts.theme = {
         backgroundColor: null,
 		borderWidth: 0,
 		borderRadius: 2,
+		height: 650,
 		plotBackgroundColor: null,
 		plotShadow: false,
 		plotBorderWidth: 0,
