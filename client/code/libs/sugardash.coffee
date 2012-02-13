@@ -44,7 +44,8 @@ SugarDash = {
         module_show_count = e.data('module_show_count')
         if(module_show_count % 30 == 0)
             SugarDash.fetch(module_id, e, SugarDash.update)
-        e.data('module_show_count', module_show_count + 1)
+        if SugarDash.current.parents().find("#module_"+module_id).length > 0
+            e.data('module_show_count', module_show_count + 1)
         $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
 
     fetch: (module_id, e, cb) ->
