@@ -176,6 +176,9 @@ exports.actions = (req, res, ss) ->
             if(this.states.length <= 0)
                 this.callback.call(this.context)
     return {
+        clearData: (input) ->
+            process.sodaTime = null
+
         getSodaResults: (input) ->
             input = validateInput input
             input.stack = input.stack || 'stack47'
