@@ -28,5 +28,11 @@ SocketStream.event.on 'ready', ->
         $(window).resize resizeFunc
         resizeFunc.call()
 
+        # Refresh every 30 mins - 1 hr.
+        refresh_time = (Math.random() * 0.5 + 0.5) * (60 * 60 * 100)
+        setTimeout ->
+            window.location.reload()
+        , refresh_time
+
     SugarDash.init()
 
