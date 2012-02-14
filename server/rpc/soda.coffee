@@ -186,7 +186,9 @@ exports.actions = (req, res, ss) ->
             results = {
                 uuid_val: input.uuid
             }
-            if process.soda?
+            now = new Date()
+            # Update soda every 6 hours.
+            if process.soda? and process.sodaTime? and !_.isEmpty(process.soda) and process.sodaTime < now - 1000 * 60 * 60 * 6
                 return_data process.soda
                 res true
             else
@@ -195,6 +197,7 @@ exports.actions = (req, res, ss) ->
                         chart_data = parsed
                         results.data = getStackedArea chart_data, segments
                         process.soda = results
+                        process.sodaTime = new Date()
                         return_data results
                         res true
                     else
