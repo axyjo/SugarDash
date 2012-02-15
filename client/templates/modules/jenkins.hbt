@@ -4,13 +4,12 @@
     <div class="item">
         {{#if widget_jenkins_lastFail_64_Joneses}}
             {{#with widget_jenkins_lastFail_64_Joneses}}
-                <h2>The last person to break the 6.4 Joneses build:</h2>
+                <h3>Last broken 6.4 Joneses build (#{{number}}):</h3>
                 <ul>
                     {{#each name}}
                         <li>{{this}}</li>
                     {{/each}}
                 </ul>
-                Build #{{number}}: <span class="moment_datetime">{{timestamp}}</span>
             {{/with}}
         {{/if}}
     </div>
@@ -20,13 +19,12 @@
     <div class="item">
         {{#if widget_jenkins_lastFail_650}}
             {{#with widget_jenkins_lastFail_650}}
-                <h2>The last person to break the 6.5.0 build:</h2>
+                <h3>Last broken 6.5.0 build (#{{number}}):</h3>
                 <ul>
                     {{#each name}}
                         <li>{{this}}</li>
                     {{/each}}
                 </ul>
-                Build #{{number}}: <span class="moment_datetime">{{timestamp}}</span>
             {{/with}}
         {{/if}}
     </div>
