@@ -101,6 +101,7 @@ exports.actions = (req, res, ss) ->
             @count_by = params.countBy || null
             @filters = params.filters || []
             @filter_lim = params.filter_limit || 0
+            @id = params.id || null
 
             @si = si
             @orig_data = []
@@ -129,8 +130,8 @@ exports.actions = (req, res, ss) ->
             if @count_by?
                 all_fields += ', COUNT(' + @count_by + ')'
 
-            query = "SELECT " + all_fields + " FROM " + @module.toLowerCase()
-            if @where_clause?
+            query = "SELECT " + all_fields + " FROM " + @module
+            if @where_clause? and !_.isEmpty(@where_clause)
                 query += " WHERE " + @where_clause
 
             if @group_by?
@@ -160,14 +161,23 @@ exports.actions = (req, res, ss) ->
             if @validated
                 obj = @
                 callback = (data) ->
-                    obj.data = data
+                    if obj.module.toLowerCase() == 'reports'
+                        data._orig_entry_list = data.entry_list
+                        entry_list = []
+                        for e in data._orig_entry_list[0]
+                            entry_list.push e
+                        data.entry_list = entry_list
 
                     if data.entry_list? and _.isArray data.entry_list
                         # Flatten the object.
                         for entry, i in data.entry_list
                             new_data = {}
-                            for key, value of entry.name_value_list
-                                new_data[key] = value.value
+                            if obj.module.toLowerCase() == 'reports'
+                                if entry.name_value_list?
+                                    new_data[entry.name_value_list[0].value] = entry.name_value_list[1].value
+                            else
+                                for key, value of entry.name_value_list
+                                    new_data[key] = value.value
                             data.entry_list[i] = new_data
 
                         # Calculate ages.
@@ -223,6 +233,7 @@ exports.actions = (req, res, ss) ->
                     obj.time = (obj.endDate - obj.startDate)/1000
                     obj.logQuery()
                     obj.executed = true
+                    obj.data = data
 
                     try
                         obj.cb(obj)
@@ -230,7 +241,12 @@ exports.actions = (req, res, ss) ->
                         log e
                 @startDate = new Date()
                 try
-                    @si.call(callback, 'get_entry_list', [SugarInternal::token(), @module, @where_clause, @order_clause, @offset_val, @fields, null, @limit_val])
+                    @.logQuery()
+                    if @module.toLowerCase() == "reports"
+                        @si.call(callback, 'get_report_entries', [SugarInternal::token(), [@id]])
+                    else
+                        @si.call(callback, 'get_entry_list', [SugarInternal::token(), @module, @where_clause, @order_clause, @offset_val, @fields, null, @limit_val])
+
                 catch e
                     @.endDate = new Date()
                     @.time = (obj.endDate - obj.startDate)/1000
@@ -434,6 +450,11 @@ exports.actions = (req, res, ss) ->
     class Heartbeats extends SugarRecord
         constructor: (params, si, cb) ->
             params.from = 'SugarInstallations'
+            super params, si, cb
+
+    class Report extends SugarRecord
+        constructor: (params, si, cb) ->
+            params.from = 'Reports'
             super params, si, cb
 
     appName = 'SugarDash'
