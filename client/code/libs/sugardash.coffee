@@ -63,7 +63,6 @@ SugarDash = {
                     cb() if cb?
                 SugarDash.fetch(module_id, e, callback)
             e.data('module_show_count', module_show_count+1)
-        $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
 
     fetch: (module_id, e, cb) ->
         #console.debug "FETCHING", module_id
