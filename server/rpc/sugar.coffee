@@ -558,15 +558,16 @@ exports.actions = (req, res, ss) ->
             series: []
         }
 
-    getPie = (results) ->
+    getPie = (results, limit = 6, other = true) ->
         data = _.zip _.keys(results.data.entry_list), _.values(results.data.entry_list)
-        if data.length > 6
-            data = _.first(data, 6)
-            other_vals = _.rest(_.values(results.data.entry_list), 6)
-            sum = _.reduce other_vals, (memo, num) ->
-                memo+num
-            , 0
-            data.push ["Others", sum]
+        if data.length > limit
+            data = _.first(data, limit)
+            if other
+                other_vals = _.rest(_.values(results.data.entry_list), limit)
+                sum = _.reduce other_vals, (memo, num) ->
+                    memo+parseInt(num)
+                , 0
+                data.push ["Others", sum]
 
         data = _.sortBy data, (point) ->
             point[1]
