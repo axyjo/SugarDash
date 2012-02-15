@@ -83,6 +83,7 @@ SugarDash = {
             #update any moment_datetimes
             e.find("span.moment_datetime").each ->
                 mom = moment($(this).html())
+                $(this).data('date', $(this).html())
                 $(this).html mom.fromNow()
                 $(this).removeClass 'moment_datetime'
                 $(this).addClass 'datetime'
@@ -132,6 +133,11 @@ SugarDash = {
             hc_data = SugarDash.charts[SugarDash.currentItem.parent().attr('id')]
             if hc_data?
                 SugarDash.loaded_charts[SugarDash.currentItem.parent().attr('id')] = new Highcharts.Chart hc_data
+
+            # Update any of the dates we have in the module.
+            SugarDash.currentItem.find("span.datetime").each ->
+                mom = moment($(this).data('date'))
+                $(this).html mom.fromNow()
 
             # Use the next item we've switched to as our current one. Then, reset the next item.
             SugarDash.currentItem = SugarDash.nextItem
