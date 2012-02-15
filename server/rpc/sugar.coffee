@@ -222,6 +222,9 @@ exports.actions = (req, res, ss) ->
                     if obj.filter_lim? and _.isNumber obj.filter_lim and obj.filter_lim != 0
                         data.entry_list = data.entry_list.slice(0, obj.filter_lim - 1)
 
+                    # GroupBy/CountBy are dependent on the data being inside the object.
+                    obj.data = data
+
                     # Group the data as requested.
                     if obj.group_by?
                         obj._groupBy(obj.group_by)
@@ -233,7 +236,6 @@ exports.actions = (req, res, ss) ->
                     obj.time = (obj.endDate - obj.startDate)/1000
                     obj.logQuery()
                     obj.executed = true
-                    obj.data = data
 
                     try
                         obj.cb(obj)
