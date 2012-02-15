@@ -659,11 +659,23 @@ exports.actions = (req, res, ss) ->
                 return_data results
             q.select(['picture', 'date_entered', 'department', 'full_name']).newest().limit(9).execute()
 
+        getHeartbeatPHP: (input) ->
+            input = validateInput input
+            q = new Report {uuid: input.uuid, id: "a22343df-5b19-717b-2579-4f3995bcfe29"}, process.si, (results) ->
+                chart = {}
+                for element in results.data.entry_list
+                    for key, value of element
+                        chart[key] = value
+                results.data.entry_list = chart
+                results.data = getPie results
+                return_data results
+            q.execute()
+
         getNewHeartbeats: (input) ->
             input = validateInput(input)
             q = new Heartbeats {uuid: input.uuid}, process.si, (results) ->
                 return_data results
-            q.newest().limit(10).execute()
+            q.order('date_created DESC').limit(10).execute()
 
         getSatisfaction: (input) ->
             input = validateInput input

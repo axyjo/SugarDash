@@ -1,0 +1,6 @@
+<h1 class="module_title">Heartbeat Data</h1>
+<div class="widget graph row-fluid" id="widget_heartbeat_php" data-func="sugar.getHeartbeatPHP">
+    <div class="item widget_title">PHP Versions:</div>
+    <div class="item graph_container" id="widget_heartbeat_php_container"></div>
+</div>
+
