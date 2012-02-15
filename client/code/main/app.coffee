@@ -28,8 +28,8 @@ SocketStream.event.on 'ready', ->
         $(window).resize resizeFunc
         resizeFunc.call()
 
-        # Refresh every 1.5 - 2hrs
-        refresh_time = (Math.random() * 0.5 + 1.5) * (60 * 60 * 100)
+        # Refresh every 3 - 4hrs
+        refresh_time = (Math.random() + 3) * (60 * 60 * 100)
         setTimeout ->
             window.location.reload()
         , refresh_time
