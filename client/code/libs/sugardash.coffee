@@ -169,6 +169,9 @@ SugarDash = {
                             SugarDash.nextWidget = SugarDash.nextModule.children('.widget').first()
                         SugarDash.nextItem = SugarDash.nextWidget.find(SugarDash.itemFilter).first()
 
+            if SugarDash.nextItem.length > 1
+                SugarDash.nextItem = SugarDash.nextItem.first()
+
             console.debug "Next item:", SugarDash.nextItem
             # Set the delay until the next switch.
             setTimeout(SugarDash.switch, SugarDash.scrollInterval)
@@ -191,8 +194,5 @@ SugarDash = {
             else
                 SugarDash.nextItem.fadeIn ->
                     trigger()
-
-
-
 
 }
