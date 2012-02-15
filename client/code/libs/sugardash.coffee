@@ -2,14 +2,16 @@ SugarDash = {
     charts: {}
     loaded_charts: {}
     itemFilter: 'div.item'
-    modules: ['countdowns', 'weather', 'github', 'joneses', 'soda', 'twitter']
+    modules: ['countdowns', 'jenkins', 'weather', 'github', 'joneses', 'soda', 'twitter']
+    modulesInitialized: 0
     # 10 second flip delay.
     scrollInterval: 10*1000
     initialized: false
     init: ->
         this.container = $("#container")
         #$(window).resize()
-        this.populate()
+        SugarDash.populate()
+        SugarDash.initialize()
     generateUUID: ->
         s = [];
         hexDigits = "0123456789abcdef";
@@ -21,21 +23,31 @@ SugarDash = {
         s.join("")
     initialize: ->
         if !SugarDash.initialized
-            SugarDash.current = $("#container p")
-            SugarDash.next = $(this.container).find(SugarDash.itemFilter).first()
-            SugarDash.newModule = SugarDash.next.parents('.module')
-            SugarDash.switch()
+            SugarDash.currentItem = $("#container p")
+            callback = ->
+                SugarDash.modulesInitialized++
+                SugarDash.nextItem = $(this.container).find(SugarDash.itemFilter).first()
+                SugarDash.nextModule = SugarDash.nextItem.parents('.module')
+                SugarDash.switch()
+
+            # Load the first module content.
+            SugarDash.refresh SugarDash.modules[SugarDash.modulesInitialized], false, callback
+
             SugarDash.initialized = true
 
     populate: ->
         for module in this.modules
             #console.debug "POPULATING", module
-            this.refresh(module)
+            this.refresh module, true
 
-    refresh: (module_id) ->
+    refresh: (e, init = false, cb = null) ->
+        if e.jquery
+            module_id = e.attr('id').replace 'module_', ''
+        else
+            module_id = e
         #console.debug "REFRESHING", module_id
         e = $("#module_"+module_id)
-        if(e.length == 0)
+        if init
             #console.debug "CREATED", module_id
             e = $ document.createElement('div')
             e.attr 'id', 'module_'+module_id
@@ -43,10 +55,14 @@ SugarDash = {
             e.data('module_show_count', 0)
             e.addClass 'module'
             e.appendTo("#container")
-        module_show_count = e.data('module_show_count')
-        if(module_show_count == 0)
-            SugarDash.fetch(module_id, e, SugarDash.update)
-        e.data('module_show_count', module_show_count+1)
+        else
+            module_show_count = e.data('module_show_count')
+            if(module_show_count == 0)
+                callback = (module_id, e, module_data) ->
+                    SugarDash.update(module_id, e, module_data)
+                    cb() if cb?
+                SugarDash.fetch(module_id, e, callback)
+            e.data('module_show_count', module_show_count+1)
         $("footer").html('Last updated: ' + moment($("footer").data('last_updated')).fromNow())
 
     fetch: (module_id, e, cb) ->
@@ -79,7 +95,6 @@ SugarDash = {
                 if data.legend? and data.legend.labelFormatter?
                     data.legend.labelFormatter = new Function data.legend.labelFormatter
                 SugarDash.charts[$(this).attr('id')] = data
-            SugarDash.initialize()
         statemachine = new State(states, callback, this)
         $(template).each ->
             if $(this).is('.widget')
@@ -106,55 +121,76 @@ SugarDash = {
         e.html(template)
 
     switch: ->
-        #console.debug "SWITCHING FROM", SugarDash.current, "TO", SugarDash.next
+        console.debug "SWITCHING FROM", SugarDash.currentItem, "TO", SugarDash.nextItem
 
-        setVars = ->
-            SugarDash.current = SugarDash.next
-            SugarDash.next = $(SugarDash.current).next(SugarDash.itemFilter)
-            # Debug infinite loop.
-            recurse = 0
-            while SugarDash.next.length == 0 && recurse < 5
-                recurse++
-                console.log "LAST CHILD:", SugarDash.current.parent().find('div.item:last')
-                if SugarDash.current.is SugarDash.current.parent().find('div.item:last')
-                    #console.debug "LAST CHILD IN THIS WIDGET"
-                    if SugarDash.current.parents('.widget').is SugarDash.current.parents('.module').find('div.widget:last')
-                        #console.debug "LAST CHILD IN THIS MODULE"
-                        SugarDash.oldModule = SugarDash.current.parents('.module')
-                        SugarDash.newModule = SugarDash.oldModule.next('.module')
-                        if SugarDash.newModule.length == 0
-                            SugarDash.newModule = SugarDash.oldModule.siblings('.module').first()
-                        #console.debug "Next Module:", SugarDash.newModule
-                        SugarDash.next = SugarDash.newModule.find(SugarDash.itemFilter).first()
-                    else
-                        SugarDash.next = SugarDash.current.parents('.widget').next().find(SugarDash.itemFilter).first()
-            #console.debug "NEXT", SugarDash.next
-            SugarDash.refresh(SugarDash.next.parents('.module').data('module_id'))
+        trigger = ->
+            # If we haven't initialized all of the modules yet, do so.
+            if SugarDash.modulesInitialized < SugarDash.modules.length
+                SugarDash.refresh SugarDash.modules[SugarDash.modulesInitialized]
+                SugarDash.modulesInitialized++
 
-            # Load any charts if there are some.
-            hc_data = SugarDash.charts[SugarDash.current.parent().attr('id')]
+            # Load any charts if there are some in the current item.
+            hc_data = SugarDash.charts[SugarDash.currentItem.parent().attr('id')]
             if hc_data?
-                SugarDash.loaded_charts[SugarDash.current.parent().attr('id')] = new Highcharts.Chart hc_data
+                SugarDash.loaded_charts[SugarDash.currentItem.parent().attr('id')] = new Highcharts.Chart hc_data
 
+            # Use the next item we've switched to as our current one. Then, reset the next item.
+            SugarDash.currentItem = SugarDash.nextItem
+            SugarDash.currentWidget = SugarDash.currentItem.parents('.widget')
+            SugarDash.currentModule = SugarDash.currentItem.parents('.module')
+            SugarDash.nextItem = []
+
+            # If there is another item in the same widget, use that as the next item.
+            if SugarDash.currentItem.next(SugarDash.itemFilter).length != 0
+                SugarDash.nextItem = SugarDash.currentItem.next(SugarDash.itemFilter)
+            else
+                # If there is no next element in the same widget, we are at the end of the widget and need to jump to the next widget in the module.
+                # We need to keep doing this until there is an item we can display.
+                SugarDash.nextModule = SugarDash.currentModule
+                SugarDash.nextWidget = SugarDash.currentWidget
+                while SugarDash.nextItem.length == 0
+                    console.debug "No item found within widget: ", SugarDash.nextWidget
+                    SugarDash.nextWidget = SugarDash.currentItem.parents('.widget').next('.widget')
+                    # If we have a next widget, we can use the first item in it as our nextItem.
+                    if SugarDash.nextWidget.length == 1
+                        SugarDash.nextItem = SugarDash.nextWidget.find(SugarDash.itemFilter)
+                    # If we don't have a next widget, we're done with the current module and must move on to the next module.
+                    else
+                        # Until we have a widget, find the next module and get the first child widget.
+                        while SugarDash.nextWidget.length == 0
+                            console.debug "No widget found within module:", SugarDash.nextModule
+                            SugarDash.nextModule = SugarDash.currentItem.parents('.module').next('.module')
+                            # If we don't have a next module, we have to use the first module in the container.
+                            if SugarDash.nextModule.length == 0
+                                SugarDash.nextModule = SugarDash.container.children('.module').first()
+                            # Refresh the next module.
+                            SugarDash.refresh SugarDash.nextModule
+                            # Now that we have the next module, find the first widget in it.
+                            SugarDash.nextWidget = SugarDash.nextModule.children('.widget').first()
+                        SugarDash.nextItem = SugarDash.nextWidget.find(SugarDash.itemFilter).first()
+
+            console.debug "Next item:", SugarDash.nextItem
+            # Set the delay until the next switch.
             setTimeout(SugarDash.switch, SugarDash.scrollInterval)
 
-        $(SugarDash.current).fadeOut ->
+        $(SugarDash.currentItem).fadeOut ->
             # Destroy the old chart, if there is one.
-            if SugarDash.current.find('.graph_container').length > 0
-                if SugarDash.loaded_charts[SugarDash.current.parent().attr('id')]?
-                    SugarDash.loaded_charts[SugarDash.current.parent().attr('id')].destroy()
-            if SugarDash.oldModule? and SugarDash.newModule?
-                SugarDash.oldModule.slideUp 'slow', ->
-                    SugarDash.newModule.delay(Math.random()*1500).slideDown 'slow', ->
-                        SugarDash.next.fadeIn ->
-                            setVars()
-            else if SugarDash.newModule?
-                SugarDash.newModule.slideDown 'slow', ->
-                    SugarDash.next.fadeIn ->
-                        setVars()
+            if SugarDash.currentItem.find('.graph_container').length > 0
+                if SugarDash.loaded_charts[SugarDash.currentItem.parent().attr('id')]?
+                    SugarDash.loaded_charts[SugarDash.currentItem.parent().attr('id')].destroy()
+
+            if SugarDash.currentModule? and SugarDash.nextModule? and SugarDash.currentModule != SugarDash.nextModule
+                SugarDash.currentModule.slideUp 'slow', ->
+                    SugarDash.nextModule.delay(Math.random()*1500).slideDown 'slow', ->
+                        SugarDash.nextItem.fadeIn ->
+                            trigger()
+            else if SugarDash.nextModule?
+                SugarDash.nextModule.slideDown 'slow', ->
+                    SugarDash.nextItem.fadeIn ->
+                        trigger()
             else
-                SugarDash.next.fadeIn ->
-                    setVars()
+                SugarDash.nextItem.fadeIn ->
+                    trigger()
 
 
 
