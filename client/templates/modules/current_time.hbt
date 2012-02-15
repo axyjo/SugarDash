@@ -1,43 +1,43 @@
 <h1 class="module_title">Current Time</h2>
-<div class="widget" id="widget_time_cupertino" data-func="app.time" data-tz="America/Los_Angeles">
+<div class="current_time widget" id="widget_time_cupertino" data-func="app.time" data-tz="America/Los_Angeles">
     {{#if widget_time_cupertino}}
-        <div class="item"><h3>Cupertino (Pacific): <span class="jsclock"></span></h3></div>
+        <div class="item"><h2>Cupertino (Pacific): <span class="jsclock"></span></h2></div>
     {{/if}}
 </div>
 
-<div class="widget" id="widget_time_durham" data-func="app.time" data-tz="America/New_York">
+<div class="current_time widget" id="widget_time_durham" data-func="app.time" data-tz="America/New_York">
     {{#if widget_time_durham}}
-        <div class="item"><h3>Durham, NC (Eastern): <span class="jsclock"></span></h3></div>
+        <div class="item"><h2>Durham, NC (Eastern): <span class="jsclock"></span></h2></div>
     {{/if}}
 </div>
 
-<div class="widget" id="widget_time_cambridge" data-func="app.time" data-tz="Europe/London">
+<div class="current_time widget" id="widget_time_cambridge" data-func="app.time" data-tz="Europe/London">
     {{#if widget_time_cambridge}}
-        <div class="item"><h3>Cambridge: <span class="jsclock"></span></h3></div>
+        <div class="item"><h2>Cambridge: <span class="jsclock"></span></h2></div>
     {{/if}}
 </div>
 
-<div class="widget" id="widget_time_paris" data-func="app.time" data-tz="Europe/Paris">
+<div class="current_time widget" id="widget_time_paris" data-func="app.time" data-tz="Europe/Paris">
     {{#if widget_time_paris}}
-        <div class="item"><h3>Paris: <span class="jsclock"></span></h3></div>
+        <div class="item"><h2>Paris: <span class="jsclock"></span></h2></div>
     {{/if}}
 </div>
 
-<div class="widget" id="widget_time_munich" data-func="app.time" data-tz="Europe/Berlin">
+<div class="current_time widget" id="widget_time_munich" data-func="app.time" data-tz="Europe/Berlin">
     {{#if widget_time_munich}}
-        <div class="item"><h3>Munich: <span class="jsclock"></span></h3></div>
+        <div class="item"><h2>Munich: <span class="jsclock"></span></h2></div>
     {{/if}}
 </div>
 
-<div class="widget" id="widget_time_minsk" data-func="app.time" data-tz="Europe/Minsk">
+<div class="current_time widget" id="widget_time_minsk" data-func="app.time" data-tz="Europe/Minsk">
     {{#if widget_time_minsk}}
-        <div class="item"><h3>Minsk: <span class="jsclock"></span></h3></div>
+        <div class="item"><h2>Minsk: <span class="jsclock"></span></h2></div>
     {{/if}}
 </div>
 
-<div class="widget" id="widget_time_gordon" data-func="app.time" data-tz="Australia/Sydney">
+<div class="current_time widget" id="widget_time_gordon" data-func="app.time" data-tz="Australia/Sydney">
     {{#if widget_time_gordon}}
-        <div class="item"><h3>Gordon: <span class="jsclock"></span></h3></div>
+        <div class="item"><h2>Gordon: <span class="jsclock"></span></h2></div>
     {{/if}}
 </div>
 
