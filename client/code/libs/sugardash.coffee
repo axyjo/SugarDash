@@ -187,7 +187,9 @@ SugarDash = {
 
             console.debug "Next item:", SugarDash.nextItem
             # Set the delay until the next switch.
-            setTimeout(SugarDash.switch, SugarDash.scrollInterval)
+            interval = SugarDash.scrollInterval
+            interval *= 2/5 if SugarDash.currentItem.hasClass('widget_title')
+            setTimeout(SugarDash.switch, interval)
 
         $(SugarDash.currentItem).fadeOut ->
             # Destroy the old chart, if there is one.
