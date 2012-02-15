@@ -5,11 +5,7 @@
         {{#if widget_jenkins_lastFail_64_Joneses}}
             {{#with widget_jenkins_lastFail_64_Joneses}}
                 <h3>Last broken 6.4 Joneses build (#{{number}}):</h3>
-                <ul>
-                    {{#each name}}
-                        <li>{{this}}</li>
-                    {{/each}}
-                </ul>
+                <div>{{names}}</div>
             {{/with}}
         {{/if}}
     </div>
@@ -20,11 +16,7 @@
         {{#if widget_jenkins_lastFail_650}}
             {{#with widget_jenkins_lastFail_650}}
                 <h3>Last broken 6.5.0 build (#{{number}}):</h3>
-                <ul>
-                    {{#each name}}
-                        <li>{{this}}</li>
-                    {{/each}}
-                </ul>
+                <div>{{names}}</div>
             {{/with}}
         {{/if}}
     </div>

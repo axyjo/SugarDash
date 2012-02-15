@@ -149,7 +149,7 @@ exports.actions = (req, res, ss) ->
                             culprits.push culprit.fullName
 
                         time = (new Date(build.timestamp)).toString()
-                        lastFailed = {name: culprits, number: build.number, time: time}
+                        lastFailed = {names: culprits.join(', '), number: build.number, time: time}
                         break
 
                 if !lastFailed?
