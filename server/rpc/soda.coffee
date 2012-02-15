@@ -152,7 +152,7 @@ exports.actions = (req, res, ss) ->
                     directoryName = $(this).html()
                     buildNums.push directoryName.substr 0, directoryName.length-1
 
-                buildNums = buildNums.slice(-14)
+                buildNums = buildNums.slice(-8)
 
                 for build in buildNums
                     state.add branch+"-"+build
