@@ -191,9 +191,10 @@ SugarDash = {
 
         $(SugarDash.currentItem).fadeOut ->
             # Destroy the old chart, if there is one.
-            if SugarDash.currentItem.find('.graph_container').length > 0
+            if SugarDash.currentItem.find('.graph_container').first().children().length > 0
                 if SugarDash.loaded_charts[SugarDash.currentItem.parent().attr('id')]?
                     SugarDash.loaded_charts[SugarDash.currentItem.parent().attr('id')].destroy()
+                    SugarDash.currentItem.find('.graph_container').first().html ''
 
             if SugarDash.currentModule? and SugarDash.nextModule? and SugarDash.currentModule.attr('id') != SugarDash.nextModule.attr('id')
                 SugarDash.currentModule.slideUp 'slow', ->
