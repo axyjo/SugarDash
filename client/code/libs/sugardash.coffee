@@ -98,11 +98,6 @@ SugarDash = {
                     data.legend.labelFormatter = new Function data.legend.labelFormatter
                 SugarDash.charts[$(this).attr('id')] = data
 
-            # Create any ticking clocks required.
-            e.find('span.jsclock').each ->
-                id = $(this).parents('.widget').attr('id')
-                data = module_data[id]
-                $(this).jsclock(data.time)
         statemachine = new State(states, callback, this)
         $(template).each ->
             if $(this).is('.widget')
@@ -127,6 +122,11 @@ SugarDash = {
         template_id = "modules-"+module_id
         template = Handlebars.templates[template_id](data)
         e.html(template)
+
+        # Create any ticking clocks required.
+        e.find('span.jsclock').each ->
+            data = $(this).html()
+            $(this).jsclock(data)
 
     switch: ->
         console.debug "SWITCHING FROM", SugarDash.currentItem, "TO", SugarDash.nextItem
