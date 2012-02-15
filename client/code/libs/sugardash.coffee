@@ -2,7 +2,7 @@ SugarDash = {
     charts: {}
     loaded_charts: {}
     itemFilter: 'div.item'
-    modules: ['countdowns', 'jenkins', 'weather', 'github', 'joneses', 'soda', 'twitter']
+    modules: ['countdowns', 'jenkins', 'weather', 'current_time', 'github', 'joneses', 'soda', 'twitter']
     modulesInitialized: 0
     # 10 second flip delay.
     scrollInterval: 10*1000
@@ -87,6 +87,8 @@ SugarDash = {
                 $(this).html mom.fromNow()
                 $(this).removeClass 'moment_datetime'
                 $(this).addClass 'datetime'
+
+            # Create any graphs required.
             e.find(".graph").each ->
                 id = $(this).attr('id')
                 data = module_data[id]
@@ -95,6 +97,12 @@ SugarDash = {
                 if data.legend? and data.legend.labelFormatter?
                     data.legend.labelFormatter = new Function data.legend.labelFormatter
                 SugarDash.charts[$(this).attr('id')] = data
+
+            # Create any ticking clocks required.
+            e.find('span.jsclock').each ->
+                id = $(this).parents('.widget').attr('id')
+                data = module_data[id]
+                $(this).jsclock(data.time)
         statemachine = new State(states, callback, this)
         $(template).each ->
             if $(this).is('.widget')

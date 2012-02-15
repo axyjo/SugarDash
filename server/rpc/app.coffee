@@ -35,12 +35,14 @@ exports.actions = (req, res, ss) ->
                         if(!_.isEmpty(chunk))
                             contents.push chunk
                     response.on "end", ->
+                        moment = require('moment')
                         resp = JSON.parse(contents.join(''))
+                        date = moment().hours(resp.hour).minutes(resp.minute).seconds(resp.second)
                         data = {
-                            data: resp
+                            data: {time: date.format('HH:mm:ss')}
                             uuid_val: input.uuid
                         }
-                        return data
+                        return_data data
                 request.end()
                 console.log 'Request sent.'
 
