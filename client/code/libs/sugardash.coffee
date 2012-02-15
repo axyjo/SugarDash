@@ -181,7 +181,7 @@ SugarDash = {
                 if SugarDash.loaded_charts[SugarDash.currentItem.parent().attr('id')]?
                     SugarDash.loaded_charts[SugarDash.currentItem.parent().attr('id')].destroy()
 
-            if SugarDash.currentModule? and SugarDash.nextModule? and SugarDash.currentModule != SugarDash.nextModule
+            if SugarDash.currentModule? and SugarDash.nextModule? and SugarDash.currentModule.attr('id') != SugarDash.nextModule.attr('id')
                 SugarDash.currentModule.slideUp 'slow', ->
                     SugarDash.nextModule.delay(Math.random()*1500).slideDown 'slow', ->
                         SugarDash.nextItem.fadeIn ->
