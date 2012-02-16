@@ -542,21 +542,6 @@ exports.actions = (req, res, ss) ->
                     text: yaxis || null
                 }
             }
-
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                    enableMouseTracking: false
-                }
-                pie: {
-                    dataLabels: {
-                        enabled: false,
-                    },
-                    showInLegend: true,
-                }
-            }
             series: []
         }
 

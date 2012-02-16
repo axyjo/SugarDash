@@ -25,6 +25,7 @@ Highcharts.theme = {
 	},
 	legend: {
         enabled: true,
+        borderWidth: 0,
 		itemStyle: {
             color: '#EEE'
 		},
@@ -33,7 +34,8 @@ Highcharts.theme = {
 		},
 		itemHiddenStyle: {
 			color: '#333'
-		}
+		},
+        symbolWidth: 80
 	},
 	tooltip: {
         enabled: false
@@ -41,8 +43,13 @@ Highcharts.theme = {
 	plotOptions: {
 		line: {
 			dataLabels: {
-				color: '#AAA'
+                enabled: true,
+				color: '#AAA',
+				style: {
+                    fontSize: 40
+                }
 			},
+            enableMouseTracking: false,
 			marker: {
 				lineColor: '#333'
 			}
@@ -59,8 +66,9 @@ Highcharts.theme = {
 		},
         pie: {
             dataLabels: {
-                color: '#AAA'
-            }
+                enabled: false
+            },
+            showInLegend: true
         }
 	},
 
