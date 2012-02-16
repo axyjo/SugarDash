@@ -1,7 +1,4 @@
 exports.actions = (req, res, ss) ->
-    jsdom = require 'jsdom'
-    parsed = parsed || {}
-
     log = (args...)->
         str = "SODA: ".blue + args.join(' ')
         console.log str
@@ -94,106 +91,54 @@ exports.actions = (req, res, ss) ->
                 }
         chart
 
-    jquery_path = "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
-    base_url = "http://soda-reporting/soda/"
-
-    getSummaryData = (branch, build, branch_url, state) ->
-        url = branch_url + build + "/summary.html"
-        config = {
-            html: url
-            scripts: [jquery_path]
-            done: (errors, window) ->
-                if errors? and !_.isEmpty(errors)
-                    log errors
-                $ = window.jQuery
-                container = $("#totals")
-                data = {
-                    "Passed": parseInt container.find('.td_footer_passed').html()
-                    "Failed": parseInt container.find('.td_footer_failed').html()
-                    "Blocked": parseInt container.find('.td_footer_skipped').html()
-                }
-                log "Got data for", branch+'-'+build, JSON.stringify(data)
-                parsed[branch] = {} if !parsed[branch]?
-                parsed[branch][build] = {} if !parsed[branch][build]?
-                parsed[branch][build] = data
-                state.complete(branch+"-"+build)
-        }
-
-        jsdom.env(config)
-
-    stack = "stack47"
-    browser = "firefox"
-    fetchSodaResults = (state, branch) ->
-        log "Called fetchSodaResults"
-        log "Fetching branch", branch
-        branch_url = base_url + stack+"/"+branch+"/"+browser+"/"
-        jsdom.env {
-            html: branch_url
-            scripts: [jquery_path]
-            done: (errors, window) ->
-                if errors? and !_.isEmpty(errors)
-                    log errors
-                parsed[branch] = {}
-                $ = window.jQuery
-                buildNums = []
-                # Remove header row.
-                $('table tr:first').remove()
-                # Remove <hr> top row.
-                $('table tr:first').remove()
-                # Remove 'Parent Directory' row.
-                $('table tr:first').remove()
-                # Remove 'latest' directory row.
-                $('table tr:last').remove()
-                # Remove <hr> bottom row.
-                $('table tr:last').remove()
-
-                $('table').find('td a').each ->
-                    # Search for the link to the directory in cell
-                    directoryName = $(this).html()
-                    buildNums.push directoryName.substr 0, directoryName.length-1
-
-                buildNums = buildNums.slice(-8)
-
-                for build in buildNums
-                    state.add branch+"-"+build
-                    getSummaryData branch, build, branch_url, state
-                state.complete 'fetch'
-        }
-
-    Array::remove = (e) -> @[t..t] = [] if (t = @indexOf(e)) > -1
-    class State
-        constructor: (@states, @callback, @context) ->
-
-        add: (state) ->
-            this.states.push state
-
-        complete: (state) ->
-            this.states.remove(state)
-            if(this.states.length <= 0)
-                this.callback.call(this.context)
     return {
-        clearData: (input) ->
-            process.sodaTime = null
 
         getSodaResults: (input) ->
             input = validateInput input
-            input.branch = input.branch || '650'
+            branch = input.branch || '64_Joneses'
+
+            mysql = require 'mysql'
+            client = mysql.createClient {
+                host: process.env.SODA_HOST
+                port: process.env.SODA_PORT
+                user: process.env.SODA_USER
+                password: process.env.SODA_PASS
+                database: process.env.SODA_DB
+            }
 
             segments = ['Passed', 'Failed', 'Blocked']
             results = {
                 uuid_val: input.uuid
             }
-            cb = ->
-                if input.branch?
-                    chart_data = parsed
-                    results.data = getStackedArea chart_data, segments
+            strings = [' - ', 'SodaBuild-', '', "lib\\/.*", 'SodaBuild%'+branch+'%']
+
+            query = "SELECT REPLACE(SUBSTRING_INDEX(builds.build_id , ?, 1) , ?, ?) as jenkins, test_data.build_id as id, COUNT(test_data.test_id) AS total,
+            (COUNT(*) - SUM(blocked)) AS run,
+            SUM(blocked) AS Blocked,
+            SUM(test_result) AS Failed,
+            (COUNT(*) - SUM(test_result)) AS Passed
+            FROM test_data LEFT JOIN builds ON test_data.build_id = builds.id
+            WHERE test_data.testfile_name NOT REGEXP ?
+            AND builds.build_id LIKE ?
+            GROUP BY builds.id"
+
+            parsed = {}
+            client.query query, strings, (err, mysql_results, fields) ->
+                console.log("ERR:", err)
+                if !err?
+                    parsed[branch] = {}
+                    for result in mysql_results
+                        build = result.jenkins
+                        parsed[branch][build] = {} if !parsed[branch][build]?
+                        for segment in segments
+                            parsed[branch][build][segment] = result[segment]
+
+                    results.data = getStackedArea parsed, segments
                     return_data results
                     res true
+
                 else
                     res false
-            state = new State ["fetch"], cb, this
-            fetchSodaResults state, input.branch
-
     }
 
 
