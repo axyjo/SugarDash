@@ -12,7 +12,7 @@ Highcharts.theme = {
 		plotShadow: false,
 		plotBorderWidth: 0,
 		style: {
-            fontSize: '45px'
+            fontSize: '60px'
         }
 	},
 
