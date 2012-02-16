@@ -42,8 +42,15 @@ if (ss.env == 'production') {
 
 process.env.GH_USER = process.env.GH_USER || ""
 process.env.GH_PASS = process.env.GH_PASS || ""
+
 process.env.SUGAR_USER = process.env.SUGAR_USER || ""
 process.env.SUGAR_PASS = process.env.SUGAR_PASS || ""
+
+process.env.SODA_HOST = process.env.SODA_HOST || "127.0.0.1"
+process.env.SODA_PORT = process.env.SODA_PORT || 3306
+process.env.SODA_USER = process.env.SODA_USER || "root"
+process.env.SODA_PASS = process.env.SODA_PASS || ""
+process.env.SODA_DB = process.env.SODA_DB || ""
 
 var server = http.Server(ss.http.middleware);
 server.listen(3000);
