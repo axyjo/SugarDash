@@ -137,27 +137,21 @@ exports.actions = (req, res, ss) ->
                 return_data ret
             getJob input, cb
 
-        getLastFailure: (input) ->
+        getLast: (input) ->
             cb = (d) ->
                 data = {}
+                # Get the last build.
+                build = d.builds[0]
+                culprits = []
+                for culprit in build.culprits
+                    culprits.push culprit.fullName
 
-                # Find latest failure.
-                for build in d.builds
-                    if build.result == "FAILURE"
-                        culprits = []
-                        for culprit in build.culprits
-                            culprits.push culprit.fullName
-
-                        time = (new Date(build.timestamp)).toString()
-                        lastFailed = {names: culprits.join(', '), number: build.number, time: time}
-                        break
-
-                if !lastFailed?
-                    lastFailed = {name: "nobody", timestamp: 0}
+                time = (new Date(build.timestamp)).toString()
+                last = {names: culprits.join(', '), number: build.number, time: time, status: build.result}
 
                 resp = {
                     uuid_val: input.uuid
-                    data: lastFailed
+                    data: last
                 }
                 return_data resp
             getJob input, cb

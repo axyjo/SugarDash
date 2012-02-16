@@ -1,22 +1,24 @@
 <h1 class="module_title">PHPUnit Ent Tests:</h1>
 
-<div class="widget row-fluid" id="widget_jenkins_lastFail_64_Joneses" data-func="jenkins.getLastFailure" data-view="64_Joneses" data-job="64_Joneses_PreBuild_Master">
+<div class="widget row-fluid" id="widget_jenkins_last_64_Joneses" data-func="jenkins.getLast" data-view="64_Joneses" data-job="64_Joneses_PreBuild_Master">
     <div class="item">
-        {{#if widget_jenkins_lastFail_64_Joneses}}
-            {{#with widget_jenkins_lastFail_64_Joneses}}
-                <h3>Last broken 6.4 Joneses build (#{{number}}):</h3>
+        {{#if widget_jenkins_last_64_Joneses}}
+            {{#with widget_jenkins_last_64_Joneses}}
+                <h3>Last 6.4 Joneses build (#{{number}}) - {{status}}:</h3>
                 <div>{{names}}</div>
+                <div>{{time}}</div<
             {{/with}}
         {{/if}}
     </div>
 </div>
 
-<div class="widget row-fluid" id="widget_jenkins_lastFail_650" data-func="jenkins.getLastFailure" data-view="650" data-job="650_PreBuild_Master">
+<div class="widget row-fluid" id="widget_jenkins_last_650" data-func="jenkins.getLast" data-view="650" data-job="650_PreBuild_Master">
     <div class="item">
-        {{#if widget_jenkins_lastFail_650}}
-            {{#with widget_jenkins_lastFail_650}}
-                <h3>Last broken 6.5.0 build (#{{number}}):</h3>
+        {{#if widget_jenkins_last_650}}
+            {{#with widget_jenkins_last_650}}
+                <h3>Last 6.5.0 build (#{{number}}) - {{status}}:</h3>
                 <div>{{names}}</div>
+                <div>{{time}}</div<
             {{/with}}
         {{/if}}
     </div>
