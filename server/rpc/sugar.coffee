@@ -751,7 +751,7 @@ exports.actions = (req, res, ss) ->
                 chart = getChart input.chart_type, input.chart_title, input.xaxis_title, input.yaxis_title
                 chart.xAxis.categories = _.keys results.data.entry_list
                 chart.legend = {
-                    enabled = false
+                    enabled: false
                 }
                 chart.series.push {
                     type: 'line'
