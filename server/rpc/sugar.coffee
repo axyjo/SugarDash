@@ -695,7 +695,8 @@ exports.actions = (req, res, ss) ->
                                         val = "sad"
                                 result.responses.push val
                             else
-                                result.responses.push "unknown"
+                                # We check for falsy values in the template.
+                                result.responses.push false
                 return_data results
             q.all().addWhereClause('csurv_surveyresponse.date_entered > (NOW() - INTERVAL 2 WEEK)').groupBy('assigned_user_name').execute()
 
