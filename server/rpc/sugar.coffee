@@ -574,8 +574,8 @@ exports.actions = (req, res, ss) ->
         }
         chart
 
-    getStackedBar = (chart_data, segments) ->
-        chart = getChart('bar', 'Bugs by Developer/Status')
+    getStackedBar = (chart_data, segments, title) ->
+        chart = getChart('bar', title || 'Bugs by Developer/Status')
         chart.xAxis.categories = _.keys chart_data
         chart.legend = {
             enabled: true,
@@ -662,25 +662,42 @@ exports.actions = (req, res, ss) ->
                 return_data results
             q.order('date_created DESC').limit(10).execute()
 
+
+        getSupportCount: (input) ->
+            input = validateInput input
+            q = new SatisfactionSurvey {uuid: input.uuid}, process.si, (results) ->
+                chart = getChart 'column', 'Support Cases in Last Two Weeks', 'Support Team Member', 'Cases'
+                chart.xAxis.categories = _.keys results.data.entry_list
+                chart.series.push {
+                    name: 'Cases'
+                    data: _.values results.data.entry_list
+                }
+                return_data {
+                    uuid_val: input.uuid
+                    data: chart
+                }
+            q.all().addWhereClause('csurv_surveyresponse.date_entered > (NOW() - INTERVAL 2 WEEK)').countBy('assigned_user_name').execute()
+
         getSatisfaction: (input) ->
             input = validateInput input
             q = new SatisfactionSurvey {uuid: input.uuid}, process.si, (results) ->
-                for result in results.data.entry_list
-                    result.responses = []
-                    for i in [1..6]
-                        if result["question_"+i]? and !_.isEmpty result["question_"+i]
-                            switch parseInt(result["question_"+i])
-                                when 10, 9, 8
-                                    val = "happy"
-                                when 7, 6, 5
-                                    val = "neutral"
-                                else
-                                    val = "sad"
-                            result.responses.push val
-                        else
-                            result.responses.push false
+                for person,values of results.data.entry_list
+                    for result in values
+                        result.responses = []
+                        for i in [1..6]
+                            if result["question_"+i]? and !_.isEmpty result["question_"+i]
+                                switch parseInt(result["question_"+i])
+                                    when 10, 9, 8
+                                        val = "happy"
+                                    when 7, 6, 5
+                                        val = "neutral"
+                                    else
+                                        val = "sad"
+                                result.responses.push val
+                            else
+                                result.responses.push "unknown"
                 return_data results
-            q.newest().addWhereClause('csurv_SurveyResponse.date_entered > NOW() - INTERVAL 2 WEEK').execute()
+            q.all().addWhereClause('csurv_surveyresponse.date_entered > (NOW() - INTERVAL 2 WEEK)').groupBy('assigned_user_name').execute()
 
         getNewLargeOpportunities: (input) ->
             input = validateInput input
