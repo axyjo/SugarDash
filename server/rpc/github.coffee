@@ -64,4 +64,15 @@ exports.actions = (req, res, ss) ->
                 }
                 return_data ret
             call input, cb
+
+        commits: (input) ->
+            input = input || {}
+            input.path = "/repos/" + input.repo + "/commits"
+            cb = (result) ->
+                ret = {
+                    uuid_val: input.uuid
+                    data: result.splice 0, input.limit-1 || 9
+                }
+                return_data ret
+            call input, cb
     }
