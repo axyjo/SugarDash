@@ -1,12 +1,12 @@
 <h1 class="module_title">Countdowns</h2>
-<div class="widget" id="widget_countdown_641" data-func="app.loopback" data-date="2012-02-29">
-    {{#if widget_countdown_642}}
-        <div class="item"><h3>6.4.1 Maintenance Release <span class="moment_datetime">{{widget_countdown_641.date}}</span></h3></div>
-    {{/if}}
-</div>
 <div class="widget" id="widget_countdown_642" data-func="app.loopback" data-date="2012-03-28">
     {{#if widget_countdown_642}}
         <div class="item"><h3>6.4.2 Maintenance Release <span class="moment_datetime">{{widget_countdown_642.date}}</span></h3></div>
+    {{/if}}
+</div>
+<div class="widget" id="widget_countdown_643" data-func="app.loopback" data-date="2012-04-25">
+    {{#if widget_countdown_643}}
+        <div class="item"><h3>6.4.3 Maintenance Release <span class="moment_datetime">{{widget_countdown_643.date}}</span></h3></div>
     {{/if}}
 </div>
 <div class="widget" id="widget_countdown_caramel_beta1" data-func="app.loopback" data-date="2012-03-14">
