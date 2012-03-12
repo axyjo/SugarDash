@@ -162,7 +162,8 @@ SugarDash = {
                 # We need to keep doing this until there is an item we can display.
                 SugarDash.nextModule = SugarDash.currentModule
                 SugarDash.nextWidget = SugarDash.currentWidget
-                while SugarDash.nextItem.length == 0
+                iterated = 0
+                while SugarDash.nextItem.length == 0 and iterated < 10
                     console.debug "No item found within widget: ", SugarDash.nextWidget
                     SugarDash.nextWidget = SugarDash.currentItem.parents('.widget').next('.widget')
                     # If we have a next widget, we can use the first item in it as our nextItem.
@@ -171,7 +172,7 @@ SugarDash = {
                     # If we don't have a next widget, we're done with the current module and must move on to the next module.
                     else
                         # Until we have a widget, find the next module and get the first child widget.
-                        while SugarDash.nextWidget.length == 0
+                        while SugarDash.nextWidget.length == 0 and iterated < 10
                             console.debug "No widget found within module:", SugarDash.nextModule
                             SugarDash.nextModule = SugarDash.currentItem.parents('.module').next('.module')
                             # If we don't have a next module, we have to use the first module in the container.
@@ -183,6 +184,8 @@ SugarDash = {
                             SugarDash.refresh SugarDash.nextModule
                             # Now that we have the next module, find the first widget in it.
                             SugarDash.nextWidget = SugarDash.nextModule.children('.widget').first()
+                            # MOAR HACK.
+                            iterated++
                         SugarDash.nextItem = SugarDash.nextWidget.find(SugarDash.itemFilter).first()
 
             if SugarDash.nextItem.length > 1
