@@ -91,7 +91,7 @@ exports.actions = (req, res, ss) ->
 
     getJob = (input, cb) ->
         console.log "Got request", input.uuid
-        host = 'eng-ci1.sjc.sugarcrm.pvt'
+        host = '10.13.8.10'
         path = '/view/'+input.view+'/job/'+input.job+'/api/json?depth=1'
         http = require('http')
         client = http.createClient 8080, host
