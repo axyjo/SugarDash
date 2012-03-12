@@ -174,8 +174,10 @@ SugarDash = {
                             console.debug "No widget found within module:", SugarDash.nextModule
                             SugarDash.nextModule = SugarDash.currentItem.parents('.module').next('.module')
                             # If we don't have a next module, we have to use the first module in the container.
+                            # HACK: Right now, we just reload the page because for whatever reason, we get stuck in an infinite loop.
                             if SugarDash.nextModule.length == 0
-                                SugarDash.nextModule = SugarDash.container.children('.module').first()
+                                # SugarDash.nextModule = SugarDash.container.children('.module').first()
+                                window.location.reload()
                             # Refresh the next module.
                             SugarDash.refresh SugarDash.nextModule
                             # Now that we have the next module, find the first widget in it.
