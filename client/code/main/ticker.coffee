@@ -21,6 +21,8 @@ Ticker = {
             Ticker.current_index = 0 if Ticker.current_index >= Ticker.ticker_items.length
             $("#ticker p").animate { opacity: 'toggle', height: 'toggle' }, ->
                 setTimeout Ticker.switch, 7500
+                $("#container").height ($(window).height() - $("#ticker").outerHeight())
+
 }
 
 SocketStream.event.on 'ready', ->
