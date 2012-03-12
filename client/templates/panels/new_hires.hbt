@@ -1,9 +1,0 @@
-<h1 class="panel_title">Welcome, new hires!</h1>
-
-<div class="row-fluid">
-    <div class="widget" id="widget_new_hires" data-func="sugar.getNewEmployees">
-    {{#divide widget_new_hires.entry_list}}
-        {{> new_hire this}}
-    {{/divide}}
-    </div>
-</div>

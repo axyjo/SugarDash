@@ -1,4 +1,4 @@
-<div class="new_hire span4">
+<div class="new_hire span12 item">
     <div class="new_hire_photo">
     {{#if this.picture}}
         <img src="https://sugarinternal.sugarondemand.com/index.php?entryPoint=download&type=SugarFieldImage&isTempFile=1&id={{this.picture}}" />
@@ -6,7 +6,7 @@
         <img src="/images/mm.png" />
     {{/if}}
     </div>
-    <h2 class="new_hire_name">{{this.full_name}}</h2>
+    <h3 class="new_hire_name">{{this.full_name}}</h2>
     <br />
     <div class="new_hire_dept">
         {{#if this.department}}

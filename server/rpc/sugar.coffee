@@ -642,7 +642,7 @@ exports.actions = (req, res, ss) ->
             input = validateInput(input)
             q = new Users {uuid: input.uuid}, process.si, (results) ->
                 return_data results
-            q.select(['picture', 'date_entered', 'department', 'full_name']).newest().limit(9).execute()
+            q.select(['picture', 'date_entered', 'department', 'full_name']).newest().limit(12).execute()
 
         getHeartbeatPHP: (input) ->
             input = validateInput input

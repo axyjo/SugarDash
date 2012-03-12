@@ -1,0 +1,8 @@
+<h1 class="module_title">Welcome, new hires!</h2>
+<div class="widget" id="widget_new_hires" data-func="sugar.getNewEmployees">
+    {{#if widget_new_hires}}
+        {{#each widget_new_hires.entry_list}}
+            {{> new_hire this}}
+        {{/each}}
+    {{/if}}
+</div>
