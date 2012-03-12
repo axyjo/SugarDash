@@ -2,7 +2,7 @@ SugarDash = {
     charts: {}
     loaded_charts: {}
     itemFilter: 'div.item'
-    modules: ['countdowns', 'jenkins', 'weather', 'current_time', 'github', 'heartbeat', 'joneses', 'soda', 'twitter']
+    modules: ['countdowns', 'sugar_satisfaction', 'jenkins', 'weather', 'current_time', 'github', 'heartbeat', 'joneses', 'soda', 'twitter']
     modulesInitialized: 0
     # 10 second flip delay.
     scrollInterval: 10*1000
@@ -110,7 +110,7 @@ SugarDash = {
                 inputs = $(this).data()
                 inputs.uuid = SugarDash.generateUUID()
                 ss.rpc func, inputs
-                console.log "Sent request", inputs.uuid, "to", func
+                console.log "Sent request", inputs.uuid, "for", func
 
                 ss.event.on 'response_'+inputs.uuid, (resp) ->
                     console.log "Got response", resp.uuid_val, 'for', widget_id, resp
@@ -120,6 +120,7 @@ SugarDash = {
     update: (module_id, e, data) ->
         #console.debug "UPDATING", module_id
         template_id = "modules-"+module_id
+        console.log("Rendering ", template_id, "with", data, "for", e)
         template = Handlebars.templates[template_id](data)
         e.html(template)
 

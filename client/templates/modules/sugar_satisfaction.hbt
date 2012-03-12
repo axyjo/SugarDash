@@ -1,26 +1,27 @@
+<h1 class="module_title">Sugar Customer Satisfaction</h1>
 <div class="widget" id="widget_sugar_satisfaction" data-func="sugar.getSatisfaction">
-    <h2 class="widget_title"></h3>
     {{#if widget_sugar_satisfaction}}
-        {{#each widget_sugar_satisfaction.entry_list}}
-            {{#each this}}
+        {{#key_value widget_sugar_satisfaction.entry_list}}
+            {{#each this.value}}
                 <div class="item sugar_satisfaction_entry">
                     <div class="row-fluid">
-                        <h3 class="span5 sugar_satisfaction_title">{{this.name}} assigned to {{this.assigned_user_name}}</h3>
+                        <h3 class="span12 sugar_satisfaction_title">{{this.name}} ({{{this.case_relate}}}) assigned to {{this.assigned_user_name}}</h3>
                     </div>
                     <div class="row-fluid">
                         {{#each this.responses}}
                             {{#if this}}
-                                <img class="span1" src="/images/emotions/{{this}}.png" />
+                                <img class="span2" src="/images/emotions/{{this}}.png" />
                             {{else}}
-                                <div class="span1"></div>
+                                <div class="span2"></div>
                             {{/if}}
                         {{/each}}
                     </div>
                 </div>
             {{/each}}
-        {{/each}}
+        {{/key_value}}
     {{/if}}
 </div>
+
 
 <div class="widget" id="widget_sugar_support_chart" data-func="sugar.getSupportCount">
     <div class="item widget_title">Support Count by User:</div>
