@@ -20,7 +20,8 @@ Ticker = {
             Ticker.current_index++
             Ticker.current_index = 0 if Ticker.current_index >= Ticker.ticker_items.length
             $("#ticker p").animate { opacity: 'toggle', height: 'toggle' }, ->
-                setTimeout Ticker.switch, 2000
+                clearTimeout(Ticker.timeout) if Ticker.timeout?
+                Ticker.timeout = setTimeout Ticker.switch, 7500
                 $("#container").height ($(window).height() - $("#ticker").outerHeight())
 
 }
