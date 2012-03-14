@@ -131,7 +131,8 @@ SugarDash = {
 
     switch: ->
         console.debug "SWITCHING FROM", SugarDash.currentItem, "TO", SugarDash.nextItem
-
+        if SugarDash.nextItem.length == 0
+            window.location.reload()
         trigger = ->
             # If we haven't initialized all of the modules yet, do so.
             if SugarDash.modulesInitialized < SugarDash.modules.length
