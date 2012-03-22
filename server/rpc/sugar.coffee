@@ -462,7 +462,7 @@ exports.actions = (req, res, ss) ->
     class UserStream extends SugarRecord
         constructor: (params, si, cb) ->
             params.from = 'SugarFeed'
-            params.where.push "(related_module = 'SugarFeed' OR related_module = 'UserFeed')"
+            @in 'related_module', ['SugarFeed', 'UserFeed']
             callback = (data) ->
                 for entry in data.entry_list
                     entry.name.replace "&lt;b&gt;{this.CREATED_BY}&lt;/b&gt;", ""
