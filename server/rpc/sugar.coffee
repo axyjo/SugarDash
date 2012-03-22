@@ -767,6 +767,10 @@ exports.actions = (req, res, ss) ->
             q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', '', '<>', true)
             q.countBy('sprint_number_c').all().execute()
 
+        _getToken: (username, password) ->
+            if process.env.SUGAR_USER == username and process.env.SUGAR_PASS == password
+                res SugarInternal::token()
+
         _rawCall: (func, args, params) ->
             request = process.si._call (data)->
                 res data
