@@ -1,0 +1,15 @@
+<h1 class="module_title">Sugar Internal Feed</h2>
+<div class="widget" id="widget_sugar_feed" data-func="sugar.getFeed">
+    {{#if widget_sugar_feed}}
+        {{#each widget_sugar_feed.entry_list}}
+            <h3>
+                <div class="sugar_feed span12 item">
+                    <div class="sugar_feed_text">
+                        {{this.modified_user_name}}: {{this.name}}
+                    </div>
+                    <div class="sugar_feed_date"><span class="moment_datetime">{{this.date_entered}}</span></div>
+                </div>
+            </h3>
+        {{/each}}
+    {{/if}}
+</div>
