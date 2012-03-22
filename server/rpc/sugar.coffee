@@ -697,7 +697,7 @@ exports.actions = (req, res, ss) ->
                                 # We check for falsy values in the template.
                                 result.responses.push false
                 return_data results
-            q.all().addWhereClause('csurv_surveyresponse.date_entered > (NOW() - INTERVAL 2 WEEK)').groupBy('assigned_user_name').execute()
+            q.all().addWhereClause('csurv_surveyresponse.date_entered > (NOW() - INTERVAL 1 WEEK)').groupBy('assigned_user_name').execute()
 
         getNewLargeOpportunities: (input) ->
             input = validateInput input
