@@ -5,7 +5,7 @@
             <div class="sugar_feed span12 item">
                 <h3>
                     <div class="sugar_feed_text">
-                        {{this.modified_user_name}}: {{this.name}}
+                        {{this.modified_user_name}}: {{{this.name}}}
                     </div>
                     <div class="sugar_feed_date"><span class="moment_datetime">{{this.date_entered}}</span></div>
                 </h3>
