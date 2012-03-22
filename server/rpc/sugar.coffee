@@ -767,6 +767,13 @@ exports.actions = (req, res, ss) ->
             q.in('status', statuses).where('fixed_in_release', joneses_release).where('sprint_number_c', '', '<>', true)
             q.countBy('sprint_number_c').all().execute()
 
+        getFeed: (input) ->
+            input = validateInput(input)
+            q = new UserStream
+            q.callback( (results) ->
+                return_data results
+            ).limit(10).order('date_entered DESC').execute()
+
         _getToken: (username, password) ->
             if process.env.SUGAR_USER == username and process.env.SUGAR_PASS == password
                 res SugarInternal::token()
