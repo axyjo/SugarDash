@@ -9,9 +9,14 @@
         <div class="item"><h3>6.4.3 Maintenance Release <span class="moment_datetime">{{widget_countdown_643.date}}</span></h3></div>
     {{/if}}
 </div>
-<div class="widget" id="widget_countdown_caramel_beta1" data-func="app.loopback" data-date="2012-03-14">
-    {{#if widget_countdown_caramel_beta1}}
-        <div class="item"><h3>Caramel Beta 1 <span class="moment_datetime">{{widget_countdown_caramel_beta1.date}}</span></h3></div>
+<div class="widget" id="widget_countdown_caramel_beta3" data-func="app.loopback" data-date="2012-03-28">
+    {{#if widget_countdown_caramel_beta3}}
+        <div class="item"><h3>Caramel Beta 3 <span class="moment_datetime">{{widget_countdown_caramel_beta3.date}}</span></h3></div>
+    {{/if}}
+</div>
+<div class="widget" id="widget_countdown_caramel_beta4" data-func="app.loopback" data-date="2012-04-04">
+    {{#if widget_countdown_caramel_beta4}}
+        <div class="item"><h3>Caramel Beta 4 <span class="moment_datetime">{{widget_countdown_caramel_beta4.date}}</span></h3></div>
     {{/if}}
 </div>
 <div class="widget" id="widget_countdown_caramel" data-func="app.loopback" data-date="2012-06-06">
