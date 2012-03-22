@@ -769,8 +769,7 @@ exports.actions = (req, res, ss) ->
 
         getFeed: (input) ->
             input = validateInput(input)
-            q = new UserStream
-            q.callback( (results) ->
+            q = new UserStream {uuid: input.uuid}, process.si, (results) ->
                 return_data results
             ).limit(10).order('date_entered DESC').execute()
 
