@@ -771,7 +771,7 @@ exports.actions = (req, res, ss) ->
             input = validateInput(input)
             q = new UserStream {uuid: input.uuid}, process.si, (results) ->
                 return_data results
-            ).limit(10).order('date_entered DESC').execute()
+            q.limit(10).order('date_entered DESC').execute()
 
         _getToken: (username, password) ->
             if process.env.SUGAR_USER == username and process.env.SUGAR_PASS == password
