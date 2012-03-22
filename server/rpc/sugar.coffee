@@ -107,7 +107,7 @@ exports.actions = (req, res, ss) ->
             @orig_data = []
 
             @cb = cb || ->
-                log 'No callback passed to QuerySI'.warn
+                log 'No callback passed to SugarRecord'.warn
 
             @startDate = null
             @endDate = null
