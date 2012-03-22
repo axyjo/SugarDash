@@ -459,18 +459,17 @@ exports.actions = (req, res, ss) ->
             params.from = 'Reports'
             super params, si, cb
 
+    class UserStream extends SugarRecord
+        constructor: (params, si, cb) ->
+            params.from = 'SugarFeed'
+            params.where.push "(related_module = 'SugarFeed' OR related_module = 'UserFeed')"
+            callback = (data) ->
+                for entry in data.entry_list
+                    entry.name.replace "&lt;b&gt;{this.CREATED_BY}&lt;/b&gt;", ""
+                cb data
+            super params, si, callback
+
     appName = 'SugarDash'
-
-    countBy = (data, column) ->
-        data = groupBy data, column
-        entry_list = {}
-        for value in data.entry_list
-            if _.isNaN entry_list[value]
-                entry_list[val] = value.size
-        data.entry_list = entry_list
-
-        # return data
-        data
 
     return_data = (query) ->
         if _.isObject(query) and _.isString(query.uuid_val)
