@@ -236,14 +236,13 @@ exports.actions = (req, res, ss) ->
                     obj.time = (obj.endDate - obj.startDate)/1000
                     obj.logQuery()
                     obj.executed = true
-
                     try
                         obj.cb(obj)
                     catch e
+                        log "Exception occured in callback for SugarRecord:"
                         log e
                 @startDate = new Date()
                 try
-                    @.logQuery()
                     if @module.toLowerCase() == "reports"
                         @si.call(callback, 'get_report_entries', [SugarInternal::token(), [@id]])
                     else
@@ -464,10 +463,10 @@ exports.actions = (req, res, ss) ->
             params.from = 'SugarFeed'
             super params, si, cb
             @in 'related_module', ['SugarFeed', 'UserFeed']
-            @callback (data) ->
-                for entry in data.entry_list
-                    entry.name.replace "&lt;b&gt;{this.CREATED_BY}&lt;/b&gt;", ""
-                cb data
+            @callback (obj) ->
+                for entry in obj.data.entry_list
+                    entry.name = entry.name.replace "&lt;b&gt;{this.CREATED_BY}&lt;/b&gt; ", ""
+                cb obj
 
     appName = 'SugarDash'
 
