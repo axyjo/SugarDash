@@ -462,7 +462,7 @@ exports.actions = (req, res, ss) ->
     class UserStream extends SugarRecord
         constructor: (params, si, cb) ->
             params.from = 'SugarFeed'
-            super params, si, callback
+            super params, si, cb
             @in 'related_module', ['SugarFeed', 'UserFeed']
             @callback (data) ->
                 for entry in data.entry_list
