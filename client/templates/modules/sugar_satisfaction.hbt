@@ -5,7 +5,7 @@
             {{#each this.value}}
                 <div class="item sugar_satisfaction_entry">
                     <div class="row-fluid">
-                        <h3 class="span12 sugar_satisfaction_title">{{this.name}} ({{{this.case_relate}}}) assigned to {{this.assigned_user_name}}</h3>
+                        <h3 class="span12 sugar_satisfaction_title">{{this.name}}: ({{{this.case_relate}}}) ({{this.assigned_user_name}})</h3>
                     </div>
                     <div class="row-fluid">
                         {{#each this.responses}}
