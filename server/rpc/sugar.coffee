@@ -681,6 +681,7 @@ exports.actions = (req, res, ss) ->
             q = new SatisfactionSurvey {uuid: input.uuid}, process.si, (results) ->
                 for person,values of results.data.entry_list
                     for result in values
+                        result.name = result.name.replace "Survey for ", ""
                         result.responses = []
                         for i in [1..6]
                             if result["question_"+i]? and !_.isEmpty result["question_"+i]
