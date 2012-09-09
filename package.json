@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "author": "Akshay <me@akshayjoshi.com>",
   "private": true,
-  "engines": { "node": ">= 0.6.0" },
+  "engines": {
+    "node": ">= 0.6.0"
+  },
   "dependencies": {
     "ss-coffee": "0.1.x",
     "ss-jade": "0.1.x",
@@ -15,5 +17,9 @@
     "colors": "0.6.x",
     "mysql": "0.9.x",
     "timezone": "0.0.x"
+  },
+  "subdomain": "axyjo.sugardash",
+  "scripts": {
+    "start": "app.js"
   }
 }
