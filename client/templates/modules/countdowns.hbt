@@ -1,27 +1,22 @@
 <h1 class="module_title">Countdowns</h2>
-<div class="widget" id="widget_countdown_642" data-func="app.loopback" data-date="2012-03-28">
-    {{#if widget_countdown_642}}
-        <div class="item"><h3>6.4.2 Maintenance Release <span class="moment_datetime">{{widget_countdown_642.date}}</span></h3></div>
+<div class="widget" id="widget_countdown_655" data-func="app.loopback" data-date="2012-09-19">
+    {{#if widget_countdown_655}}
+        <div class="item"><h3>6.4.2 Maintenance Release <span class="moment_datetime">{{widget_countdown_655.date}}</span></h3></div>
     {{/if}}
 </div>
-<div class="widget" id="widget_countdown_643" data-func="app.loopback" data-date="2012-04-25">
-    {{#if widget_countdown_643}}
-        <div class="item"><h3>6.4.3 Maintenance Release <span class="moment_datetime">{{widget_countdown_643.date}}</span></h3></div>
+<div class="widget" id="widget_countdown_656" data-func="app.loopback" data-date="2012-10-17">
+    {{#if widget_countdown_656}}
+        <div class="item"><h3>6.5.6 Maintenance Release <span class="moment_datetime">{{widget_countdown_656.date}}</span></h3></div>
     {{/if}}
 </div>
-<div class="widget" id="widget_countdown_caramel_beta3" data-func="app.loopback" data-date="2012-03-28">
-    {{#if widget_countdown_caramel_beta3}}
-        <div class="item"><h3>Caramel Beta 3 <span class="moment_datetime">{{widget_countdown_caramel_beta3.date}}</span></h3></div>
+<div class="widget" id="widget_countdown_toffee" data-func="app.loopback" data-date="2012-11-10">
+    {{#if widget_countdown_toffee}}
+        <div class="item"><h3>Toffee Release <span class="moment_datetime">{{widget_countdown_toffee.date}}</span></h3></div>
     {{/if}}
 </div>
-<div class="widget" id="widget_countdown_caramel_beta4" data-func="app.loopback" data-date="2012-04-04">
-    {{#if widget_countdown_caramel_beta4}}
-        <div class="item"><h3>Caramel Beta 4 <span class="moment_datetime">{{widget_countdown_caramel_beta4.date}}</span></h3></div>
-    {{/if}}
-</div>
-<div class="widget" id="widget_countdown_caramel" data-func="app.loopback" data-date="2012-06-06">
-    {{#if widget_countdown_caramel}}
-        <div class="item"><h3>Caramel GA <span class="moment_datetime">{{widget_countdown_caramel.date}}</span></h3></div>
+<div class="widget" id="widget_countdown_shortbread_rc1" data-func="app.loopback" data-date="2013-04-03">
+    {{#if widget_countdown_shortbread_rc1}}
+        <div class="item"><h3>Shortbread RC1 <span class="moment_datetime">{{widget_countdown_shortbread_rc1.date}}</span></h3></div>
     {{/if}}
 </div>
 
