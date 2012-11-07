@@ -1,7 +1,7 @@
 {
   "name": "SugarDash",
   "description": "An awesome real time dashboard for multiple devices.",
-  "version": "0.0.1",
+  "version": "0.0.1-3",
   "author": "Akshay <me@akshayjoshi.com>",
   "private": true,
   "engines": {
