@@ -21,34 +21,29 @@
 </div>
 
 <div class="widget" id="widget_countdown_nutmeg" data-func="app.loopback" data-date="2013-01-30" data-fcdate="2012-11-14">
-    {{#if widget_countdown_toffee}}
+    {{#if widget_countdown_nutmeg"}}
         <div class="item">
-        <h3>Nutmeg (6.7.0) Release <span class="moment_datetime">{{widget_countdown_nutmeg.date}}</span> ({{widget_countdown_nutmeg.date}})</h3>
-    </div>
-        <div class="item">
-        <h3>Nutmeg (6.7.0) Feature complete <span class="moment_datetime">{{widget_countdown_nutmeg.fcdate}}</span> ({{widget_countdown_nutmeg.fcdate}})</h3>
-    </div>
+            <h3>Nutmeg (6.7.0) Release <span class="moment_datetime">{{widget_countdown_nutmeg.date}}</span> ({{widget_countdown_nutmeg.date}})</h3>
+            <h3>Nutmeg (6.7.0) Feature complete <span class="moment_datetime">{{widget_countdown_nutmeg.fcdate}}</span> ({{widget_countdown_nutmeg.fcdate}})</h3>
+            <h3>Note: SugarCRM Mobile 2 (Nomad 1.0) is released at the same time.</h3>   
+        </div>
     {{/if}}
 </div>
 
 <div class="widget" id="widget_countdown_orangespice" data-func="app.loopback" data-date="2013-03-27" data-fcdate="2013-01-30">
-    {{#if widget_countdown_toffee}}
+    {{#if widget_countdown_orangespice}
         <div class="item">
-        <h3>Orange Spice (6.8.0) Release <span class="moment_datetime">{{widget_countdown_orangespice.date}}</span> ({{widget_countdown_orangespice.date}})</h3>
-    </div>
-        <div class="item">
-        <h3>Orange Spice (6.8.0) Feature complete <span class="moment_datetime">{{widget_countdown_orangespice.fcdate}}</span> ({{widget_countdown_orangespice.fcdate}})</h3>
-    </div>
+            <h3>Orange Spice (6.8.0) Release <span class="moment_datetime">{{widget_countdown_orangespice.date}}</span> ({{widget_countdown_orangespice.date}})</h3>
+            <h3>Orange Spice (6.8.0) Feature complete <span class="moment_datetime">{{widget_countdown_orangespice.fcdate}}</span> ({{widget_countdown_orangespice.fcdate}})</h3>
+        </div>
     {{/if}}
 </div>
 
 <div class="widget" id="widget_countdown_peppermint" data-func="app.loopback" data-date="2013-04-03" data-fcdate="2013-01-30">
-    {{#if widget_countdown_toffee}}
+    {{#if widget_countdown_peppermint}}
         <div class="item">
-        <h3>Peppermint (7.0) Beta 1 <span class="moment_datetime">{{widget_countdown_peppermint.date}}</span> ({{widget_countdown_peppermint.date}})</h3>
-    </div>
-        <div class="item">
-        <h3>Peppermint (7.0) Feature complete <span class="moment_datetime">{{widget_countdown_peppermint.fcdate}}</span> ({{widget_countdown_peppermint.fcdate}})</h3>
-    </div>
+            <h3>Peppermint (7.0) Beta 1 <span class="moment_datetime">{{widget_countdown_peppermint.date}}</span> ({{widget_countdown_peppermint.date}})</h3>
+            <h3>Peppermint (7.0) Feature complete <span class="moment_datetime">{{widget_countdown_peppermint.fcdate}}</span> ({{widget_countdown_peppermint.fcdate}})</h3>
+        </div>
     {{/if}}
 </div>
